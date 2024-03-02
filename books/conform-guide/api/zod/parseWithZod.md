@@ -1,4 +1,6 @@
-# parseWithZod
+---
+title: "APIリファレンス @conform-to/zod: parseWithZod"
+---
 
 提供された zod スキーマを使用してフォームデータを解析し、送信内容の概要を返すヘルパーです。
 
@@ -33,9 +35,9 @@ Zod スキーマ、または Zod スキーマを返す関数のいずれかで�
 ## 例
 
 ```tsx
-import { parseWithZod } from '@conform-to/zod';
-import { useForm } from '@conform-to/react';
-import { z } from 'zod';
+import { parseWithZod } from "@conform-to/zod";
+import { useForm } from "@conform-to/react";
+import { z } from "zod";
 
 const schema = z.object({
   email: z.string().email(),
@@ -79,7 +81,7 @@ const schema = z.object({
     }
 
     // 書式をクリアして値を数値に変換します。
-    return Number(value.trim().replace(/,/g, ''));
+    return Number(value.trim().replace(/,/g, ""));
   }, z.number()),
 });
 ```
@@ -93,7 +95,7 @@ Zod は、前処理後の入力が `undefined` の場合、デフォルト値を
 ```tsx
 const schema = z.object({
   foo: z.string(), // string | undefined
-  bar: z.string().default('bar'), // string
+  bar: z.string().default("bar"), // string
   baz: z.string().nullable().default(null), // string | null
 });
 ```

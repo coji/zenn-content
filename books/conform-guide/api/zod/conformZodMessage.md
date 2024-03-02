@@ -1,4 +1,6 @@
-# conformZodMessage
+---
+title: "APIリファレンス @conform-to/zod: conformZodMessage"
+---
 
 検証動作を制御するためのカスタムメッセージのセットです。これは、フィールドの一つに対して非同期検証が必要な場合に便利です。
 

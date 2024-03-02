@@ -1,10 +1,12 @@
-# Next.js
+---
+title: "インテグレーション: Next.js"
+---
 
 [Next.js](https://nextjs.org)とインテグレーションしたログインフォームの例をこちらに示します。完全な例は[こちら](../../examples/nextjs)で見ることができます。
 
 ```tsx
 // schema.ts
-import { z } from 'zod';
+import { z } from "zod";
 
 export const loginSchema = z.object({
   email: z.string().email(),
@@ -13,32 +15,32 @@ export const loginSchema = z.object({
 });
 
 // action.ts
-('use server');
+("use server");
 
-import { redirect } from 'next/navigation';
-import { parseWithZod } from '@conform-to/zod';
-import { loginSchema } from '@/app/schema';
+import { redirect } from "next/navigation";
+import { parseWithZod } from "@conform-to/zod";
+import { loginSchema } from "@/app/schema";
 
 export async function login(prevState: unknown, formData: FormData) {
   const submission = parseWithZod(formData, {
     schema: loginSchema,
   });
 
-  if (submission.status !== 'success') {
+  if (submission.status !== "success") {
     return submission.reply();
   }
 
-  redirect('/dashboard');
+  redirect("/dashboard");
 }
 
 // form.tsx
-('use client');
+("use client");
 
-import { useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
-import { useFormState } from 'react-dom';
-import { login } from '@/app/actions';
-import { loginSchema } from '@/app/schema';
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { useFormState } from "react-dom";
+import { login } from "@/app/actions";
+import { loginSchema } from "@/app/schema";
 
 export function LoginForm() {
   const [lastResult, action] = useFormState(login, undefined);
@@ -52,7 +54,7 @@ export function LoginForm() {
     },
 
     // blurイベント発生時にフォームを検証する
-    shouldValidate: 'onBlur',
+    shouldValidate: "onBlur",
   });
 
   return (

@@ -1,3 +1,7 @@
+---
+title: "APIリファレンス @conform-to/react: "
+---
+
 # getFieldsetProps
 
 フィールドセット要素をアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。
@@ -9,7 +13,7 @@ const props = getFieldsetProps(meta, options);
 ## 例
 
 ```tsx
-import { useForm, getFieldsetProps } from '@conform-to/react';
+import { useForm, getFieldsetProps } from "@conform-to/react";
 
 function Example() {
   const [form, fields] = useForm();

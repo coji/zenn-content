@@ -1,14 +1,16 @@
-# Remix
+---
+title: "インテグレーション: Remix"
+---
 
 Here is a login form example integrating with [Remix](https://remix.run/) とインテグレーションしたログインフォームの例です。完全な例は [こちら](../../examples/remix) です。
 
 ```tsx
-import { getFormProps, getInputProps, useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
-import type { ActionArgs } from '@remix-run/node';
-import { json, redirect } from '@remix-run/node';
-import { Form, useActionData } from '@remix-run/react';
-import { z } from 'zod';
+import { getFormProps, getInputProps, useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import type { ActionArgs } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
+import { Form, useActionData } from "@remix-run/react";
+import { z } from "zod";
 
 const schema = z.object({
   email: z.string().email(),
@@ -20,7 +22,7 @@ export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
   const submission = parseWithZod(formData, { schema });
 
-  if (submission.status !== 'success') {
+  if (submission.status !== "success") {
     return json(submission.reply());
   }
 
@@ -40,7 +42,7 @@ export default function Login() {
     },
 
     // blurイベント発生時にフォームを検証する
-    shouldValidate: 'onBlur',
+    shouldValidate: "onBlur",
   });
 
   return (

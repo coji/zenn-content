@@ -1,4 +1,6 @@
-# インテントボタン
+---
+title: "インテントボタン"
+---
 
 送信ボタンがフォームの送信を行う際、それは [submitter](https://developer.mozilla.org/en-US/docs/Web/API/SubmitEvent/submitter) として機能し、フォームデータに含まれることになります。
 
@@ -7,18 +9,18 @@
 submitter は、インテント(意図)に基づいて異なる振る舞いでフォームを拡張したい場合に特に便利です。
 
 ```tsx
-import { useForm } from '@conform-to/react';
+import { useForm } from "@conform-to/react";
 
 function Product() {
   const [form] = useForm({
     onSubmit(event, { formData }) {
       event.preventDefault();
 
-      switch (formData.get('intent')) {
-        case 'add-to-cart':
+      switch (formData.get("intent")) {
+        case "add-to-cart":
           // カートに追加
           break;
-        case 'buy-now':
+        case "buy-now":
           // 購入
           break;
       }
@@ -48,7 +50,7 @@ Conform は、フィールドのバリデーションや削除など、すべて
 バリデーションをトリガーするには、バリデート インテントを使用してボタンを構成できます。
 
 ```tsx
-import { useForm } from '@conform-to/react';
+import { useForm } from "@conform-to/react";
 
 function EmailForm() {
   const [form, fields] = useForm();
@@ -69,7 +71,7 @@ function EmailForm() {
 しかし、ユーザーがフィールドを離れた時点でバリデーションをトリガーしたい場合は、バリデート インテントを直接トリガーすることもできます。
 
 ```tsx
-import { useForm } from '@conform-to/react';
+import { useForm } from "@conform-to/react";
 
 function EmailForm() {
   const [form, fields] = useForm();
@@ -90,7 +92,7 @@ function EmailForm() {
 **reset** および **update** のインテントを使ってフィールドを変更することもできます。
 
 ```tsx
-import { useForm } from '@conform-to/react';
+import { useForm } from "@conform-to/react";
 
 export default function Tasks() {
   const [form, fields] = useForm();
@@ -109,8 +111,8 @@ export default function Tasks() {
         {...form.update.getButtonProps({
           name: fields.agenda.name,
           value: {
-            title: 'My agenda',
-            description: 'This is my agenda',
+            title: "My agenda",
+            description: "This is my agenda",
           },
         })}
       >
@@ -135,7 +137,7 @@ export default function Tasks() {
 フィールドリストを操作するには、 **insert** 、 **remove** 、 **reorder** のインテントを使用できます。
 
 ```tsx
-import { useForm } from '@conform-to/react';
+import { useForm } from "@conform-to/react";
 
 export default function Tasks() {
   const [form, fields] = useForm();

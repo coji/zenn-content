@@ -1,3 +1,7 @@
+---
+title: "APIリファレンス @conform-to/react: "
+---
+
 # getInputProps
 
 入力要素をアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。
@@ -9,12 +13,12 @@ const props = getInputProps(meta, options);
 ## 例
 
 ```tsx
-import { useForm, getInputProps } from '@conform-to/react';
+import { useForm, getInputProps } from "@conform-to/react";
 
 function Example() {
   const [form, fields] = useForm();
 
-  return <input {...getInputProps(fields.password, { type: 'password' })} />;
+  return <input {...getInputProps(fields.password, { type: "password" })} />;
 }
 ```
 
@@ -77,7 +81,7 @@ function Example() {
         name={fields.completed.name}
         form={fields.completed.formId}
         value="yes"
-        defaultChecked={fields.completed.initialValue === 'yes'}
+        defaultChecked={fields.completed.initialValue === "yes"}
         aria-invalid={!fields.completed.valid || undefined}
         aria-describedby={
           !fields.completed.valid ? fields.completed.errorId : undefined
@@ -93,12 +97,12 @@ function Example() {
   return (
     <form>
       {/* text input */}
-      <input {...getInputProps(fields.task, { type: 'text' })} />
+      <input {...getInputProps(fields.task, { type: "text" })} />
       {/* checkbox */}
       <input
         {...getInputProps(fields.completed, {
-          type: 'checkbox',
-          value: 'yes',
+          type: "checkbox",
+          value: "yes",
         })}
       />
     </form>

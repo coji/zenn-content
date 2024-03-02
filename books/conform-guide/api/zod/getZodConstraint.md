@@ -1,4 +1,6 @@
-# getZodConstraint
+---
+title: "APIリファレンス @conform-to/zod: getZodConstraint"
+---
 
 Zod スキーマを内省することにより、各フィールドの検証属性を含むオブジェクトを返すヘルパーです。
 
@@ -15,9 +17,9 @@ const constraint = getZodConstraint(schema);
 ## 例
 
 ```tsx
-import { getZodConstraint } from '@conform-to/zod';
-import { useForm } from '@conform-to/react';
-import { z } from 'zod';
+import { getZodConstraint } from "@conform-to/zod";
+import { useForm } from "@conform-to/react";
+import { z } from "zod";
 
 const schema = z.object({
   title: z.string().min(5).max(20),

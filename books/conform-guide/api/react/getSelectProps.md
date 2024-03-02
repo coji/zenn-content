@@ -1,3 +1,7 @@
+---
+title: "APIリファレンス @conform-to/react: "
+---
+
 # getSelectProps
 
 セレクト要素をアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。
@@ -9,7 +13,7 @@ const props = getSelectProps(meta, options);
 ## 例
 
 ```tsx
-import { useForm, getSelectProps } from '@conform-to/react';
+import { useForm, getSelectProps } from "@conform-to/react";
 
 function Example() {
   const [form, fields] = useForm();

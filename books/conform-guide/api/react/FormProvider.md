@@ -1,9 +1,13 @@
+---
+title: ""
+---
+
 # FormProvider
 
 フォームコンテキストのための [Context Provider](https://react.dev/reference/react/createContext#provider) をレンダリングする React コンポーネントです。 [useField](./useField.md) や [useFormMetadata](./useFormMetadata.md) フックを使用したい場合には必須です。
 
 ```tsx
-import { FormProvider, useForm } from '@conform-to/react';
+import { FormProvider, useForm } from "@conform-to/react";
 
 export default function SomeParent() {
   const [form, fields] = useForm();
@@ -45,7 +49,7 @@ function Example() {
 これは、レイアウトの制約のために 1 つのフォームを別のフォームの内部に配置する必要がある場合に便利です。
 
 ```tsx
-import { FormProvider, useForm } from '@conform-to/react';
+import { FormProvider, useForm } from "@conform-to/react";
 
 function Field({ name, formId }) {
   //  formId が指定されていない場合、 useField は最も近い FormContext を探します。
@@ -55,7 +59,7 @@ function Field({ name, formId }) {
 }
 
 function Parent() {
-  const [form, fields] = useForm({ id: 'parent' });
+  const [form, fields] = useForm({ id: "parent" });
   return (
     <FormProvider context={form.context}>
       <form id={form.id} />
@@ -67,7 +71,7 @@ function Parent() {
 }
 
 function Child() {
-  const [form, fields] = useForm({ id: 'child' });
+  const [form, fields] = useForm({ id: "child" });
 
   return (
     <FormProvider context={form.context}>

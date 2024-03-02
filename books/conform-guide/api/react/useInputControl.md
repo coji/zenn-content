@@ -1,4 +1,6 @@
-# useInputControl
+---
+title: "APIリファレンス @conform-to/react: useInputControl"
+---
 
 ブラウザイベントの発火を制御できる React フックです。Conform にカスタム input を組み込みたい場合に便利です。
 
@@ -9,8 +11,8 @@ const control = useInputControl(metaOrOptions);
 ## 例
 
 ```tsx
-import { useForm, useInputControl } from '@conform-to/react';
-import { Select, Option } from './custom-ui';
+import { useForm, useInputControl } from "@conform-to/react";
+import { Select, Option } from "./custom-ui";
 
 function Example() {
   const [form, fields] = useForm();
@@ -104,14 +106,14 @@ function Example() {
 
 ```tsx
 const style = {
-  position: 'absolute',
-  width: '1px',
-  height: '1px',
+  position: "absolute",
+  width: "1px",
+  height: "1px",
   padding: 0,
-  margin: '-1px',
-  overflow: 'hidden',
-  clip: 'rect(0,0,0,0)',
-  whiteSpace: 'nowrap',
+  margin: "-1px",
+  overflow: "hidden",
+  clip: "rect(0,0,0,0)",
+  whiteSpace: "nowrap",
   border: 0,
 };
 ```

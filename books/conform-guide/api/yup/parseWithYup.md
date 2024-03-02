@@ -1,4 +1,6 @@
-# parseWithYup
+---
+title: "APIリファレンス @conform-to/yup: parseWithYup"
+---
 
 指定された yup スキーマを使用してフォームデータを解析し、送信内容の概要を返すヘルパーです。
 
@@ -25,9 +27,9 @@ Yup スキーマ、または Yup スキーマを返す関数のいずれかで�
 ## 例
 
 ```tsx
-import { parseWithYup } from '@conform-to/zod';
-import { useForm } from '@conform-to/react';
-import * as yup from 'zod';
+import { parseWithYup } from "@conform-to/zod";
+import { useForm } from "@conform-to/react";
+import * as yup from "zod";
 
 const schema = yup.object({
   email: yup.string().email(),

@@ -1,4 +1,6 @@
-# UI ライブラリとのインテグレーション
+---
+title: "インテグレーション: UI ライブラリとのインテグレーション"
+---
 
 このガイドでは、カスタム入力コンポーネントを Conform とインテグレーションする方法を紹介します。
 
@@ -10,7 +12,7 @@ Conform は、ドキュメントに直接 **input** と **focusout** イベン�
 function Example() {
   const [form, fields] = useForm({
     // オプション。指定されていない場合は Conform がランダムなIDを生成します。
-    id: 'example',
+    id: "example",
   });
 
   return (
@@ -47,7 +49,7 @@ Conform は[イベント移譲](#event-delegation)に依存してフォームを
 入力がネイティブ入力かどうかを識別するために、カスタム入力を操作している間にフォームイベントが発行され、バブルアップするかどうかを確認するために、イベントリスナーを添付した div で入力をラップすることができます。また、以下にはいくつかの人気のある UI ライブラリに関する [例](#examples) も掲載されています。
 
 ```tsx
-import { CustomInput } from 'your-ui-library';
+import { CustomInput } from "your-ui-library";
 
 function Example() {
   return (
@@ -74,13 +76,13 @@ import {
   type FieldMetadata,
   useForm,
   useInputControl,
-} from '@conform-to/react';
-import * as Select from '@radix-ui/react-select';
+} from "@conform-to/react";
+import * as Select from "@radix-ui/react-select";
 import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-} from '@radix-ui/react-icons';
+} from "@radix-ui/react-icons";
 
 type SelectFieldProps = {
   // `FieldMetadata` 型を使用して `meta` プロパティを定義し、
@@ -142,7 +144,7 @@ function Example() {
     <form id={form.id}>
       <div>
         <label>Currency</label>
-        <SelectField meta={fields.color} options={['red', 'green', 'blue']} />
+        <SelectField meta={fields.color} options={["red", "green", "blue"]} />
         <div>{fields.color.errors}</div>
       </div>
       <button>Submit</button>
@@ -162,13 +164,13 @@ import {
   useForm,
   useField,
   useInputControl,
-} from '@conform-to/react';
-import * as Select from '@radix-ui/react-select';
+} from "@conform-to/react";
+import * as Select from "@radix-ui/react-select";
 import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-} from '@radix-ui/react-icons';
+} from "@radix-ui/react-icons";
 
 type SelectFieldProps = {
   // `FieldMetadata` 型の代わりに `FieldName` 型を使用します。
@@ -207,7 +209,7 @@ function Example() {
       <form id={form.id}>
         <div>
           <label>Color</label>
-          <Select name={fields.color.name} options={['red', 'green', 'blue']} />
+          <Select name={fields.color.name} options={["red", "green", "blue"]} />
           <div>{fields.color.errors}</div>
         </div>
         <button>Submit</button>

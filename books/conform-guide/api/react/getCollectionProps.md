@@ -1,3 +1,7 @@
+---
+title: ""
+---
+
 # getCollectionProps
 
 チェックボックスまたはラジオボタンのグループをアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。
@@ -9,7 +13,7 @@ const collectionProps = getCollectionProps(meta, options);
 ## 例
 
 ```tsx
-import { useForm, getCollectionProps } from '@conform-to/react';
+import { useForm, getCollectionProps } from "@conform-to/react";
 
 function Example() {
   const [form, fields] = useForm();
@@ -17,8 +21,8 @@ function Example() {
   return (
     <>
       {getCollectionProps(fields.color, {
-        type: 'radio',
-        options: ['red', 'green', 'blue'],
+        type: "radio",
+        options: ["red", "green", "blue"],
       }).map((props) => (
         <label key={props.id} htmlFor={props.id}>
           <input {...props} />
@@ -67,7 +71,7 @@ ARIA 属性が `meta.errors` または `meta.allErrors` に基づくべきかど
 function Example() {
   return (
     <form>
-      {['a', 'b', 'c'].map((value) => (
+      {["a", "b", "c"].map((value) => (
         <label key={value} htmlFor={`${fields.category.id}-${value}`}>
           <input
             type="checkbox"
@@ -95,8 +99,8 @@ function Example() {
   return (
     <form>
       {getCollectionProps(fields.category, {
-        type: 'checkbox',
-        options: ['a', 'b', 'c'],
+        type: "checkbox",
+        options: ["a", "b", "c"],
       }).map((props) => (
         <label key={props.id} htmlFor={props.id}>
           <input {...props} />

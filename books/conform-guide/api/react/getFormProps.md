@@ -1,3 +1,7 @@
+---
+title: "APIリファレンス @conform-to/react: "
+---
+
 # getFormProps
 
 フォーム要素をアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。
@@ -9,7 +13,7 @@ const props = getFormProps(form, options);
 ## 例
 
 ```tsx
-import { useForm, getFormProps } from '@conform-to/react';
+import { useForm, getFormProps } from "@conform-to/react";
 
 function Example() {
   const [form, fields] = useForm();

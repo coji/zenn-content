@@ -1,4 +1,6 @@
-# @conform-to/validitystate
+---
+title: "@conform-to/validitystate"
+---
 
 > 現在のバージョンは、 Conform の React アダプターと互換性がありません。
 
@@ -61,21 +63,21 @@ function formatError({ input }: FormatErrorArgs) {
   const error = [];
 
   switch (input.name) {
-    case 'email': {
+    case "email": {
       if (input.validity.valueMissing) {
-        error.push('Email is required');
+        error.push("Email is required");
       }
       if (input.validity.typeMismatch) {
-        error.push('Email is invalid');
+        error.push("Email is invalid");
       }
       break;
     }
-    case 'password': {
+    case "password": {
       if (input.validity.valueMissing) {
-        error.push('Password is required');
+        error.push("Password is required");
       }
       if (input.validity.tooShort) {
-        error.push('Password is too short');
+        error.push("Password is too short");
       }
       break;
     }
@@ -92,7 +94,7 @@ function formatError({ input }: FormatErrorArgs) {
 クライアントのバリデーションをカスタマイズするために、制約とエラーフォーマッターを再利用するヘルパーです。エラーは `setCustomValidity` メソッドを使用してフォームコントロール要素に設定されます。新しいエラーを報告する前（つまり、 `form.reportValidity()` をトリガーする前）に呼び出すべきです。
 
 ```tsx
-import { validate } from '@conform-to/validitystate';
+import { validate } from "@conform-to/validitystate";
 
 function Example() {
   return (
@@ -158,7 +160,7 @@ const submission = parse(formData, {
 実際のエラーメッセージは `validationMessage` プロパティに保存されます。これは、カスタムエラーフォーマッターが複数のエラーを返す場合に必要です。
 
 ```tsx
-import { getError } from '@conform-to/validitystate';
+import { getError } from "@conform-to/validitystate";
 
 function Example() {
   const [error, setError] = useState({});

@@ -1,3 +1,7 @@
+---
+title: ""
+---
+
 # v1 へのアップグレード
 
 このガイドでは、 v1 で導入されたすべての変更点を説明し、既存のコードベースをアップグレードする方法をご案内します。
@@ -28,7 +32,7 @@ Conform は現在、 React 18 以降を要求します。もし古いバージ�
 - `getInputProps` における `type` オプションが現在必須になりました。
 
 ```tsx
-<input {...getInputProps(fields.title, { type: 'text' })} />
+<input {...getInputProps(fields.title, { type: "text" })} />
 ```
 
 - `description` オプションは `ariaDescribedBy` に改名され、ブール値の代わりに文字列型（ description 要素の `id` ）になりました。
@@ -46,7 +50,7 @@ Conform は現在、 React 18 以降を要求します。もし古いバージ�
 まず、`form.props` が削除されました。代わりに [getFormProps()](./api/react/getFormProps.md) ヘルパーを使用できます。
 
 ```tsx
-import { useForm, getFormProps } from '@conform-to/react';
+import { useForm, getFormProps } from "@conform-to/react";
 
 function Example() {
   const [form] = useForm();
@@ -143,10 +147,10 @@ export async function action({ request }: ActionArgs) {
    * 送信ステータスは「success」、「error」、または undefined のいずれかになります。
    * ステータスが undefined の場合、送信が準備されていないことを意味します（つまり、 intent が submit ではありません）。
    */
-  if (submission.status !== 'success') {
+  if (submission.status !== "success") {
     return json(submission.reply(), {
       // また、ステータスを使用してHTTPステータスコードを決定することもできます。
-      status: submission.status === 'error' ? 400 : 200,
+      status: submission.status === "error" ? 400 : 200,
     });
   }
 
@@ -156,14 +160,14 @@ export async function action({ request }: ActionArgs) {
     return json(
       submission.reply({
         // `reply` メソッドに追加のエラーを渡すこともできます。
-        formErrors: ['Submission failed'],
+        formErrors: ["Submission failed"],
         fieldErrors: {
-          address: ['Address is invalid'],
+          address: ["Address is invalid"],
         },
 
         // or avoid sending the the field value back to client by specifying the field names
-        hideFields: ['password'],
-      }),
+        hideFields: ["password"],
+      })
     );
   }
 
@@ -192,8 +196,8 @@ export default function Example() {
 - カスタム input を制御された input として統合するために `control.value` を使用し、 `control.change(value)` を通じて値の状態を更新できるようになりました。フォームがリセットされると、値もリセットされます。
 
 ```tsx
-import { useForm, useInputControl } from '@conform-to/react';
-import { CustomSelect } from './some-ui-library';
+import { useForm, useInputControl } from "@conform-to/react";
+import { CustomSelect } from "./some-ui-library";
 
 function Example() {
   const [form, fields] = useForm();

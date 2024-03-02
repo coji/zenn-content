@@ -1,3 +1,7 @@
+---
+title: "APIリファレンス @conform-to/react: "
+---
+
 # getTextareaProps
 
 テキストエリア要素をアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。
@@ -9,7 +13,7 @@ const props = getTextareaProps(meta, options);
 ## 例
 
 ```tsx
-import { useForm, getTextareaProps } from '@conform-to/react';
+import { useForm, getTextareaProps } from "@conform-to/react";
 
 function Example() {
   const [form, fields] = useForm();

@@ -1,4 +1,6 @@
-# アクセシビリティ
+---
+title: "アクセシビリティ"
+---
 
 フォームをアクセシブルにするには、各フォーム要素を適切な属性で設定する必要がありますが、 Conform がその手助けをします。
 
@@ -7,7 +9,7 @@
 アクセシビリティに関しては、通常、異なる要素を関連付けるために一意の ID が必要になる Aria 属性が最初に思い浮かびます。Conform は、必要なすべての ID を生成してくれることで、この点でのサポートを提供します。
 
 ```tsx
-import { useForm } from '@conform-to/react';
+import { useForm } from "@conform-to/react";
 
 function Example() {
   const [form, fields] = useForm();
@@ -39,9 +41,9 @@ function Example() {
 バリデーション属性も、スクリーンリーダーのヒントを改善するなど、アクセシビリティにおいて重要な役割を果たします。 Conform を使用すると、 zod や yup スキーマからバリデーション属性を導出し、各フィールドのメタデータにそれらを反映させることができます。
 
 ```tsx
-import { parseWithZod, getZodConstraint } from '@conform-to/zod';
-import { useForm } from '@conform-to/react';
-import { z } from 'zod';
+import { parseWithZod, getZodConstraint } from "@conform-to/zod";
+import { useForm } from "@conform-to/react";
+import { z } from "zod";
 
 const schema = z.object({
   message: z
@@ -80,7 +82,7 @@ function Example() {
 プログレッシブエンハンスメントも、一時的なネットワークの問題の影響を最小限に抑えるなど、アクセシビリティを支援します。たとえば、 Conform を使用すると、ページのリフレッシュをまたいでもフォームデータと状態が保持されるように、フィールドリストを操作できます。
 
 ```tsx
-import { useForm } from '@conform-to/react';
+import { useForm } from "@conform-to/react";
 
 export default function Example() {
   const [form, fields] = useForm();
@@ -131,9 +133,9 @@ export default function Example() {
 以下は、手動設定と比較した場合の例です。ヘルパーについて詳しく知りたい場合は、上記リンクの対応するドキュメントを確認してください。
 
 ```tsx
-import { parseWithZod, getZodConstraint } from '@conform-to/zod';
-import { useForm } from '@conform-to/react';
-import { z } from 'zod';
+import { parseWithZod, getZodConstraint } from "@conform-to/zod";
+import { useForm } from "@conform-to/react";
+import { z } from "zod";
 
 const schema = z.object({
   message: z
@@ -172,7 +174,7 @@ function Example() {
       {/* アフター */}
       <input
         {...getInputProps(fields.message, {
-          type: 'text',
+          type: "text",
           ariaDescribedBy: fields.message.descriptionId,
         })}
       />

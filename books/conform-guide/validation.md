@@ -1,3 +1,7 @@
+---
+title: ""
+---
+
 # バリデーション
 
 Conform は異なるバリデーションモードをサポートしています。このセクションでは、異なる要件に基づいてフォームをバリデーションする方法を説明します。
@@ -7,9 +11,9 @@ Conform は異なるバリデーションモードをサポートしています
 フォームを**完全にサーバーサイドで**バリデーションすることができます。これはフォームの送信に限らず、ユーザーがタイピングしているときやフィールドを離れるときにも機能します。これにより、バリデーションロジックをクライアントバンドルから除外することができます。しかし、ユーザーがタイピングしている間にバリデーションを行いたい場合、ネットワークの遅延が懸念されるかもしれません。
 
 ```tsx
-import { useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
-import { z } from 'zod';
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
+import { z } from "zod";
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
@@ -20,7 +24,7 @@ export async function action({ request }: ActionArgs) {
     }),
   });
 
-  if (submission.status !== 'success') {
+  if (submission.status !== "success") {
     return submission.reply();
   }
 
@@ -35,8 +39,8 @@ export default function Signup() {
     lastResult,
 
     // 各フィールドをいつ検証するかを設定する
-    shouldValidate: 'onBlur',
-    shouldRevalidate: 'onInput',
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
   });
 
   // ...
@@ -48,8 +52,8 @@ export default function Signup() {
 クライアントサイドでバリデーションロジックを再利用し、即時のフィードバックを提供することができます。
 
 ```tsx
-import { useForm } from '@conform-to/react';
-import { parseWithZod } from '@conform-to/zod';
+import { useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod";
 
 // スキーマ定義をアクションの外に移動する
 const schema = z.object({
@@ -68,8 +72,8 @@ export default function Signup() {
   const lastResult = useActionData<typeof action>();
   const [form] = useForm({
     lastResult,
-    shouldValidate: 'onBlur',
-    shouldRevalidate: 'onInput',
+    shouldValidate: "onBlur",
+    shouldRevalidate: "onInput",
 
     // クライアント バリデーションの設定
     onValidate({ formData }) {

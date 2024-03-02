@@ -1,3 +1,7 @@
+---
+title: "APIリファレンス @conform-to/react: "
+---
+
 # useField
 
 [FormProvider](./FormProvider.md) に設定されたコンテキストを購読することで、フィールドメタデータを返す React フックです。これは **最も近い** [FormProvider](./FormProvider.md) に基づいています。
@@ -33,7 +37,7 @@ const [meta, form] = useField(name, options);
 フィールドやフォームのメタデータの型推論を改善するために、 `string` の代わりに `FieldName<FieldSchema, FormSchema, FormError>` 型を使用できます。
 
 ```tsx
-import { type FormName, useFormMetadata } from '@conform-to/react';
+import { type FormName, useFormMetadata } from "@conform-to/react";
 
 type ExampleComponentProps = {
   name: FieldName<FieldSchema, FormSchema, FormError>;
@@ -50,7 +54,7 @@ function ExampleComponent({ name }: ExampleComponentProps) {
 コンポーネントをレンダリングする際には、 Conform によって提供される名前（例: `fields.fieldName.name` ）を使用します。これは既に `FieldName<FieldSchema, FormSchema, FormError>` として型付けされています。これにより、 TypeScript は型が互換性があるかをチェックし、互換性がない場合に警告を出すことができます。 `string` を渡すこともできますが、型チェックの機能は失われます。
 
 ```tsx
-import { useForm } from '@conform-to/react';
+import { useForm } from "@conform-to/react";
 
 function Example() {
   const [form, fields] = useForm();

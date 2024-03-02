@@ -1,4 +1,6 @@
-# getYupConstraint
+---
+title: "APIリファレンス @conform-to/yup: getYupConstraint"
+---
 
 Yup スキーマをイントロスペクトすることで、各フィールドの検証属性を含むオブジェクトを返すヘルパーです。
 
@@ -15,9 +17,9 @@ const constraint = getYupConstraint(schema);
 ## 例
 
 ```tsx
-import { getYupConstraint } from '@conform-to/yup';
-import { useForm } from '@conform-to/react';
-import * as yup from 'yup';
+import { getYupConstraint } from "@conform-to/yup";
+import { useForm } from "@conform-to/react";
+import * as yup from "yup";
 
 const schema = yup.object({
   title: yup.string().required().min(5).max(20),
