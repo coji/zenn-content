@@ -1,8 +1,6 @@
 ---
-title: "APIリファレンス @conform-to/react: "
+title: "APIリファレンス @conform-to/react: getSelectProps"
 ---
-
-# getSelectProps
 
 セレクト要素をアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。
 

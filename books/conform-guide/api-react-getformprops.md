@@ -1,8 +1,6 @@
 ---
-title: "APIリファレンス @conform-to/react: "
+title: "APIリファレンス @conform-to/react: getFormProps"
 ---
-
-# getFormProps
 
 フォーム要素をアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。
 

@@ -1,8 +1,6 @@
 ---
-title: "APIリファレンス @conform-to/react: "
+title: "APIリファレンス @conform-to/react: useForm"
 ---
-
-# useForm
 
 HTML フォームを強化するためのフォームとフィールドのメタデータを返す React フックです。
 

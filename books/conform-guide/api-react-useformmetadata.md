@@ -1,8 +1,6 @@
 ---
-title: "APIリファレンス @conform-to/react: "
+title: "APIリファレンス @conform-to/react: useFormMetadata"
 ---
-
-# useFormMetadata
 
 [FormProvider](./FormProvider.md) に設定されたコンテキストを購読することで、フォームのメタデータを返す React フックです。
 
