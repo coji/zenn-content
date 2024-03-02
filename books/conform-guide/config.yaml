@@ -16,20 +16,20 @@ chapters:
   - integration-ui-libraries
   - integration-remix
   - integration-nextjs
-  - api-react-useForm
-  - api-react-useField
-  - api-react-useFormMetadata
-  - api-react-useInputControl
-  - api-react-FormProvider
-  - api-react-FormStateInput
-  - api-react-getFormProps
-  - api-react-getFieldsetProps
-  - api-react-getInputProps
-  - api-react-getSelectProps
-  - api-react-getTextareaProps
-  - api-react-getCollectionProps
-  - api-yup-parseWithYup
-  - api-yup-getYupConstraint
-  - api-zod-parseWithZod
-  - api-zod-getZodConstraint
-  - api-zod-conformZodMessage
+  - api-react-useform
+  - api-react-usefield
+  - api-react-useformmetadata
+  - api-react-useinputcontrol
+  - api-react-formprovider
+  - api-react-formstateinput
+  - api-react-getformprops
+  - api-react-getfieldsetprops
+  - api-react-getinputprops
+  - api-react-getselectprops
+  - api-react-gettextareaprops
+  - api-react-getcollectionprops
+  - api-yup-parsewithyup
+  - api-yup-getyupconstraint
+  - api-zod-parsewithzod
+  - api-zod-getzodconstraint
+  - api-zod-conformzodmessage
