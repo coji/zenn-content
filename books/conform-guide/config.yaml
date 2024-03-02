@@ -13,23 +13,23 @@ chapters:
   - checkbox-and-radio-group
   - file-upload
   - accessibility
-  - integration_ui-libraries
-  - integration_remix
-  - integration_nextjs
-  - api_react_useForm
-  - api_react_useField
-  - api_react_useFormMetadata
-  - api_react_useInputControl
-  - api_react_FormProvider
-  - api_react_FormStateInput
-  - api_react_getFormProps
-  - api_react_getFieldsetProps
-  - api_react_getInputProps
-  - api_react_getSelectProps
-  - api_react_getTextareaProps
-  - api_react_getCollectionProps
-  - api_yup_parseWithYup
-  - api_yup_getYupConstraint
-  - api_zod_parseWithZod
-  - api_zod_getZodConstraint
-  - api_zod_conformZodMessage
+  - integration-ui-libraries
+  - integration-remix
+  - integration-nextjs
+  - api-react-useForm
+  - api-react-useField
+  - api-react-useFormMetadata
+  - api-react-useInputControl
+  - api-react-FormProvider
+  - api-react-FormStateInput
+  - api-react-getFormProps
+  - api-react-getFieldsetProps
+  - api-react-getInputProps
+  - api-react-getSelectProps
+  - api-react-getTextareaProps
+  - api-react-getCollectionProps
+  - api-yup-parseWithYup
+  - api-yup-getYupConstraint
+  - api-zod-parseWithZod
+  - api-zod-getZodConstraint
+  - api-zod-conformZodMessage
