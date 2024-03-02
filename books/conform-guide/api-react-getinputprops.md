@@ -1,5 +1,5 @@
 ---
-title: "APIリファレンス @conform-to/react: getInputProps"
+title: "@conform-to/react: getInputProps"
 ---
 
 入力要素をアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。

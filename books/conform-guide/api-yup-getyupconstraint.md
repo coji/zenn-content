@@ -1,5 +1,5 @@
 ---
-title: "APIリファレンス @conform-to/yup: getYupConstraint"
+title: "@conform-to/yup: getYupConstraint"
 ---
 
 Yup スキーマをイントロスペクトすることで、各フィールドの検証属性を含むオブジェクトを返すヘルパーです。

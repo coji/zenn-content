@@ -1,5 +1,5 @@
 ---
-title: "APIリファレンス @conform-to/zod: getZodConstraint"
+title: "@conform-to/zod: getZodConstraint"
 ---
 
 Zod スキーマを内省することにより、各フィールドの検証属性を含むオブジェクトを返すヘルパーです。

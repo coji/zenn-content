@@ -1,5 +1,5 @@
 ---
-title: "APIリファレンス @conform-to/react: useInputControl"
+title: "@conform-to/react: useInputControl"
 ---
 
 ブラウザイベントの発火を制御できる React フックです。Conform にカスタム input を組み込みたい場合に便利です。
@@ -50,15 +50,15 @@ input の値です。これを使用して、制御された input を設定す�
 
 ### `change(value: string)`
 
-値を変更する必要があるときに呼び出されるメソッドです。これにより、新しい値を持つ入力の代わりに [change](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/change_event) イベントと [input](https://developer.mozilla.org/en-US/docs/Web/API/Element/input_event) イベントの両方がディスパッチされます。
+値を変更する必要があるときに呼び出されるメソッドです。これにより、新しい値を持つ入力の代わりに [change](https://developer.mozilla.org/ja/docs/Web/API/HTMLElement/change_event) イベントと [input](https://developer.mozilla.org/ja/docs/Web/API/Element/input_event) イベントの両方がディスパッチされます。
 
 ### `blur()`
 
-ユーザーが input から離れたときに呼び出されるメソッドです。これにより、入力の代わりに [blur](https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event) イベントと [focusout](https://developer.mozilla.org/en-US/docs/Web/API/Element/focusout_event) イベントの両方がディスパッチされます。
+ユーザーが input から離れたときに呼び出されるメソッドです。これにより、入力の代わりに [blur](https://developer.mozilla.org/ja/docs/Web/API/Element/blur_event) イベントと [focusout](https://developer.mozilla.org/ja/docs/Web/API/Element/focusout_event) イベントの両方がディスパッチされます。
 
 ### `focus()`
 
-このメソッドは、 input にフォーカスが当たったときに呼び出されます。これにより、入力の代わりに [focus](https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus) イベントと [focusin](https://developer.mozilla.org/en-US/docs/Web/API/Element/focusin_event) イベントの両方がディスパッチされます。
+このメソッドは、 input にフォーカスが当たったときに呼び出されます。これにより、入力の代わりに [focus](https://developer.mozilla.org/ja/docs/Web/API/HTMLElement/focus) イベントと [focusin](https://developer.mozilla.org/ja/docs/Web/API/Element/focusin_event) イベントの両方がディスパッチされます。
 
 ## Tips
 

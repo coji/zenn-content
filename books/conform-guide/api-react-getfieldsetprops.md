@@ -1,5 +1,5 @@
 ---
-title: "APIリファレンス @conform-to/react: getFieldsetProps"
+title: "@conform-to/react: getFieldsetProps"
 ---
 
 フィールドセット要素をアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。

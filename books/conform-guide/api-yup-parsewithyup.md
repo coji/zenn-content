@@ -1,5 +1,5 @@
 ---
-title: "APIリファレンス @conform-to/yup: parseWithYup"
+title: "@conform-to/yup: parseWithYup"
 ---
 
 指定された yup スキーマを使用してフォームデータを解析し、送信内容の概要を返すヘルパーです。

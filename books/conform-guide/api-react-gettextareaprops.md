@@ -1,5 +1,5 @@
 ---
-title: "APIリファレンス @conform-to/react: getTextareaProps"
+title: "@conform-to/react: getTextareaProps"
 ---
 
 テキストエリア要素をアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。

@@ -1,5 +1,5 @@
 ---
-title: "APIリファレンス @conform-to/react: getCollectionProps"
+title: "@conform-to/react: getCollectionProps"
 ---
 
 チェックボックスまたはラジオボタンのグループをアクセシブルにするために必要なすべてのプロパティを返すヘルパーです。

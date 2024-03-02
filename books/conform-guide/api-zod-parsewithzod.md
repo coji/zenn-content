@@ -1,5 +1,5 @@
 ---
-title: "APIリファレンス @conform-to/zod: parseWithZod"
+title: "@conform-to/zod: parseWithZod"
 ---
 
 提供された zod スキーマを使用してフォームデータを解析し、送信内容の概要を返すヘルパーです。
