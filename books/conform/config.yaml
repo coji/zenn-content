@@ -1,0 +1,35 @@
+title: "Conform: Web標準をもとに Remix / Nextjs app router に対応する型安全フォームバリデーションライブラリ"
+summary: "Conform は、Web 標準に基づいて HTML フォームを段階的に強化し、RemixやNext.jsのようなサーバーフレームワークを完全にサポートする、型安全なフォームバリデーションライブラリです。\n\nhttps://conform.guide"
+topics: ["Conform", "Remix", "Nextjs", "React"]
+published: false
+price: 0
+chapters:
+  - tutorial
+  - overview
+  - upgrading-v1
+  - validation
+  - complex-structures
+  - intent-button
+  - checkbox-and-radio-group
+  - file-upload
+  - accessibility
+  - integration/ui-libraries
+  - integration/remix
+  - integration/nextjs
+  - api/react/useForm
+  - api/react/useField
+  - api/react/useFormMetadata
+  - api/react/useInputControl
+  - api/react/FormProvider
+  - api/react/FormStateInput
+  - api/react/getFormProps
+  - api/react/getFieldsetProps
+  - api/react/getInputProps
+  - api/react/getSelectProps
+  - api/react/getTextareaProps
+  - api/react/getCollectionProps
+  - api/yup/parseWithYup
+  - api/yup/getYupConstraint
+  - api/zod/parseWithZod
+  - api/zod/getZodConstraint
+  - api/zod/conformZodMessage
