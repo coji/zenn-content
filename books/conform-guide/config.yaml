@@ -4,8 +4,8 @@ topics: ["Conform", "Remix", "Nextjs", "React"]
 published: false
 price: 0
 chapters:
-  - tutorial
   - overview
+  - tutorial
   - upgrading-v1
   - validation
   - complex-structures
