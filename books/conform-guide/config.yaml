@@ -1,4 +1,4 @@
-title: "Conform: Web標準をもとに Remix / Nextjs app router に対応する型安全フォームバリデーションライブラリ"
+title: "Conform: Web標準をもとに Remix / Next.js App Router に対応する型安全フォームバリデーションライブラリ"
 summary: "Conform は、Web 標準に基づいて HTML フォームを段階的に強化し、RemixやNext.jsのようなサーバーフレームワークを完全にサポートする、型安全なフォームバリデーションライブラリです。\n\nhttps://conform.guide"
 topics: ["Conform", "Remix", "Nextjs", "React"]
 published: false
