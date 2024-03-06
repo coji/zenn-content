@@ -132,7 +132,7 @@ export default function IndexPage = () => {
     <Link to={$path("/:handle/posts/:id", { handle, id: postId })}>
       こんにちは！
     </Link>
-    <Link to="/help">ヘルプページ</Link>
+    <Link to={$path("/help")}>ヘルプページ</Link>
   )
 }
 ```
