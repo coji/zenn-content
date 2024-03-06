@@ -143,7 +143,7 @@ export default function IndexPage = () => {
 
 Remix SPA モードで作ったこのアプリに導入してみました。ソースコードも公開してるので、ご参考まで！
 
-https://zenn.dev/articles/474d9b54d34962/edit
+https://zenn.dev/coji/articles/474d9b54d34962
 
 # まとめ
 
