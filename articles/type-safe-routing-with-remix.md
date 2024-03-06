@@ -3,7 +3,7 @@ title: "Remix で型安全なルーティングを簡単に。"
 emoji: "🐬"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["remix", "typescript"]
-published: false
+published: true
 ---
 
 # これはなに？
