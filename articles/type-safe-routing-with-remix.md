@@ -14,7 +14,7 @@ published: false
 
 結論、とても簡単に設定できて、下のようにエディタで補完も効くのでなかなか快適でした。
 
-![](/images/type-safe-routing-with-remix//image.png)
+![](/images/type-safe-routing-with-remix/image.png)
 
 あ、これはいい、と思ったので記事にしてみます。
 
