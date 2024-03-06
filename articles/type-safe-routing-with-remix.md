@@ -79,12 +79,12 @@ remix-routes は $path という型安全にパス文字列を生成するヘル
 
 ```ts:_index.tsx
 export const loader = async ({request}: LoaderFunctionArgs) => {
-  authenticator.authenticate({ failureRedirect("/login") })
+  authenticator.authenticate({ failureRedirect('/login') })
   return json({})
 }
 
 export const action = async ({request}: ActionFunctionArgs) => {
-  return redirect("/")
+  return redirect('/')
 }
 ```
 
@@ -94,12 +94,12 @@ export const action = async ({request}: ActionFunctionArgs) => {
 import { $path } from 'remix-routes'
 
 export const loader = async ({request}: LoaderFunctionArgs) => {
-  authenticator.authenticate({ failureRedirect($path("/login")) })
+  authenticator.authenticate({ failureRedirect($path('/login')) })
   return json({})
 }
 
 export const action = async ({request}: ActionFunctionArgs) => {
-  return redirect($path("/"))
+  return redirect($path('/'))
 }
 ```
 
@@ -114,7 +114,7 @@ export default function IndexPage = () => {
 
   return (
     <Link to={`/${handle}/posts/${postId}`}>こんにちは！</Link>
-    <Link to="/help">ヘルプページ</Link>
+    <Link to='/help'>ヘルプページ</Link>
   )
 }
 ```
@@ -129,10 +129,10 @@ export default function IndexPage = () => {
   const postId = 'V1StGXR8_Z5jdHi6B-myT'
 
   return (
-    <Link to={$path("/:handle/posts/:id", { handle, id: postId })}>
+    <Link to={$path('/:handle/posts/:id', { handle, id: postId })}>
       こんにちは！
     </Link>
-    <Link to={$path("/help")}>ヘルプページ</Link>
+    <Link to={$path('/help')}>ヘルプページ</Link>
   )
 }
 ```
