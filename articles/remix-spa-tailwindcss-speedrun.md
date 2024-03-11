@@ -12,7 +12,7 @@ published: true
 
 確かに Remix ドキュメントが現状 Vite モードで、TailwindCSS の記述を見てそのまま設定すると動かない、ということがおきているようです。Remix の Vite のほうには書いてあるんですがね。。
 
-というわけで、Remix SPA モードに モードで、TailwindCSS を入れて、ついでに C;loudflare Pages にデプロイするのを最小手でやってみましょう。
+というわけで、Remix SPA モードで、TailwindCSS を入れて、ついでに Cloudflare Pages にデプロイするのを最小手でやってみましょう。
 
 # 手順
 
