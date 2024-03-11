@@ -3,7 +3,7 @@ title: "Remix SPA Mode に TailwindCSS を入れて Cloudflare Pages にデプ�
 emoji: "👉"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["remix", "tailwindcss", "cloudflarepages"]
-published: false
+published: true
 ---
 
 # これは何？
@@ -215,7 +215,7 @@ $ pnpm dev
   ➜  press h + enter to show help
 ```
 
-![](/images/remix-spa-tailwindcss-speedrun//local-check.png)
+![](/images/remix-spa-tailwindcss-speedrun/local-check.png)
 
 できましたね！
 
@@ -292,7 +292,7 @@ $ pnpm wrangler pages deploy build/client
 
 しばらくしてからプロジェクト作成時に表示された公開 URL にアクセスします。
 
-![](/images/remix-spa-tailwindcss-speedrun//deploy-check.png)
+![](/images/remix-spa-tailwindcss-speedrun/deploy-check.png)
 
 できました！
 
