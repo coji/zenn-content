@@ -183,6 +183,33 @@ https://example.net/,株式会社△△,製造業,株式会社△△は、製造
 
 Google 検索結果から取得した URL ごとに、業種が判別されて CSV 形式で出力されました。
 
+# Haiku のコスト
+
+今回のスクリプトを書くにあたって、何度も Web ページの内容を Claude API に渡して推論していました。どれくらいのコストがかかったか記録しておきます。
+
+コスト: 0.3 ドル (45 円)
+![](/images/claude3-haiku-crawl-company-detect-industry/billing.png)
+
+入力トークン数: 100 万トークン
+![](/images/claude3-haiku-crawl-company-detect-industry/input_tokens.png)
+
+出力トークン数: 2 万トークン
+![](/images/claude3-haiku-crawl-company-detect-industry/output_tokens.png)
+
+Claude3 の価格はこんなかんじです。Haiku の安さが光りますね！
+
+- Opus：100 万入力トークン当たり 15 ドル、100 万出力トークン当たり 75 ドル
+- Sonnet：100 万入力トークン当たり 3 ドル、100 万出力トークン当たり 15 ドル
+- Haiku：100 万入力トークン当たり 0.25 ドル、100 万出力トークン当たり 1.25 ドル
+
+OpenAI だとこんなかんじ。
+
+- GPT-4: 100 万入力トークンあたり 30 ドル、100 万出力トークン当たり 60 ドル
+- GPT-4 Turbo: 100 万入力トークンあたり 10 ドル、100 万出力トークン当たり 30 ドル
+- GPT-3.5 Turbo: 100 万入力トークンあたり 0.5 ドル、100 万出力トークン当たり 1.5 ドル
+
+Haiku が最安ですが、性能は GPT-3.5 Turbo 並か、ちょっと上ぐらいに感じました。
+
 # おわりに
 
 今回は anthropic の Claude を使って Google 検索結果から業種を特定する CLI ツールの作り方を紹介しました。anthropic の SDK を使うことで、比較的簡単に Claude を使ったツールを作ることができます。
