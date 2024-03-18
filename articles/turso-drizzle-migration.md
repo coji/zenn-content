@@ -6,6 +6,10 @@ topics: ["turso", "drizzle", "db"]
 published: true
 ---
 
+:::message
+この記事は Claude3 API で Haiku を使って、Zenn のスクラップ記事を元に LLM によって生成された記事になります。[元のスクラップはこちら](https://zenn.dev/coji/scraps/4ee5385c9dbfc7)です。[生成に使ったコードやプロンプトはこちら](https://github.com/coji/haiku-example/blob/main/commands/zenn-scrap-to-article.ts)
+:::
+
 # Turso の DB を drizzle でマイグレーションやってみる。
 
 ## はじめに
