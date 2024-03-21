@@ -3,7 +3,7 @@ title: "Remix × Zodix: パラメータやクエリのバリデーションを�
 emoji: "🚀"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["remix", "zod", "typescript"]
-published: false
+published: true
 ---
 
 # これは何？
