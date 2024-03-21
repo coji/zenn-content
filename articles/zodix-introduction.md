@@ -32,8 +32,8 @@ zodix を使う場合
 ```typescript
 export async function loader({ request }: LoaderArgs) {
   const { count, page } = zx.parseQuery(request, {
-    count: zx.NumAsString, // "100"
-    page: zx.NumAsString, // "1"
+    count: zx.NumAsString, // 100
+    page: zx.NumAsString, // 1
   });
 }
 ```
@@ -85,8 +85,8 @@ export async function loader({ params }: LoaderArgs) {
 // URL https://remix-app/users?count=100&page=1
 export async function loader({ request }: LoaderArgs) {
   const { count, page } = zx.parseQuery(request, {
-    count: zx.NumAsString, // "100"
-    page: zx.NumAsString, // "1"
+    count: zx.NumAsString, // 100
+    page: zx.NumAsString, // 1
   });
 }
 ```
