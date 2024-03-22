@@ -30,7 +30,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 zodix を使う場合
 
 ```typescript
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { count, page } = zx.parseQuery(request, {
     count: zx.NumAsString, // 100
     page: zx.NumAsString, // 1
@@ -54,10 +54,11 @@ https://github.com/rileytomasek/zodix
 pnpm install zodix zod
 ```
 
-次に、基本になる zx オブジェクトをインポートします。
+次に、基本になる `zx` オブジェクトと、zod のスキーマ定義のための `z` をインポートします。
 
 ```tsx
 import { zx } from "zodix";
+import { z } from "zod";
 ```
 
 ## 使い方
@@ -69,7 +70,7 @@ import { zx } from "zodix";
 ```tsx
 // route: users.$userId.notes.$noteId.tsx
 // URL: https://remix-app/users/coji/notes/y8XparQV
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { userId, noteId } = zx.parseParams(params, {
     userId: z.string(), // "coji"
     noteId: z.string(), // "y8XparQV"
@@ -83,7 +84,7 @@ export async function loader({ params }: LoaderArgs) {
 
 ```ts
 // URL https://remix-app/users?count=100&page=1
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { count, page } = zx.parseQuery(request, {
     count: zx.NumAsString, // 100
     page: zx.NumAsString, // 1
@@ -132,7 +133,7 @@ const Schema = z.object({
   cost: zx.NumAsString,
 });
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const { isAdmin, agreedToTerms, age, cost } = await zx.parseForm(
     request,
     Schema
@@ -143,7 +144,7 @@ export async function action({ request }: ActionArgs) {
   // cost: number
 }
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { isAdmin, agreedToTerms, age, cost } = zx.parseQuery(request, Schema);
   // isAdmin: boolean
   // agreedToTerms: boolean
@@ -159,7 +160,7 @@ export async function loader({ request }: LoaderArgs) {
 `parseParams`、`parseForm`、`parseQuery` は、パースに失敗した場合に 400 Response をスローします。これは Remix の error boundary とうまく連動し、カスタムエラーハンドリングを必要としない場合に使用するのに適しています。
 
 ```ts
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { postId } = zx.parseParams(
     params,
     { postId: zx.NumAsString },
