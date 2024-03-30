@@ -1,5 +1,5 @@
 title: "Conform: 型安全でWeb標準に基づくフォームバリデーションライブラリ"
-summary: "注意：この本は conform v1.0.4 時点での conform 公式サイトの英語記事を日本語に翻訳したものです。最新のものは原典 https://conform.guide をご確認ください。\n\nConform は、Web 標準に基づいて HTML フォームを段階的に強化し、RemixやNext.jsのようなサーバーフレームワークを完全にサポートする、型安全なフォームバリデーションライブラリです。"
+summary: "注意：この本は conform v1.0.4 時点での conform 公式サイトの英語記事を日本語に翻訳したものです。最新のものは公式ガイド(日本語版) https://ja.conform.guide をご確認ください。\n\nConform は、Web 標準に基づいて HTML フォームを段階的に強化し、RemixやNext.jsのようなサーバーフレームワークを完全にサポートする、型安全なフォームバリデーションライブラリです。"
 topics: ["Conform", "Remix", "Nextjs", "React"]
 published: true
 price: 0
