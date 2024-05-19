@@ -6,7 +6,7 @@ topics: ["python", "fastapi", "prisma"]
 published: true
 ---
 
-## FastAPI + Prisma で REST API を作る
+# FastAPI + Prisma で REST API を作る
 
 Python で REST API を作りたい場合、FastAPI と Prisma を組み合わせると非常に効率的に開発を進められます。本記事では、FastAPI と Prisma を使って簡単な REST API を作成する方法を解説します。
 
