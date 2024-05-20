@@ -10,6 +10,12 @@ published: true
 
 Python で REST API を作りたい場合、FastAPI と Prisma を組み合わせると非常に効率的に開発を進められます。本記事では、FastAPI と Prisma を使って簡単な REST API を作成する方法を解説します。
 
+Python で REST API を作る際、ORM として SQLAlchemy を使うことが一般的ですが、あまり知られていないもののPython でも Prisma が使えます。Prisma は Node.js や TypeScript などで広く使われている ORM ですが、Python 用のクライアントライブラリとして Prisma Client Python が開発されています。
+
+https://prisma-client-py.readthedocs.io/
+
+Prisma Client Python を使えば、Prisma の型安全性や自動生成される移行ファイルなどの利点を Python でも活用できます。本記事では、FastAPI と Prisma Client Python を組み合わせて簡単な REST API を作成する方法を解説します。
+
 ## 環境構築
 
 まず、`rye` を使ってプロジェクトを初期化し、必要なパッケージをインストールします。
