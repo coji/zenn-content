@@ -1,6 +1,6 @@
 title: "Remix"
 summary: "注意：この本は Remix v2.9.2 時点での Remix 公式サイトの英語記事を日本語に翻訳したものです。最新のものは公式サイト https://remix.run/docs/en/main をご確認ください。\n\n© Shopify, Inc.\n•Docs and examples licensed under MIT"
-topics: ["Conform", "Remix", "Nextjs", "React"]
+topics: ["Remix", "React"]
 published: false
 price: 0
 chapters:
@@ -47,8 +47,8 @@ chapters:
   - deployment.md
   - dev.md
   - disabling-javascript.md
-  - entry.client.md
-  - entry.server.md
+  - entry_client.md
+  - entry_server.md
   - envvars.md
   - error-boundary.md
   - error-handling.md
