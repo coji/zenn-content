@@ -98,7 +98,7 @@ chapters:
   - quickstart.md
   - react-router.md
   - redirect.md
-  - redirectDocument.md
+  - redirect-document.md
   - remix-config.md
   - resource-routes.md
   - resubmissions.md
