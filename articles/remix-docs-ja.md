@@ -19,16 +19,16 @@ https://remix-docs-ja.techtalk.jp
 
 今回翻訳したRemixドキュメントは、以下のようなカテゴリに分かれています。
 
-- start: 5分でできるチュートリアルなど、Remixを始めるためのガイド
-- discussion: Remixの設計思想や概念の解説
+- start: 5分でできるチュートリアルなど、Remixを始めるためのガイド。
+- discussion: Remixの設計思想や概念の解説。
 - file-conventions: ファイルベースルーティングや特別なファイルの規約。
-- route: ルートモジュールの仕様
-- components: Remixが提供する React コンポーネントのリファレンス
-- hooks: Remixが提供する React Hooks のリファレンス
-- utils: Remixが提供するユーティリティ関数のリファレンス
-- styling: Tailwindcss や CSS Modules等でのスタイリングの方法
-- other-api: その他の Remix が提供するAPI
-- guides: 各機能の詳細な使い方。SPAモードや、Vite の設定などもこちらに。
+- route: ルートモジュールの仕様。
+- components: Remixが提供する React コンポーネントのリファレンス。
+- hooks: Remixが提供する React Hooks のリファレンス。
+- utils: Remixが提供するユーティリティ関数のリファレンス。
+- styling: Tailwindcss や CSS Modules等でのスタイリングの方法。
+- other-api: その他の Remix が提供するAPI。
+- guides: 各機能の詳細な使い方。SPAモードや、Vite の設定などもこちら。
 
 これらを網羅的に翻訳することで、日本の開発者がRemixを理解し、活用するための情報を提供しています。
 
@@ -51,6 +51,11 @@ Translate the following text to Japanese. Markdowns should be left intact:
 
 Gemini 1.5 Flash の利用により、手作業のみでは難しい大量のドキュメント翻訳を効率的に進めることができました。
 
+翻訳に使ったコードを以下で公開しています。
+これも remix で作ったもので、手元PCで実行して翻訳を行いました。
+
+https://github.com/coji/oss-translation
+
 ## Remixによる日本語版サイトの開発
 
 翻訳したドキュメントは、Remixを使って構築したWebサイトで公開しています。Remixの特徴を活かし、以下のような工夫をしました。
@@ -66,6 +71,11 @@ Gemini 1.5 Flash の利用により、手作業のみでは難しい大量のド
 ### 言語切り替えリンクの追加
 
 各ページのヘッダーには、英語版の該当ページへのリンクを配置しました。これにより、日本語と英語を行き来しながらドキュメントを読むことができます。
+
+このサイトのソースコードは以下で公開しています。
+日本語に翻訳した markdown ファイルも同じリポジトリに含めました。
+
+https://github.com/coji/remix-docs-ja
 
 ## Remixで開発を始めるには
 
