@@ -11,31 +11,32 @@ published: false
 
 この度、Remix の公式ドキュメントを日本語に翻訳し、 https://remix-docs-ja.techtalk.jp というサイトで公開しました。
 
+https://remix-docs-ja.techtalk.jp
+
 本記事では、Remix ドキュメントの翻訳を Remix を使って開発した内容について技術的な側面から説明します。また、これから Remix を使った開発を始めたい方に向けて、日本語版ドキュメントを活用いただく方法についてもご紹介します。
 
 ## 日本語版ドキュメントの構成
 
 今回翻訳したRemixドキュメントは、以下のようなカテゴリに分かれています。
 
-- start: Remixを始めるためのガイド
-- tutorials: 実践的なチュートリアル
-- guides: 各機能の詳細な使い方
-- hooks: Remixが提供するフック
-- components: Remixが提供するコンポーネント
-- route: ルートモジュールの仕様
-- file-conventions: ファイル構成の規約
-- other-api: その他のAPI
-- styling: スタイリングの方法
+- start: 5分でできるチュートリアルなど、Remixを始めるためのガイド
 - discussion: Remixの設計思想や概念の解説
-- utils: ユーティリティ関数
+- file-conventions: ファイルベースルーティングや特定の役割をもつファイルの規約。
+- route: ルートモジュールの仕様
+- components: Remixが提供する React コンポーネントのリファレンス
+- hooks: Remixが提供する React Hooks のリファレンス
+- utils: Remixが提供するユーティリティ関数のリファレンス
+- styling: Tailwindcss や CSS Modules等でのスタイリングの方法
+- other-api: その他の Remix が提供するAPI
+- guides: 各機能の詳細な使い方。SPAモードや、Vite の設定などもこちらに。
 
 これらを網羅的に翻訳することで、日本の開発者がRemixを理解し、活用するための情報を提供しています。
 
 ## 翻訳の手法
 
-今回のドキュメント翻訳では、Google が開発した大規模言語モデル Gemini 1.5 Flash を活用しました。翻訳処理では以下のようなプロンプトを使用しています。
+今回のドキュメント翻訳では、Google が開発した大規模言語モデル Gemini 1.5 Flash を活用しました。翻訳処理では以下のようなシンプルなプロンプトを使用しています。
 
-```
+```txt
 Translate the following text to Japanese. Markdowns should be left intact:
 ```
 
