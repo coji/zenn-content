@@ -1,5 +1,5 @@
 ---
-title: "FastAPI + Prisma で REST API を作る"
+title: "Remix ドキュメントを Gemini 1.5 Flash で日本語化しました"
 emoji: "💿"
 type: "tech"
 topics: ["remix", "react", "typescript"]
