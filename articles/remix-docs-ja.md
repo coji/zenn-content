@@ -21,7 +21,7 @@ https://remix-docs-ja.techtalk.jp
 
 - start: 5分でできるチュートリアルなど、Remixを始めるためのガイド
 - discussion: Remixの設計思想や概念の解説
-- file-conventions: ファイルベースルーティングや特定の役割をもつファイルの規約。
+- file-conventions: ファイルベースルーティングや特別なファイルの規約。
 - route: ルートモジュールの仕様
 - components: Remixが提供する React コンポーネントのリファレンス
 - hooks: Remixが提供する React Hooks のリファレンス
