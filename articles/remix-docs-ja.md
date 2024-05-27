@@ -9,7 +9,7 @@ published: false
 
 ## はじめに
 
-この度、Remix の公式ドキュメントを日本語に翻訳し、 https://remix-docs-ja.techtalk.jp というサイトで公開しました。
+この度、Remix の公式ドキュメントを日本語に翻訳し、「Remix ドキュメント日本語版」というサイトで公開しました。
 
 https://remix-docs-ja.techtalk.jp
 
