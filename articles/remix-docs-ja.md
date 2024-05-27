@@ -3,7 +3,7 @@ title: "Remix のドキュメントを Gemini 1.5 Flash で日本語化しまし
 emoji: "💿"
 type: "tech"
 topics: ["remix", "react", "typescript"]
-published: false
+published: true
 ---
 # Remix ドキュメント日本語版を公開しました
 
