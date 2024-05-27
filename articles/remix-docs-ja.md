@@ -81,18 +81,29 @@ https://github.com/coji/remix-docs-ja
 
 本サイトを参考に、ぜひRemixでの開発にチャレンジしてみてください。おすすめの学習ステップは以下のとおりです。
 
-1. `start` や `tutorial` で基本的な使い方をつかむ
-2. `guides` で各機能の詳細を理解する
+1. `start` で基本的な使い方をつかむ
+2. `discussion` で設計思想や概念を深く知る
 3. `hooks` や `components` を活用してコーディングする
-4. `discussion` で設計思想や概念を深く知る
-5. `file-conventions` や `other-api` で発展的なトピックを学ぶ
+4. `file-conventions` や `other-api` で発展的なトピックを学ぶ
+5. `guides` で各機能の詳細を理解する
+6. `other-api` で発展的なトピックを学ぶ
 
-また、実際のコードを読むのも理解が深まるでしょう。本サイトのソースコードもGitHubで公開しているので、参考にしてみてください。
+特に、チュートリアルが終わったタイミングで、`discussion`にある以下の記事を読むのをおすすめします。
+
+1. [フルスタックデータフロー](https://remix-docs-ja.techtalk.jp/discussion/data-flow)
+2. [プログレッシブエンハンスメント](https://remix-docs-ja.techtalk.jp/discussion/progressive-enhancement)
+3. [状態管理](https://remix-docs-ja.techtalk.jp/discussion/state-management)
+4. [フォーム vs. フェッチャー](https://remix-docs-ja.techtalk.jp/discussion/form-vs-fetcher)
+
+Remix の流儀を理解することで、シンプルに機能を実装できるようになるでしょう。
+
+また、実際のコードを読むのも理解が深まるでしょう。
+本サイトのソースコードもGitHubで公開しているので、参考にしてみてください。
+
+https://github.com/coji/remix-docs-ja
 
 ## さいごに
 
 Remix ドキュメントの日本語化により、日本国内でのRemixの普及が進むことを願っています。翻訳の改善やアップデートも継続的に行なっていく予定です。
 
 フィードバックやコントリビューションもお待ちしています。みなさまのRemixライフに、本ドキュメントが役立つことを祈っています。
-
-以上、Gemini 1.5 Flash を使用した翻訳と、ドキュメントの構成を踏まえて記事を書き直してみました。Remixの特徴を活かしたサイト構築の工夫や、ドキュメントを活用した学習ステップなどを盛り込んでいます。読者にとって有益な情報となれば幸いです。
