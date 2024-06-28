@@ -16,6 +16,8 @@ Vercel AI SDKの`useObject`フックを使用した経験から、その有用�
 
 たとえば、以下のような UIを 10分で作ることができます。
 
+![demo](/images/vercel-ai-sdk-use-object-is-nice/use-object-demo.gif)
+
 ## 主な特徴
 
 1. **使用の簡便性**: APIエンドポイントとスキーマの指定だけで、AIレスポンスの処理が可能です。
@@ -35,7 +37,7 @@ const { submit, isLoading, object, stop } = useObject({
 
 この実装により、`submit`でAIにリクエストを送信し、`object`でレスポンスを受信できます。また、`isLoading`と`stop`機能を使用することで、ユーザーインターフェースの制御が可能になります。
 
-なお、サーバサイドは以下のように `streamObject` 関数を使うことで簡単に実装できます。
+Remix での例ですが、サーバサイドは以下のように `streamObject` 関数を使うことで簡単に実装できます。
 
 ```ts:api.notification.ts
 import { openai } from '@ai-sdk/openai'
@@ -76,6 +78,10 @@ export const notificationSchema = z.object({
 // define a type for the partial notifications during generation
 export type PartialNotification = DeepPartial<typeof notificationSchema>
 ```
+
+Nextjs App Router での実装例は　Vercel AI SDK 自体の Example にありますので参考にしてください。
+
+https://github.com/vercel/ai/blob/main/examples/next-openai/app/use-object/page.tsx
 
 ## 開発サポートの実例と感想
 
