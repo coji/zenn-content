@@ -1,5 +1,5 @@
 ---
-title: "shadcn-uiとconformによるCheckboxの実装ガイド"
+title: "shadcn-uiとconformによるSwitchの実装"
 emoji: "📝"
 type: "tech"
 topics: ["conform", "shadcnui", "zod"]
@@ -8,7 +8,7 @@ published: true
 
 ## 概要
 
-この記事では、shadcn-uiとconformを使用して基本的なCheckboxを実装する方法を解説します。通常の実装方法と、カスタムhelper関数を使用した実装方法の両方を紹介します。
+この記事では、shadcn-uiとconformを使用して基本的なSwitchを実装する方法を解説します。通常の実装方法と、カスタムhelper関数を使用した実装方法の両方を紹介します。
 
 ## セットアップ
 
@@ -19,15 +19,14 @@ import { useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { Form } from '@remix-run/react'
 import { z } from 'zod'
-import { Checkbox } from '~/components/ui/checkbox'
-import { Label } from '~/components/ui/label'
-import { getCheckboxProps } from './helper'
+import { Switch, Label } from '~/components/ui'
+import { getSwitchProps } from './helper'
 ```
 
 基本的なフォーム構造は以下のようになります：
 
 ```typescript
-export default function CheckboxForm() {
+export default function SwitchForm() {
   const [form, fields] = useForm({
     onValidate: ({ formData }) => parseWithZod(formData, { schema }),
     constraint: getZodConstraint(schema),
@@ -37,7 +36,7 @@ export default function CheckboxForm() {
 
   return (
     <Form {...getFormProps(form)} method="post">
-      {/* Checkbox fields will be placed here */}
+      {/* Switch fields will be placed here */}
     </Form>
   )
 }
@@ -47,77 +46,75 @@ export default function CheckboxForm() {
 
 ```typescript
 const schema = z.object({
-  agreeTerms: z.boolean({
-    required_error: '利用規約に同意してください',
+  notifications: z.boolean({
+    required_error: '選択してください',
     invalid_type_error: '無効な選択です',
-  }).refine((val) => val === true, {
-    message: '利用規約に同意する必要があります',
   }),
 })
 ```
 
 ## 実装例
 
-### 1. 基本的なCheckbox実装
+### 1. 基本的なSwitch実装
 
 ```typescript
 <div className="flex items-center space-x-2">
-  <Checkbox
-    id={fields.agreeTerms.id}
-    name={fields.agreeTerms.name}
-    required={fields.agreeTerms.required}
-    defaultChecked={fields.agreeTerms.initialValue === 'on'}
-    aria-invalid={!fields.agreeTerms.valid || undefined}
-    aria-describedby={!fields.agreeTerms.valid ? fields.agreeTerms.errorId : undefined}
+  <Switch
+    id={fields.notifications.id}
+    name={fields.notifications.name}
+    required={fields.notifications.required}
+    defaultChecked={fields.notifications.initialValue === 'on'}
+    aria-invalid={!fields.notifications.valid || undefined}
+    aria-describedby={!fields.notifications.valid ? fields.notifications.errorId : undefined}
     onCheckedChange={(checked) => {
       form.update({
-        name: fields.agreeTerms.name,
+        name: fields.notifications.name,
         value: checked ? 'on' : '',
       })
     }}
   />
   <Label
-    htmlFor={fields.agreeTerms.id}
+    htmlFor={fields.notifications.id}
     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
   >
-    利用規約に同意する
+    通知を受け取る
   </Label>
 </div>
-<div id={fields.agreeTerms.errorId} className="text-destructive">
-  {fields.agreeTerms.errors}
+<div id={fields.notifications.errorId} className="text-destructive">
+  {fields.notifications.errors}
 </div>
 ```
 
-### 2. Helper関数を使用したCheckbox実装
+### 2. Helper関数を使用したSwitch実装
 
-helper.tsファイルに定義されたgetCheckboxProps関数を使用して、より簡潔に実装できます。
+helper.tsファイルに定義されたgetSwitchProps関数を使用して、より簡潔に実装できます。
 
 ```typescript
 <div className="flex items-center space-x-2">
-  <Checkbox
-    {...getCheckboxProps(fields.agreeTerms)}
+  <Switch
+    {...getSwitchProps(fields.notifications)}
     onCheckedChange={(checked) => {
       form.update({
-        name: fields.agreeTerms.name,
+        name: fields.notifications.name,
         value: checked
       })
     }}
   />
   <Label
-    htmlFor={fields.agreeTerms.id}
+    htmlFor={fields.notifications.id}
     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
   >
-    利用規約に同意する
+    通知を受け取る
   </Label>
 </div>
-<div id={fields.agreeTerms.errorId} className="text-destructive">
-  {fields.agreeTerms.errors}
+<div id={fields.notifications.errorId} className="text-destructive">
+  {fields.notifications.errors}
 </div>
 ```
 
 ## Helper関数の説明
 
-helper.tsファイルには、Checkboxの実装を簡略化するための`getCheckboxProps`関数が定義されています：
+helper.tsファイルには、Switch要素の実装を簡略化するための`getSwitchProps`関数が定義されています：
 
 ```ts:helper.ts
 import type { FieldMetadata } from '@conform-to/react';
@@ -135,7 +132,7 @@ function simplify<Props>(props: Props): Props {
   return props;
 }
 
-export const getCheckboxProps = <Schema>(
+export const getSwitchProps = <Schema>(
   metadata: FieldMetadata<Schema>,
   options:
     | {
@@ -188,7 +185,7 @@ export const getCheckboxProps = <Schema>(
 
 この関数は以下のプロパティを生成します：
 
-- `id`: CheckboxのID
+- `id`: SwitchのID
 - `key`: Reactのkey属性
 - `required`: 必須フィールドかどうか
 - `name`: フィールド名
@@ -217,6 +214,6 @@ export const getCheckboxProps = <Schema>(
 
 ## まとめ
 
-shadcn-uiとconformを組み合わせることで、基本的なCheckboxを簡単に実装できます。さらに、カスタムhelper関数を使用することで、コードをより簡潔にし、保守性を高めることができます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーなチェックボックスフォームを作成することができます。
+shadcn-uiとconformを組み合わせることで、基本的なSwitchを簡単に実装できます。さらに、カスタムhelper関数を使用することで、コードをより簡潔にし、保守性を高めることができます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーなスイッチフォームを作成することができます。
 
-次回は、Switchの実装について詳しく解説します。お楽しみに！
+次回は、RadioGroupの実装について詳しく解説します。お楽しみに！

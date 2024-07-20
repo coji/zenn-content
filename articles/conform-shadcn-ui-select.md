@@ -73,7 +73,7 @@ const schema = z.object({
     onValueChange={(value) => {
       form.update({
         name: fields.basicSelect.name,
-        value: value,
+        value,
       })
     }}
   >
