@@ -63,9 +63,7 @@ const schema = z.object({
   agreeTerms: z.boolean({
     required_error: '利用規約に同意してください',
     invalid_type_error: '無効な選択です',
-  }).refine((val) => val === true, {
-    message: '利用規約に同意する必要があります',
-  }),
+  })
 })
 ```
 
