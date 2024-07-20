@@ -61,7 +61,7 @@ export default function SwitchForm() {
 const schema = z.object({
   notifications: z.boolean({
     required_error: '選択してください',
-    invalid_type_error: '無効な選択です',
+    message: '無効な選択です',
   }),
 })
 ```

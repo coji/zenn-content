@@ -68,7 +68,7 @@ export default function SelectForm() {
 const schema = z.object({
   basicSelect: z.enum(['apple', 'banana', 'orange'], {
     required_error: '選択してください',
-    invalid_type_error: '無効な選択です',
+    message: '無効な選択です',
   }),
 })
 ```

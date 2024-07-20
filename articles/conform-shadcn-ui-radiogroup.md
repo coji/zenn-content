@@ -62,7 +62,7 @@ export default function RadioGroupForm() {
 const schema = z.object({
   plan: z.enum(['basic', 'pro', 'enterprise'], {
     required_error: 'プランを選択してください',
-    invalid_type_error: '無効な選択です',
+    message: '無効な選択です',
   }),
 })
 ```

@@ -230,6 +230,34 @@ const schema = z.object({
 </div>
 ```
 
+### 日付入力 (date)
+
+スキーマ定義:
+
+```typescript
+const schema = z.object({
+  date: z.date({
+    required_error: '必須',
+    message: '日付を入力してください',
+  }),
+})
+```
+
+実装例:
+
+```typescript
+<div>
+  <Label htmlFor={fields.date.id}>日時</Label>
+  <Input
+    {...getInputProps(fields.date, { type: 'date' })}
+    key={fields.date.key}
+  />
+  <div id={fields.date.errorId} className="text-destructive">
+    {fields.date.errors}
+  </div>
+</div>
+```
+
 ### 日時入力 (datetime-local)
 
 スキーマ定義:
@@ -238,7 +266,10 @@ const schema = z.object({
 const schema = z.object({
   datetime: z
     .string({ required_error: '必須' })
-    .refine((val) => !isNaN(Date.parse(val)), { message: '有効な日時を入力してください' }),
+    .refine((value) => !Number.isNaN(new Date(value).getTime()), {
+      message: '日時を入力してください',
+    })
+
 })
 ```
 
@@ -265,7 +296,7 @@ const schema = z.object({
 const schema = z.object({
   time: z
     .string({ required_error: '必須' })
-    .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: '有効な時間を入力してください' }),
+    .time({ message: '時間を入力してください' }),
 })
 ```
 
@@ -292,7 +323,7 @@ const schema = z.object({
 const schema = z.object({
   month: z
     .string({ required_error: '必須' })
-    .regex(/^\d{4}-([0][1-9]|[1][0-2])$/, { message: '有効な月を選択してください' }),
+    .refine((value) => !Number.isNaN(new Date(value).getMonth())),
 })
 ```
 
@@ -317,9 +348,7 @@ const schema = z.object({
 
 ```typescript
 const schema = z.object({
-  week: z
-    .string({ required_error: '必須' })
-    .regex(/^\d{4}-W(0[1-9]|[1-4][0-9]|5[0-3])$/, { message: '有効な週を選択してください' }),
+  week: z.string({ required_error: '必須' }),
 })
 ```
 
@@ -373,9 +402,7 @@ const schema = z.object({
 
 ```typescript
 const schema = z.object({
-  color: z
-    .string({ required_error: '必須' })
-    .regex(/^#[0-9A-F]{6}$/i, { message: '有効な色を選択してください' }),
+  color: z.string({ required_error: '必須' }),
 })
 ```
 
