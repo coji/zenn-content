@@ -197,6 +197,7 @@ export const getRadioGroupProps = <Schema>(
 
 この関数は以下のプロパティを生成します：
 
+- `key`: Reactのkey属性
 - `name`: フィールド名
 - `defaultValue`: 初期選択値
 - `aria-invalid`: 無効な入力かどうか
