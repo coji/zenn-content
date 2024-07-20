@@ -302,7 +302,7 @@ const schema = z.object({
 
 実装例:
 
-```typescript
+```jsx
 <div>
   <Label htmlFor={fields.time.id}>時間</Label>
   <Input
@@ -329,7 +329,7 @@ const schema = z.object({
 
 実装例:
 
-```typescript
+```jsx
 <div>
   <Label htmlFor={fields.month.id}>月</Label>
   <Input
@@ -354,7 +354,7 @@ const schema = z.object({
 
 実装例:
 
-```typescript
+```jsx
 <div>
   <Label htmlFor={fields.week.id}>週</Label>
   <Input
@@ -382,7 +382,7 @@ const schema = z.object({
 
 実装例:
 
-```typescript
+```jsx
 <div>
   <Label htmlFor={fields.file.id}>ファイル</Label>
   <Input
@@ -408,7 +408,7 @@ const schema = z.object({
 
 実装例:
 
-```typescript
+```jsx
 <div>
   <Label htmlFor={fields.color.id}>色</Label>
   <Input
@@ -425,7 +425,7 @@ const schema = z.object({
 
 フォームの値とエラーを確認するためのデバッグセクションを追加することができます：
 
-```typescript
+```jsx
 <div>
   <h3>フォームの値</h3>
   <pre>{JSON.stringify(form.value, null, 2)}</pre>

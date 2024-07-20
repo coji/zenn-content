@@ -39,7 +39,7 @@ import { getCheckboxProps } from './helper'
 
 基本的なフォーム構造は以下のようになります：
 
-```typescript
+```jsx
 export default function CheckboxForm() {
   const [form, fields] = useForm({
     onValidate: ({ formData }) => parseWithZod(formData, { schema }),
@@ -71,7 +71,7 @@ const schema = z.object({
 
 ### 1. 基本的なCheckbox実装
 
-```typescript
+```jsx
 <div className="flex items-center space-x-2">
   <Checkbox
     id={fields.agreeTerms.id}
@@ -103,7 +103,7 @@ const schema = z.object({
 
 helper.tsファイルに定義されたgetCheckboxProps関数を使用して、より簡潔に実装できます。
 
-```typescript
+```jsx
 <div className="flex items-center space-x-2">
   <Checkbox
     {...getCheckboxProps(fields.agreeTerms)}
@@ -213,7 +213,7 @@ export const getCheckboxProps = <Schema>(
 
 フォームの値とエラーを確認するためのデバッグセクションを追加することができます：
 
-```typescript
+```jsx
 <div>
   <h3>フォームの値</h3>
   <pre>{JSON.stringify(form.value, null, 2)}</pre>

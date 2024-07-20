@@ -45,7 +45,7 @@ import { getSelectProps, getSelectTriggerProps } from './helper'
 
 基本的なフォーム構造は以下のようになります：
 
-```typescript
+```jsx
 export default function SelectForm() {
   const [form, fields] = useForm({
     onValidate: ({ formData }) => parseWithZod(formData, { schema }),
@@ -77,7 +77,7 @@ const schema = z.object({
 
 ### 1. 基本的なSelect実装
 
-```typescript
+```jsx
 <div>
   <Label htmlFor={fields.basicSelect.id}>果物を選択</Label>
   <Select
@@ -113,7 +113,7 @@ const schema = z.object({
 
 helper.tsファイルに定義されたgetSelectPropsとgetSelectTriggerProps関数を使用して、より簡潔に実装できます。
 
-```typescript
+```jsx
 <div>
   <Label htmlFor={fields.basicSelect.id}>果物を選択 (Helper使用)</Label>
   <Select
@@ -233,7 +233,7 @@ export const getSelectTriggerProps = <Schema>(
 
 フォームの値とエラーを確認するためのデバッグセクションを追加することができます：
 
-```typescript
+```jsx
 <div>
   <h3>フォームの値</h3>
   <pre>{JSON.stringify(form.value, null, 2)}</pre>

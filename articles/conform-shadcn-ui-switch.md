@@ -38,7 +38,7 @@ import { getSwitchProps } from './helper'
 
 基本的なフォーム構造は以下のようになります：
 
-```typescript
+```jsx
 export default function SwitchForm() {
   const [form, fields] = useForm({
     onValidate: ({ formData }) => parseWithZod(formData, { schema }),
@@ -70,7 +70,7 @@ const schema = z.object({
 
 ### 1. 基本的なSwitch実装
 
-```typescript
+```jsx
 <div className="flex items-center space-x-2">
   <Switch
     id={fields.notifications.id}
@@ -102,7 +102,7 @@ const schema = z.object({
 
 helper.tsファイルに定義されたgetSwitchProps関数を使用して、より簡潔に実装できます。
 
-```typescript
+```jsx
 <div className="flex items-center space-x-2">
   <Switch
     {...getSwitchProps(fields.notifications)}
@@ -212,7 +212,7 @@ export const getSwitchProps = <Schema>(
 
 フォームの値とエラーを確認するためのデバッグセクションを追加することができます：
 
-```typescript
+```jsx
 <div>
   <h3>フォームの値</h3>
   <pre>{JSON.stringify(form.value, null, 2)}</pre>

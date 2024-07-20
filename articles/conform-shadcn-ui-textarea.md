@@ -38,7 +38,7 @@ import { Label } from '~/components/ui/label'
 
 基本的なフォーム構造は以下のようになります：
 
-```typescript
+```jsx
 export default function TextareaForm() {
   const [form, fields] = useForm({
     onValidate: ({ formData }) => parseWithZod(formData, { schema }),
@@ -74,7 +74,7 @@ const schema = z.object({
 
 実装例:
 
-```typescript
+```jsx
 <div>
   <Label htmlFor={fields.basicTextarea.id}>基本的なTextarea</Label>
   <Textarea
@@ -92,7 +92,7 @@ const schema = z.object({
 
 フォームの値とエラーを確認するためのデバッグセクションを追加することができます：
 
-```typescript
+```jsx
 <div>
   <h3>フォームの値</h3>
   <pre>{JSON.stringify(form.value, null, 2)}</pre>
