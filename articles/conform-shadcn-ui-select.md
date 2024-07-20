@@ -10,12 +10,12 @@ published: true
 
 このシリーズの他の記事もご覧ください：
 
-- [shadcn-uiとconformによるInputの実装](https://zenn.dev/coji/articles/conform-shadcn-ui-input)
-- [shadcn-uiとconformによるTextareaの実装](https://zenn.dev/coji/articles/conform-shadcn-ui-textarea)
-- [shadcn-uiとconformによるSelectの実装](https://zenn.dev/coji/articles/conform-shadcn-ui-select)
-- [shadcn-uiとconformによるCheckboxの実装](https://zenn.dev/coji/articles/conform-shadcn-ui-checkbox)
-- [shadcn-uiとconformによるSwitchの実装](https://zenn.dev/coji/articles/conform-shadcn-ui-switch)
-- [shadcn-uiとconformによるRadioGroupの実装](https://zenn.dev/coji/articles/conform-shadcn-ui-radiogroup)
+- [shadcn-uiとconformによるInputの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-input)
+- [shadcn-uiとconformによるTextareaの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-textarea)
+- [shadcn-uiとconformによるSelectの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-select)
+- [shadcn-uiとconformによるCheckboxの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-checkbox)
+- [shadcn-uiとconformによるSwitchの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-switch)
+- [shadcn-uiとconformによるRadioGroupの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-radiogroup)
 
 これらの記事を組み合わせることで、shadcn-uiとconformを使用した包括的なフォーム実装の知識を得ることができます。
 
