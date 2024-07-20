@@ -19,7 +19,8 @@ import { useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { Form } from '@remix-run/react'
 import { z } from 'zod'
-import { RadioGroup, RadioGroupItem, Label } from '~/components/ui'
+import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group'
+import { Label } from '~/components/ui/label'
 import { getRadioGroupProps } from './helper'
 ```
 
