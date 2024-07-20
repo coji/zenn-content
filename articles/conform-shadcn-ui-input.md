@@ -1,5 +1,5 @@
 ---
-title: "shadcn-uiとconformによるInputの実装ガイド"
+title: "shadcn/uiとconformによるInputの実装ガイド"
 emoji: "📝"
 type: "tech"
 topics: ["conform", "shadcnui", "zod"]
@@ -10,18 +10,18 @@ published: true
 
 このシリーズの他の記事もご覧ください：
 
-- [shadcn-uiとconformによるInputの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-input)
-- [shadcn-uiとconformによるTextareaの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-textarea)
-- [shadcn-uiとconformによるSelectの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-select)
-- [shadcn-uiとconformによるCheckboxの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-checkbox)
-- [shadcn-uiとconformによるSwitchの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-switch)
-- [shadcn-uiとconformによるRadioGroupの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-radiogroup)
+- [shadcn/uiとconformによるInputの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-input)
+- [shadcn/uiとconformによるTextareaの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-textarea)
+- [shadcn/uiとconformによるSelectの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-select)
+- [shadcn/uiとconformによるCheckboxの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-checkbox)
+- [shadcn/uiとconformによるSwitchの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-switch)
+- [shadcn/uiとconformによるRadioGroupの実装ガイド](https://zenn.dev/coji/articles/conform-shadcn-ui-radiogroup)
 
-これらの記事を組み合わせることで、shadcn-uiとconformを使用した包括的なフォーム実装の知識を得ることができます。
+これらの記事を組み合わせることで、shadcn/uiとconformを使用した包括的なフォーム実装の知識を得ることができます。
 
 ## 概要
 
-この記事では、shadcn-uiとconformを使用して、様々なタイプのInputを実装する方法を詳しく解説します。各Inputタイプについて、スキーマ定義と実装例を提供します。
+この記事では、shadcn/uiとconformを使用して、様々なタイプのInputを実装する方法を詳しく解説します。各Inputタイプについて、スキーマ定義と実装例を提供します。
 
 ## セットアップ
 
@@ -444,7 +444,7 @@ const schema = z.object({
 
 [shadcn-uiとconformを使用したフォーム実装デモ](https://www.techtalk.jp/demo/conform/shadcn-ui)
 
-このデモページでは、shadcn-uiとconformを組み合わせた様々なフォーム要素の実装例を見ることができます。各要素の動作を確認でき、実際のユーザー体験を把握するのに役立ちます。
+このデモページでは、shadcn/uiとconformを組み合わせた様々なフォーム要素の実装例を見ることができます。各要素の動作を確認でき、実際のユーザー体験を把握するのに役立ちます。
 
 また、デモページからは実装のソースコードにもアクセスできます。ソースコードを参照することで、本記事で説明した実装方法がどのように適用されているかを詳細に確認できます。
 
@@ -452,6 +452,6 @@ const schema = z.object({
 
 ## まとめ
 
-shadcn-uiとconformを組み合わせることで、様々なタイプのInputを美しく機能的に実装できます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーなフォームを作成することができます。
+shadcn/uiとconformを組み合わせることで、様々なタイプのInputを美しく機能的に実装できます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーなフォームを作成することができます。
 
 次回は、[Textareaの実装について](https://zenn.dev/coji/articles/conform-shadcn-ui-textarea)詳しく解説します。お楽しみに！
