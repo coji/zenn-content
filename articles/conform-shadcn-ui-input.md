@@ -1,5 +1,5 @@
 ---
-title: "shadcn-uiとconformによるInput要素の包括的実装ガイド"
+title: "shadcn-uiとconformによるInput要素の実装ガイド"
 emoji: "📝"
 type: "tech"
 topics: ["conform", "shadcnui"]

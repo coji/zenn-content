@@ -1,5 +1,5 @@
 ---
-title: "shadcn-uiとconformによる基本的なSelect要素の実装"
+title: "shadcn-uiとconformによるSelect要素の実装ガイド"
 emoji: "📝"
 type: "tech"
 topics: ["conform", "shadcnui"]

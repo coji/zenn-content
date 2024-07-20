@@ -1,5 +1,5 @@
 ---
-title: "shadcn-uiとconformによるTextarea要素の実装"
+title: "shadcn-uiとconformによるTextarea要素の実装ガイド"
 emoji: "📝"
 type: "tech"
 topics: ["conform", "shadcnui"]
