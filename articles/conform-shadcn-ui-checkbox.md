@@ -74,6 +74,7 @@ const schema = z.object({
 ```jsx
 <div className="flex items-center space-x-2">
   <Checkbox
+    key={fields.agreeTerms.key}
     id={fields.agreeTerms.id}
     name={fields.agreeTerms.name}
     required={fields.agreeTerms.required}
@@ -107,6 +108,7 @@ helper.tsファイルに定義されたgetCheckboxProps関数を使用して、�
 <div className="flex items-center space-x-2">
   <Checkbox
     {...getCheckboxProps(fields.agreeTerms)}
+    key={fields.agreeTerms.key}
     onCheckedChange={(checked) => {
       form.update({
         name: fields.agreeTerms.name,

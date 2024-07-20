@@ -75,6 +75,7 @@ const schema = z.object({
 <div>
   <Label>プランを選択</Label>
   <RadioGroup
+    key={fields.plan.key}
     name={fields.plan.name}
     defaultValue={fields.plan.initialValue}
     onValueChange={(value) => {
@@ -114,6 +115,7 @@ helper.tsファイルに定義されたgetRadioGroupProps関数を使用して�
   <Label>プランを選択</Label>
   <RadioGroup
     {...getRadioGroupProps(fields.plan)}
+    key={fields.plan.key}
     onValueChange={(value) => {
       form.update({
         name: fields.plan.name,

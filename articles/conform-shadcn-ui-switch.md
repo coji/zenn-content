@@ -73,6 +73,7 @@ const schema = z.object({
 ```jsx
 <div className="flex items-center space-x-2">
   <Switch
+    key={fields.notifications.key}
     id={fields.notifications.id}
     name={fields.notifications.name}
     required={fields.notifications.required}
@@ -106,6 +107,7 @@ helper.tsファイルに定義されたgetSwitchProps関数を使用して、よ
 <div className="flex items-center space-x-2">
   <Switch
     {...getSwitchProps(fields.notifications)}
+    key={fields.notifications.key}
     onCheckedChange={(checked) => {
       form.update({
         name: fields.notifications.name,

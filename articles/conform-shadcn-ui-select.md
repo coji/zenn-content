@@ -81,6 +81,7 @@ const schema = z.object({
 <div>
   <Label htmlFor={fields.basicSelect.id}>果物を選択</Label>
   <Select
+    key={fields.basicSelect.key}
     name={fields.basicSelect.name}
     defaultValue={fields.basicSelect.initialValue}
     onValueChange={(value) => {
@@ -118,6 +119,7 @@ helper.tsファイルに定義されたgetSelectPropsとgetSelectTriggerProps関
   <Label htmlFor={fields.basicSelect.id}>果物を選択 (Helper使用)</Label>
   <Select
     {...getSelectProps(fields.basicSelect)}
+    key={fields.basicSelect.key}
     onValueChange={(value) => {
       form.update({
         name: fields.basicSelect.name,
