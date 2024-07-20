@@ -1,14 +1,14 @@
 ---
-title: "shadcn-uiとconformによるInput要素の実装ガイド"
+title: "shadcn-uiとconformによるInputの実装ガイド"
 emoji: "📝"
 type: "tech"
-topics: ["conform", "shadcnui"]
+topics: ["conform", "shadcnui", "zod"]
 published: true
 ---
 
 ## 概要
 
-この記事では、shadcn-uiとconformを使用して、様々なタイプのInput要素を実装する方法を詳しく解説します。各Input要素タイプについて、スキーマ定義と実装例を提供します。
+この記事では、shadcn-uiとconformを使用して、様々なタイプのInputを実装する方法を詳しく解説します。各Inputタイプについて、スキーマ定義と実装例を提供します。
 
 ## セットアップ
 
@@ -19,7 +19,8 @@ import { getInputProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { Form } from '@remix-run/react'
 import { z } from 'zod'
-import { Input, Label } from '~/components/ui'
+import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
 ```
 
 基本的なフォーム構造は以下のようになります：
@@ -43,7 +44,7 @@ export default function InputForm() {
 
 ## 実装例
 
-以下、各Input要素のスキーマ定義と実装例を示します。
+以下、各Inputのスキーマ定義と実装例を示します。
 
 ### テキスト入力 (text)
 
@@ -391,7 +392,7 @@ const schema = z.object({
 </div>
 <div>
   <h3>フォームのエラー</h3>
-  <pre>{JSON.stringify(form.errors, null, 2)}</pre>
+  <pre>{JSON.stringify(form.allErrors, null, 2)}</pre>
 </div>
 ```
 
@@ -399,6 +400,6 @@ const schema = z.object({
 
 ## まとめ
 
-shadcn-uiとconformを組み合わせることで、様々なタイプのInput要素を美しく機能的に実装できます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーなフォームを作成することができます。
+shadcn-uiとconformを組み合わせることで、様々なタイプのInputを美しく機能的に実装できます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーなフォームを作成することができます。
 
-次回は、Textarea要素の実装について詳しく解説します。お楽しみに！
+次回は、Textareaの実装について詳しく解説します。お楽しみに！

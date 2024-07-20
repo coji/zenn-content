@@ -1,14 +1,14 @@
 ---
-title: "shadcn-uiとconformによるSelect要素の実装ガイド"
+title: "shadcn-uiとconformによるSelectの実装ガイド"
 emoji: "📝"
 type: "tech"
-topics: ["conform", "shadcnui"]
+topics: ["conform", "shadcnui", "zod"]
 published: true
 ---
 
 ## 概要
 
-この記事では、shadcn-uiとconformを使用して基本的なSelect要素を実装する方法を解説します。通常の実装方法と、カスタムhelper関数を使用した実装方法の両方を紹介します。
+この記事では、shadcn-uiとconformを使用して基本的なSelectを実装する方法を解説します。通常の実装方法と、カスタムhelper関数を使用した実装方法の両方を紹介します。
 
 ## セットアップ
 
@@ -25,8 +25,8 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Label,
-} from '~/components/ui'
+} from '~/components/ui/select'
+import { Label } from '~/components/ui/label'
 import { getSelectProps, getSelectTriggerProps } from './helper'
 ```
 
@@ -129,10 +129,10 @@ helper.tsファイルに定義されたgetSelectPropsとgetSelectTriggerProps関
 
 ## Helper関数の説明
 
-helper.tsファイルには、Select要素の実装を簡略化するための2つの主要な関数が定義されています：
+helper.tsファイルには、Selectの実装を簡略化するための2つの主要な関数が定義されています：
 
-1. `getSelectProps`: Select要素に必要なプロパティを生成します。
-2. `getSelectTriggerProps`: SelectTrigger要素に必要なプロパティを生成します。
+1. `getSelectProps`: Selectに必要なプロパティを生成します。
+2. `getSelectTriggerProps`: SelectTriggerに必要なプロパティを生成します。
 
 これらの関数を使用することで、コードの冗長性を減らし、一貫性のある実装を維持できます。
 
@@ -227,7 +227,7 @@ export const getSelectTriggerProps = <Schema>(
 </div>
 <div>
   <h3>フォームのエラー</h3>
-  <pre>{JSON.stringify(form.errors, null, 2)}</pre>
+  <pre>{JSON.stringify(form.allErrors, null, 2)}</pre>
 </div>
 ```
 
@@ -235,6 +235,6 @@ export const getSelectTriggerProps = <Schema>(
 
 ## まとめ
 
-shadcn-uiとconformを組み合わせることで、基本的なSelect要素を簡単に実装できます。さらに、カスタムhelper関数を使用することで、コードをより簡潔にし、保守性を高めることができます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーな選択フォームを作成することができます。
+shadcn-uiとconformを組み合わせることで、基本的なSelectを簡単に実装できます。さらに、カスタムhelper関数を使用することで、コードをより簡潔にし、保守性を高めることができます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーな選択フォームを作成することができます。
 
-次回は、Checkbox要素の実装について詳しく解説します。お楽しみに！
+次回は、Checkboxの実装について詳しく解説します。お楽しみに！

@@ -1,14 +1,14 @@
 ---
-title: "shadcn-uiとconformによるTextarea要素の実装ガイド"
+title: "shadcn-uiとconformによるTextareaの実装ガイド"
 emoji: "📝"
 type: "tech"
-topics: ["conform", "shadcnui"]
+topics: ["conform", "shadcnui", "zod"]
 published: true
 ---
 
 ## 概要
 
-この記事では、shadcn-uiとconformを使用して基本的なTextarea要素を実装する方法を解説します。長文入力やマルチラインテキストの取り扱いについて、スキーマ定義と実装例を提供します。
+この記事では、shadcn-uiとconformを使用して基本的なTextareaを実装する方法を解説します。長文入力やマルチラインテキストの取り扱いについて、スキーマ定義と実装例を提供します。
 
 ## セットアップ
 
@@ -19,7 +19,8 @@ import { getTextareaProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { Form } from '@remix-run/react'
 import { z } from 'zod'
-import { Textarea, Label } from '~/components/ui'
+import { Textarea } from '~/components/ui/textarea'
+import { Label } from '~/components/ui/label'
 ```
 
 基本的なフォーム構造は以下のようになります：
@@ -43,7 +44,7 @@ export default function TextareaForm() {
 
 ## 実装例
 
-以下、基本的なTextarea要素のスキーマ定義と実装例を示します。
+以下、基本的なTextareaのスキーマ定義と実装例を示します。
 
 ### 基本的なTextarea
 
@@ -85,7 +86,7 @@ const schema = z.object({
 </div>
 <div>
   <h3>フォームのエラー</h3>
-  <pre>{JSON.stringify(form.errors, null, 2)}</pre>
+  <pre>{JSON.stringify(form.allErrors, null, 2)}</pre>
 </div>
 ```
 
@@ -93,6 +94,6 @@ const schema = z.object({
 
 ## まとめ
 
-shadcn-uiとconformを組み合わせることで、基本的なTextarea要素を簡単に実装できます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーな長文入力フォームを作成することができます。
+shadcn-uiとconformを組み合わせることで、基本的なTextareaを簡単に実装できます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーな長文入力フォームを作成することができます。
 
-次回は、Select要素の実装について詳しく解説します。お楽しみに！
+次回は、Selectの実装について詳しく解説します。お楽しみに！

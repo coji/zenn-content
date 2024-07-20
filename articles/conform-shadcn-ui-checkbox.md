@@ -1,14 +1,14 @@
 ---
-title: "shadcn-uiとconformによるCheckbox要素の実装ガイド"
+title: "shadcn-uiとconformによるCheckboxの実装ガイド"
 emoji: "📝"
 type: "tech"
-topics: ["conform", "shadcnui"]
+topics: ["conform", "shadcnui", "zod"]
 published: true
 ---
 
 ## 概要
 
-この記事では、shadcn-uiとconformを使用して基本的なCheckbox要素を実装する方法を解説します。通常の実装方法と、カスタムhelper関数を使用した実装方法の両方を紹介します。
+この記事では、shadcn-uiとconformを使用して基本的なCheckboxを実装する方法を解説します。通常の実装方法と、カスタムhelper関数を使用した実装方法の両方を紹介します。
 
 ## セットアップ
 
@@ -19,7 +19,8 @@ import { useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
 import { Form } from '@remix-run/react'
 import { z } from 'zod'
-import { Checkbox, Label } from '~/components/ui'
+import { Checkbox } from '~/components/ui/checkbox'
+import { Label } from '~/components/ui/label'
 import { getCheckboxProps } from './helper'
 ```
 
@@ -116,7 +117,7 @@ helper.tsファイルに定義されたgetCheckboxProps関数を使用して、�
 
 ## Helper関数の説明
 
-helper.tsファイルには、Checkbox要素の実装を簡略化するための`getCheckboxProps`関数が定義されています：
+helper.tsファイルには、Checkboxの実装を簡略化するための`getCheckboxProps`関数が定義されています：
 
 ```ts:helper.ts
 import type { FieldMetadata } from '@conform-to/react';
@@ -187,7 +188,7 @@ export const getCheckboxProps = <Schema>(
 
 この関数は以下のプロパティを生成します：
 
-- `id`: Checkbox要素のID
+- `id`: CheckboxのID
 - `key`: Reactのkey属性
 - `required`: 必須フィールドかどうか
 - `name`: フィールド名
@@ -208,7 +209,7 @@ export const getCheckboxProps = <Schema>(
 </div>
 <div>
   <h3>フォームのエラー</h3>
-  <pre>{JSON.stringify(form.errors, null, 2)}</pre>
+  <pre>{JSON.stringify(form.allErrors, null, 2)}</pre>
 </div>
 ```
 
@@ -216,6 +217,6 @@ export const getCheckboxProps = <Schema>(
 
 ## まとめ
 
-shadcn-uiとconformを組み合わせることで、基本的なCheckbox要素を簡単に実装できます。さらに、カスタムhelper関数を使用することで、コードをより簡潔にし、保守性を高めることができます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーなチェックボックスフォームを作成することができます。
+shadcn-uiとconformを組み合わせることで、基本的なCheckboxを簡単に実装できます。さらに、カスタムhelper関数を使用することで、コードをより簡潔にし、保守性を高めることができます。適切なバリデーションとエラーハンドリングを行うことで、ユーザーフレンドリーなチェックボックスフォームを作成することができます。
 
-次回は、Switch要素の実装について詳しく解説します。お楽しみに！
+次回は、Switchの実装について詳しく解説します。お楽しみに！
