@@ -121,7 +121,7 @@ helper.tsファイルに定義されたgetSelectPropsとgetSelectTriggerProps関
     onValueChange={(value) => {
       form.update({
         name: fields.basicSelect.name,
-        value: value,
+        value,
       })
     }}
   >

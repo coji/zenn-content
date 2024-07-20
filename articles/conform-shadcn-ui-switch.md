@@ -82,7 +82,7 @@ const schema = z.object({
     onCheckedChange={(checked) => {
       form.update({
         name: fields.notifications.name,
-        value: checked ? 'on' : '',
+        value: checked,
       })
     }}
   />
@@ -109,7 +109,7 @@ helper.tsファイルに定義されたgetSwitchProps関数を使用して、よ
     onCheckedChange={(checked) => {
       form.update({
         name: fields.notifications.name,
-        value: checked
+        value: checked,
       })
     }}
   />

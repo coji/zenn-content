@@ -80,7 +80,7 @@ const schema = z.object({
     onValueChange={(value) => {
       form.update({
         name: fields.plan.name,
-        value: value,
+        value,
       })
     }}
     aria-invalid={!fields.plan.valid || undefined}
@@ -117,7 +117,7 @@ helper.tsファイルに定義されたgetRadioGroupProps関数を使用して�
     onValueChange={(value) => {
       form.update({
         name: fields.plan.name,
-        value: value,
+        value,
       })
     }}
   >
