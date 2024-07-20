@@ -142,7 +142,7 @@ helper.tsファイルに定義されたgetSelectPropsとgetSelectTriggerProps関
 
 ## Helper関数の説明
 
-helper.tsファイルには、Selectの実装を簡略化するための2つの主要な関数が定義されています：
+helper.tsファイルには、Selectの実装を簡略化するための2つの主要な関数を定義しました:
 
 1. `getSelectProps`: Selectに必要なプロパティを生成します。
 2. `getSelectTriggerProps`: SelectTriggerに必要なプロパティを生成します。

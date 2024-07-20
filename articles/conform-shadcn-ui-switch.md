@@ -127,7 +127,7 @@ helper.tsファイルに定義されたgetSwitchProps関数を使用して、よ
 
 ## Helper関数の説明
 
-helper.tsファイルには、Switch要素の実装を簡略化するための`getSwitchProps`関数が定義されています：
+helper.tsファイルには、Switch要素の実装を簡略化するための`getSwitchProps`関数を定義しました。
 
 ```ts:helper.ts
 import type { FieldMetadata } from '@conform-to/react';

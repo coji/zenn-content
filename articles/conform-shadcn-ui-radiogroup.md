@@ -142,7 +142,7 @@ helper.tsファイルに定義されたgetRadioGroupProps関数を使用して�
 
 ## Helper関数の説明
 
-helper.tsファイルには、RadioGroupの実装を簡略化するための`getRadioGroupProps`関数が定義されています：
+helper.tsファイルには、RadioGroupの実装を簡略化するための`getRadioGroupProps`関数を定義しました：
 
 ```ts:helper.ts
 import type { FieldMetadata } from '@conform-to/react';

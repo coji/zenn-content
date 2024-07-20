@@ -128,7 +128,7 @@ helper.tsファイルに定義されたgetCheckboxProps関数を使用して、�
 
 ## Helper関数の説明
 
-helper.tsファイルには、Checkboxの実装を簡略化するための`getCheckboxProps`関数が定義されています：
+helper.tsファイルには、Checkboxの実装を簡略化するための`getCheckboxProps`関数を定義しています：
 
 ```ts:helper.ts
 import type { FieldMetadata } from '@conform-to/react';
