@@ -23,6 +23,10 @@ published: true
 
 この記事では、shadcn/uiとconformを使用して基本的なCheckboxを実装する方法を解説します。通常の実装方法と、カスタムhelper関数を使用した実装方法の両方を紹介します。
 
+shadcn/ui の Checkbox コンポーネント自体の仕様や使い方については、公式サイトをご覧ください。
+
+https://ui.shadcn.com/docs/components/checkbox
+
 ## セットアップ
 
 まず、必要なライブラリをインポートします。

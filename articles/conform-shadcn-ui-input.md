@@ -23,6 +23,10 @@ published: true
 
 この記事では、shadcn/uiとconformを使用して、様々なタイプのInputを実装する方法を詳しく解説します。各Inputタイプについて、スキーマ定義と実装例を提供します。
 
+shadcn/ui の Input コンポーネント自体の仕様や使い方については、公式サイトをご覧ください。
+
+https://ui.shadcn.com/docs/components/input
+
 ## セットアップ
 
 まず、必要なライブラリをインポートします。

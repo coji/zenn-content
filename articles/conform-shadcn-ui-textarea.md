@@ -23,6 +23,10 @@ published: true
 
 この記事では、shadcn/uiとconformを使用して基本的なTextareaを実装する方法を解説します。長文入力やマルチラインテキストの取り扱いについて、スキーマ定義と実装例を提供します。
 
+shadcn/ui の Textarea コンポーネント自体の仕様や使い方については、公式サイトをご覧ください。
+
+https://ui.shadcn.com/docs/components/textarea
+
 ## セットアップ
 
 まず、必要なライブラリをインポートします。
