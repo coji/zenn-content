@@ -34,7 +34,6 @@ https://ui.shadcn.com/docs/components/textarea
 ```typescript
 import { getTextareaProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
-import { Form } from '@remix-run/react'
 import { z } from 'zod'
 import { Textarea } from '~/components/ui/textarea'
 import { Label } from '~/components/ui/label'
@@ -52,9 +51,9 @@ export default function TextareaForm() {
   })
 
   return (
-    <Form {...getFormProps(form)} method="post">
+    <form {...getFormProps(form)} method="post">
       {/* Textarea field will be placed here */}
-    </Form>
+    </form>
   )
 }
 ```

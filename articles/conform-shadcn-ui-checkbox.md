@@ -34,7 +34,6 @@ https://ui.shadcn.com/docs/components/checkbox
 ```typescript
 import { useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
-import { Form } from '@remix-run/react'
 import { z } from 'zod'
 import { Checkbox } from '~/components/ui/checkbox'
 import { Label } from '~/components/ui/label'
@@ -53,9 +52,9 @@ export default function CheckboxForm() {
   })
 
   return (
-    <Form {...getFormProps(form)} method="post">
+    <form {...getFormProps(form)} method="post">
       {/* Checkbox fields will be placed here */}
-    </Form>
+    </form>
   )
 }
 ```

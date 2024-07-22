@@ -34,7 +34,6 @@ https://ui.shadcn.com/docs/components/select
 ```typescript
 import { useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
-import { Form } from '@remix-run/react'
 import { z } from 'zod'
 import {
   Select,
@@ -59,9 +58,9 @@ export default function SelectForm() {
   })
 
   return (
-    <Form {...getFormProps(form)} method="post">
+    <form {...getFormProps(form)} method="post">
       {/* Select fields will be placed here */}
-    </Form>
+    </form>
   )
 }
 ```

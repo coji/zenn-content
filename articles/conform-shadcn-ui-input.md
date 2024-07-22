@@ -34,7 +34,6 @@ https://ui.shadcn.com/docs/components/input
 ```typescript
 import { getInputProps, useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
-import { Form } from '@remix-run/react'
 import { z } from 'zod'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
@@ -52,9 +51,9 @@ export default function InputForm() {
   })
 
   return (
-    <Form {...getFormProps(form)} method="post">
+    <form {...getFormProps(form)} method="post">
       {/* Input fields will be placed here */}
-    </Form>
+    </form>
   )
 }
 ```

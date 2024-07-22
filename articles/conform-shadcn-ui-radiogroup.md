@@ -34,7 +34,6 @@ https://ui.shadcn.com/docs/components/radio-group
 ```typescript
 import { useForm } from '@conform-to/react'
 import { getZodConstraint, parseWithZod } from '@conform-to/zod'
-import { Form } from '@remix-run/react'
 import { z } from 'zod'
 import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group'
 import { Label } from '~/components/ui/label'
@@ -53,9 +52,9 @@ export default function RadioGroupForm() {
   })
 
   return (
-    <Form {...getFormProps(form)} method="post">
+    <form {...getFormProps(form)} method="post">
       {/* RadioGroup fields will be placed here */}
-    </Form>
+    </form>
   )
 }
 ```
