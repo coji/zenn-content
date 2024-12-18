@@ -9,6 +9,12 @@ published: true
 
 ![alt text](https://github.com/coji/shadcn-admin-react-router/blob/main/public/images/shadcn-admin.png?raw=true)
 
+デモサイト
+https://shadcn-admin-react-router.vercel.app
+
+ソースコード
+https://github.com/coji/shadcn-admin-react-router
+
 ## はじめに
 
 Shadcn Admin Dashboard は、[ShadcnUI](https://ui.shadcn.com) と [React Router v7](https://reactrouter.com/) を使用して構築した、再利用可能な管理ダッシュボード UI のコレクションです。レスポンシブデザインとアクセシビリティに配慮して設計されています。
