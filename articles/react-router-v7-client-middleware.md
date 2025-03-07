@@ -87,7 +87,7 @@ import {
 import { requireAuth } from '~/services/auth'
 import { userContext } from './user-context'
 
-export const onBordingAuthMiddleware: MiddlewareFunction = async ({
+export const onBoardingAuthMiddleware: MiddlewareFunction = async ({
   request,
   context,
 }) => {
@@ -126,10 +126,10 @@ export const optionalAuthMiddleware: MiddlewareFunction = async ({
 
 ```typescript
 // routes/welcome+/_layout/route.ts
-import { onBordingAuthMiddleware } from '~/middlewares/on-boarding-auth-middleware'
+import { onBoardingAuthMiddleware } from '~/middlewares/on-boarding-auth-middleware'
 
 // Middleware を設定
-export const unstable_clientMiddleware = [onBordingAuthMiddleware]
+export const unstable_clientMiddleware = [onBoardingAuthMiddleware]
 ```
 
 ```typescript
@@ -197,7 +197,7 @@ export const clientLoader = async ({ request, params }: Route.ClientLoaderArgs) 
 
 ```typescript
 // レイアウトルートにミドルウェアを設定
-export const unstable_clientMiddleware = [onBordingAuthMiddleware]
+export const unstable_clientMiddleware = [onBoardingAuthMiddleware]
 
 // ルートローダーでは context からユーザー情報を取得
 export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
