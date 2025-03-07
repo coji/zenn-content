@@ -6,8 +6,6 @@ topics: ["reactrouter", "react", "typescript"]
 published: true
 ---
 
-# React Router v7 SPA Mode でクライアントミドルウェアを使ってみた 🧩
-
 React Router v7.3.0 で導入された「クライアントミドルウェア」機能を使って認証ガードをリファクタリングしてみました。この記事では、Firebase 認証を使った SPA アプリ「[しずかな Remix SPA Example](https://github.com/coji/remix-spa-example)」での実際の使用例をもとに解説します。
 
 ## TL;DR
