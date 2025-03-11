@@ -79,18 +79,8 @@ Shadcn Admin Dashboard は、[ShadcnUI](https://ui.shadcn.com) と [React Router
 │   ├── favicon.ico
 │   └── images
 ├── react-router.config.ts
-├── server
-│   └── app.ts
 ├── tailwind.config.js
 ├── tsconfig.json
-├── vercel
-│   ├── output
-│   │   ├── config.json
-│   │   └── functions
-│   │       │   └── index.func
-│   │       │       ├── .vc-config.json
-│   │       │       └── package.json
-│   └── prepare.js
 └── vite.config.ts
 ```
 
@@ -159,9 +149,9 @@ pnpm run dev
 
 ## デプロイ
 
-このプロジェクトは、デフォルトで [Vercel](https://vercel.com) にデプロイされるように設定しています。`vercel` ディレクトリには、Vercel へのデプロイに必要な設定ファイルが含まれています。
+このプロジェクトは、デフォルトで [Vercel](https://vercel.com) にデプロイされるように設定しています。
 
-ただし、React Router v7 は、サーバーサイドレンダリング (SSR) をサポートしているため、[Cloudflare Workers](https://workers.cloudflare.com/) や [Fly.io](https://fly.io/)、[Cloud Run](https://cloud.google.com/run)、[AWS ECS](https://aws.amazon.com/ecs/) など、他のプラットフォームにもデプロイすることが可能です。
+React Router v7 は、サーバーサイドレンダリング (SSR) をサポートしており、[Cloudflare Workers](https://workers.cloudflare.com/) や [Fly.io](https://fly.io/)、[Cloud Run](https://cloud.google.com/run)、[AWS ECS](https://aws.amazon.com/ecs/) など、他のプラットフォームにもデプロイすることが可能です。
 
 他のプラットフォームへのデプロイ方法については、[React Router v7 の公式サンプル](https://github.com/remix-run/react-router-templates) のコードを参考にしてください。
 
