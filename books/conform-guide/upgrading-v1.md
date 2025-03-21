@@ -129,7 +129,7 @@ function Example() {
 
 #### `@conform-to/yup`
 
-- `parse` -&gt; [parseWithYup](./api/yup/parseWithYup.md)
+- `parse` -&gt; [parseWithYup](./api/yup/parseWithYup)
 - `getFieldsetConstraint` -&gt; [getYupConstraint](api-yup-getyupconstraint.md)
 
 ## 送信処理の改善

@@ -18,7 +18,7 @@ export default function SomeParent() {
 
 ### `context`
 
-フォームコンテキストです。これは [useForm](./useForm.md) で作成され、 `form.context` を通じてアクセスできます。
+フォームコンテキストです。これは [useForm](./useForm) で作成され、 `form.context` を通じてアクセスできます。
 
 ## Tips
 
