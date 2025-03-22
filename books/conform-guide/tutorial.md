@@ -244,7 +244,7 @@ export async function action({ request }: ActionFunctionArgs) {
 }
 ```
 
-これで、 [useForm](api-react-useform.md) フックを使って、すべてのフォームメタデータを管理できます。また、 `getZodConstraint()` ヘルパーを使用して、 zod スキーマからバリデーション属性を導出します。
+これで、 [useForm](./api-react-useform) フックを使って、すべてのフォームメタデータを管理できます。また、 `getZodConstraint()` ヘルパーを使用して、 zod スキーマからバリデーション属性を導出します。
 
 ```tsx
 import { useForm } from '@conform-to/react';
@@ -415,7 +415,7 @@ export default function ContactUs() {
 
 ## ボイラープレートの削除
 
-Conform がすべての ID とバリデーション属性を管理してくれるのは素晴らしいことです。しかし、フォームとフィールドを設定するのにはまだ多くの作業が必要です。ネイティブ入力を扱っている場合は、 [getFormProps](api-react-getformprops.md) や [getInputProps](api-react-getinputprops.md) のようなヘルパーを使用してボイラープレートを最小限に抑えることができます。
+Conform がすべての ID とバリデーション属性を管理してくれるのは素晴らしいことです。しかし、フォームとフィールドを設定するのにはまだ多くの作業が必要です。ネイティブ入力を扱っている場合は、 [getFormProps](./api-react-getformprops) や [getInputProps](./api-react-getinputprops) のようなヘルパーを使用してボイラープレートを最小限に抑えることができます。
 
 ```tsx
 import {

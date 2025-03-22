@@ -39,7 +39,7 @@ function Example() {
 
 ## 配列
 
-フィールドのリストを設定する必要がある場合は、親フィールドのメタデータから `getFieldList()` メソッドを呼び出して、名前が自動的に推測される各アイテムフィールドにアクセスできます。リスト内のアイテムを変更したい場合は、 [Intent button](./intent-button.md#insert-remove-and-reorder-intents) ページで説明されているように、 `insert` 、 `remove` 、 `reorder` のインテントも使用できます。
+フィールドのリストを設定する必要がある場合は、親フィールドのメタデータから `getFieldList()` メソッドを呼び出して、名前が自動的に推測される各アイテムフィールドにアクセスできます。リスト内のアイテムを変更したい場合は、 [Intent button](./intent-button#フォームのコントロール) ページで説明されているように、 `insert` 、 `remove` 、 `reorder` のインテントも使用できます。
 
 ```tsx
 import { useForm } from "@conform-to/react";

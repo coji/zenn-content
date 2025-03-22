@@ -130,7 +130,7 @@ export default function Tasks() {
 }
 ```
 
-両方のインテントを使用するには、フィールドメタデータから **key** を使って入力を設定する必要があります。 Conform はこのキーに依存して、更新された initialValue で input を再マウントするための React への通知を行います。唯一の例外は、 [useInputControl](api-react-useinputcontrol.md) フックを使用して制御された入力を設定している場合で、 key が変更されると値がリセットされます。
+両方のインテントを使用するには、フィールドメタデータから **key** を使って入力を設定する必要があります。 Conform はこのキーに依存して、更新された initialValue で input を再マウントするための React への通知を行います。唯一の例外は、 [useInputControl](./api-react-useinputcontrol) フックを使用して制御された入力を設定している場合で、 key が変更されると値がリセットされます。
 
 ### insert、remove、および reorder (並び替え) インテント
 

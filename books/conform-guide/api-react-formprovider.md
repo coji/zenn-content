@@ -2,7 +2,7 @@
 title: "@conform-to/react: FormProvider"
 ---
 
-フォームコンテキストのための [Context Provider](https://react.dev/reference/react/createContext#provider) をレンダリングする React コンポーネントです。 [useField](api-react-usefield.md) や [useFormMetadata](api-react-useformmetadata.md) フックを使用したい場合には必須です。
+フォームコンテキストのための [Context Provider](https://react.dev/reference/react/createContext#provider) をレンダリングする React コンポーネントです。 [useField](./api-react-usefield) や [useFormMetadata](./api-react-useformmetadata) フックを使用したい場合には必須です。
 
 ```tsx
 import { FormProvider, useForm } from "@conform-to/react";
@@ -18,7 +18,7 @@ export default function SomeParent() {
 
 ### `context`
 
-フォームコンテキストです。これは [useForm](./useForm.md) で作成され、 `form.context` を通じてアクセスできます。
+フォームコンテキストです。これは [useForm](./useForm) で作成され、 `form.context` を通じてアクセスできます。
 
 ## Tips
 

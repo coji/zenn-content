@@ -12,16 +12,16 @@ Conform は現在、 React 18 以降を要求します。もし古いバージ�
 
 まず、すべてのヘルパーが改名され、個別にインポートできるようになりました:
 
-- `conform.input` -&gt; [getInputProps](api-react-getinputprops.md)
-- `conform.select` -&gt; [getSelectProps](api-react-getselectprops.md)
-- `conform.textarea` -&gt; [getTextareaProps](api-react-gettextareaprops.md)
-- `conform.fieldset` -&gt; [getFieldsetProps](api-react-getfieldsetprops.md)
-- `conform.collection` -&gt; [getCollectionProps](api-react-getcollectionprops.md)
+- `conform.input` -&gt; [getInputProps](./api-react-getinputprops)
+- `conform.select` -&gt; [getSelectProps](./api-react-getselectprops)
+- `conform.textarea` -&gt; [getTextareaProps](./api-react-gettextareaprops)
+- `conform.fieldset` -&gt; [getFieldsetProps](./api-react-getfieldsetprops)
+- `conform.collection` -&gt; [getCollectionProps](./api-react-getcollectionprops)
 
 以前 `conform.VALIDATION_UNDEFINED` および `conform.VALIDATION_SKIPPED` を使用していた場合、それらは zod インテグレーション (`@conform-to/zod`) に移されました。
 
-- `conform.VALIDATION_SKIPPED` -&gt; [conformZodMessage.VALIDATION_SKIPPED](api-zod-conformzodmessage.md#conformzodmessagevalidation_skipped)
-- `conform.VALIDATION_UNDEFINED` -&gt; [conformZodMessage.VALIDATION_UNDEFINED](api-zod-conformzodmessage.md#conformzodmessagevalidation_undefined)
+- `conform.VALIDATION_SKIPPED` -&gt; [conformZodMessage.VALIDATION_SKIPPED](./api-zod-conformzodmessage#conformzodmessage.validation_skipped)
+- `conform.VALIDATION_UNDEFINED` -&gt; [conformZodMessage.VALIDATION_UNDEFINED](./api-zod-conformzodmessage#conformzodmessage.validation_undefined)
 
 `conform.INTENT` はもはやエクスポートされていないことに注意してください。インテントボタンを設定する必要がある場合は、より良い型安全性のために zod の [z.discriminatedUnion()](https://zod.dev/?id=discriminated-unions) と組み合わせて、それを **intent** （または好みの何か）と名付けることができます。
 
@@ -45,7 +45,7 @@ Conform は現在、 React 18 以降を要求します。もし古いバージ�
 
 ## フォーム設定の変更点
 
-まず、`form.props` が削除されました。代わりに [getFormProps()](api-react-getformprops.md) ヘルパーを使用できます。
+まず、`form.props` が削除されました。代わりに [getFormProps()](./api-react-getformprops) ヘルパーを使用できます。
 
 ```tsx
 import { useForm, getFormProps } from "@conform-to/react";
@@ -124,13 +124,13 @@ function Example() {
 
 #### `@conform-to/zod`
 
-- `parse` -&gt; [parseWithZod](api-zod-parsewithzod.md)
-- `getFieldsetConstraint` -&gt; [getZodConstraint](api-zod-getzodconstraint.md)
+- `parse` -&gt; [parseWithZod](./api-zod-parsewithzod)
+- `getFieldsetConstraint` -&gt; [getZodConstraint](./api-zod-getzodconstraint)
 
 #### `@conform-to/yup`
 
-- `parse` -&gt; [parseWithYup](./api/yup/parseWithYup.md)
-- `getFieldsetConstraint` -&gt; [getYupConstraint](api-yup-getyupconstraint.md)
+- `parse` -&gt; [parseWithYup](./api-yup-parsewithyup)
+- `getFieldsetConstraint` -&gt; [getYupConstraint](./api-yup-getyupconstraint)
 
 ## 送信処理の改善
 
@@ -187,7 +187,7 @@ export default function Example() {
 
 ## `useInputControl` フックを使用したインテグレーションがシンプルに
 
-`useInputEvent` フックは、いくつかの新機能を備えた [useInputControl](api-react-useinputcontrol.md) フックに置き換えられました。
+`useInputEvent` フックは、いくつかの新機能を備えた [useInputControl](./api-react-useinputcontrol) フックに置き換えられました。
 
 - もはや input 要素の ref を提供する必要はありません。 DOM から入力要素を探し出し、見つからない場合は自動で挿入します。
 
