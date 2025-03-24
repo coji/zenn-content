@@ -18,11 +18,11 @@ export default function SomeParent() {
 
 ### `context`
 
-フォームコンテキストです。これは [useForm](./useForm) で作成され、 `form.context` を通じてアクセスできます。
+フォームコンテキストです。これは [useForm](./api-react-useform) で作成され、 `form.context` を通じてアクセスできます。
 
 ## Tips
 
-### FormProvider は、フォームの直接の親である必要はありません。
+### FormProvider は、フォームの直接の親である必要はありません
 
 入力が [form 属性](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement#instance_properties_related_to_the_parent_form) を通じて関連付けられている限り、フォームの外部のどこにでも自由に入力を配置できます。
 
