@@ -123,12 +123,11 @@ export default function Example() {
 
 > 注意: これらすべてのヘルパーはネイティブ HTML 要素用に設計されています。 react-aria-components や Radix UI のようなカスタム UI コンポーネントを使用している場合、それらの API を通じて既に属性が設定されている可能性があるため、これらのヘルパーが不要になるかもしれません。
 
-- [getFormProps](api-react-getformprops.md)
-- [getFieldsetProps](api-react-getfieldsetprops.md)
-- [getInputProps](api-react-getinputprops.md)
-- [getSelectProps](api-react-getselectprops.md)
-- [getTextareaProps](api-react-gettextareaprops.md)
-- [getCollectionProps](api-react-getbuttonprops.md)
+- [getFormProps](./api-react-getformprops)
+- [getFieldsetProps](./api-react-getfieldsetprops)
+- [getInputProps](./api-react-getinputprops)
+- [getSelectProps](./api-react-getselectprops)
+- [getTextareaProps](./api-react-gettextareaprops)
 
 以下は、手動設定と比較した場合の例です。ヘルパーについて詳しく知りたい場合は、上記リンクの対応するドキュメントを確認してください。
 

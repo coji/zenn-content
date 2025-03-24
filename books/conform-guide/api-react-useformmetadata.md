@@ -2,7 +2,7 @@
 title: "@conform-to/react: useFormMetadata"
 ---
 
-[FormProvider](api-react-formprovider.md) に設定されたコンテキストを購読することで、フォームのメタデータを返す React フックです。
+[FormProvider](./api-react-formprovider) に設定されたコンテキストを購読することで、フォームのメタデータを返す React フックです。
 
 ```tsx
 const form = useFormMetadata(formId);
@@ -18,7 +18,7 @@ const form = useFormMetadata(formId);
 
 ### `form`
 
-フォームメタデータです。これは、 [useForm](api-react-useform.md) フックによって返されるオブジェクトと同じです。
+フォームメタデータです。これは、 [useForm](./api-react-useform) フックによって返されるオブジェクトと同じです。
 
 ## Tips
 

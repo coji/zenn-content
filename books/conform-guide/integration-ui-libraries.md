@@ -62,9 +62,9 @@ function Example() {
 
 ## `useInputControl` を使用してカスタム入力コンポーネントを強化する
 
-この問題を解決するために、 Conform は [useInputControl](api-react-useinputcontrol.md) というフックを提供しています。これにより、必要なときにフォームイベントを発行するようにカスタム入力を強化できます。このフックは以下のプロパティを持つコントロールオブジェクトを返します:
+この問題を解決するために、 Conform は [useInputControl](./api-react-useinputcontrol) というフックを提供しています。これにより、必要なときにフォームイベントを発行するようにカスタム入力を強化できます。このフックは以下のプロパティを持つコントロールオブジェクトを返します:
 
-- `value`: フォームの[リセットおよび更新のインテント](intent-button.md#reset-and-update-intent)に対応した、入力の現在の値
+- `value`: フォームの[リセットおよび更新のインテント](./intent-button#reset-および-update-インテント)に対応した、入力の現在の値
 - `change`: 現在の値を更新し、`change` および `input` イベントの両方を発行するための関数
 - `focus`: `focus` および `focusin` イベントを発行するための関数
 - `blur`: `blur` および`focusout` イベントを発行するための関数
@@ -155,7 +155,7 @@ function Example() {
 
 ## フォームコンテキストでシンプルに
 
-[useField](api-react-usefield.md) フックを [FormProvider](api-react-formprovider.md) と共に使用することで、ラッパーコンポーネントをさらにシンプルにすることもできます。
+[useField](./api-react-usefield) フックを [FormProvider](./api-react-formprovider) と共に使用することで、ラッパーコンポーネントをさらにシンプルにすることもできます。
 
 ```tsx
 import {
