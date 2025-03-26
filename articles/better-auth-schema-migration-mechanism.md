@@ -8,7 +8,7 @@ published: true
 
 # Better Auth はどうやってDBアダプタごとのスキーママイグレーションを扱っているのか？
 
-この記事では、[Better Auth](https://better-auth.com/)というTypeScript向け認証・認可ライブラリのスキーママイグレーション管理について解説します。開発者[@beakcru](https://x.com/beakcru)さんが実装した仕組みを見ていきましょう。
+この記事では、[Better Auth](https://better-auth.com/)というTypeScript向け認証・認可ライブラリのスキーママイグレーション管理について解説します。開発者[Beka Cru](https://x.com/imbereket)さんが実装した仕組みを見ていきましょう。
 
 Better Authは、TypeScript向けの包括的な認証・認可ライブラリで、様々なデータベースやフレームワークに対応しています。今回は、Better Authがどのようにして多様なDBアダプタ（Kysely、Prisma、Drizzleなど）に対応し、スキーママイグレーションを管理しているのかを解説します。
 
