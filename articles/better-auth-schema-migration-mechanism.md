@@ -50,7 +50,7 @@ Better Authは内部的に[Kysely](https://kysely.dev/)を使用して、SQLite�
 
 - 集約されたスキーマ情報を元に、**SQLマイグレーションファイル（`.sql`）**を生成
 - `CREATE TABLE`文や`ALTER TABLE`文を含む適切なSQLを出力
-- 主に`packages/better-auth/src/db/get-migration.ts`と`packages/cli/src/generators/kysely.ts`で実装
+- 主に[`packages/better-auth/src/db/get-migration.ts`](https://github.com/better-auth/better-auth/blob/main/packages/better-auth/src/db/get-migration.ts)と[`packages/cli/src/generators/kysely.ts`](https://github.com/better-auth/better-auth/blob/main/packages/cli/src/generators/kysely.ts)で実装
 
 #### `migrate`コマンドの動作
 
@@ -71,7 +71,7 @@ Better Authは内部的に[Kysely](https://kysely.dev/)を使用して、SQLite�
 - 既存の`schema.prisma`ファイルを解析し、必要なモデルやフィールドを追記・更新
 - `@mrleebo/prisma-ast`などを使用してPrismaスキーマをASTとして安全に編集
 - ユーザー設定は`@map`属性を使って反映
-- 主に`packages/cli/src/generators/prisma.ts`で実装
+- 主に[`packages/cli/src/generators/prisma.ts`](https://github.com/better-auth/better-auth/blob/main/packages/cli/src/generators/prisma.ts)で実装
 
 #### `migrate`コマンドの動作
 
@@ -92,7 +92,7 @@ Better Authは内部的に[Kysely](https://kysely.dev/)を使用して、SQLite�
 - **Drizzle ORMのスキーマ定義ファイル（`.ts`）を生成・更新**
 - データベース種類に応じて`pgTable`、`mysqlTable`、`sqliteTable`などを使い分け
 - フィールドの型、NULL許容、ユニーク制約なども適切に出力
-- 主に`packages/cli/src/generators/drizzle.ts`で実装
+- 主に[`packages/cli/src/generators/drizzle.ts`](https://github.com/better-auth/better-auth/blob/main/packages/cli/src/generators/drizzle.ts)で実装
 
 #### `migrate`コマンドの動作
 
