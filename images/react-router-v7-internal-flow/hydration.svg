@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 500">
+  <!-- タイトル -->
+  <text x="400" y="30" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold">React Router v7: クライアントサイドハイドレーションフロー</text>
+  
+  <!-- エンティティ -->
+  <rect x="50" y="70" width="120" height="60" rx="10" ry="10" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+  <text x="110" y="105" font-family="Arial" font-size="14" text-anchor="middle">ブラウザ</text>
+  
+  <rect x="350" y="70" width="120" height="60" rx="10" ry="10" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="410" y="105" font-family="Arial" font-size="14" text-anchor="middle">DOM</text>
+  
+  <rect x="650" y="70" width="120" height="60" rx="10" ry="10" fill="#f8cecc" stroke="#b85450" stroke-width="2"/>
+  <text x="710" y="105" font-family="Arial" font-size="14" text-anchor="middle">React Router</text>
+  
+  <!-- ライフライン -->
+  <line x1="110" y1="130" x2="110" y2="470" stroke="#82b366" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="410" y1="130" x2="410" y2="470" stroke="#6c8ebf" stroke-width="2" stroke-dasharray="5,5"/>
+  <line x1="710" y1="130" x2="710" y2="470" stroke="#b85450" stroke-width="2" stroke-dasharray="5,5"/>
+  
+  <!-- ステップ1: HTMLパース -->
+  <rect x="80" y="150" width="60" height="30" rx="5" ry="5" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+  <text x="110" y="170" font-family="Arial" font-size="12" text-anchor="middle">HTMLパース</text>
+  
+  <line x1="140" y1="165" x2="380" y2="165" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="260" y="155" font-family="Arial" font-size="11" text-anchor="middle">1. DOMツリー構築</text>
+  
+  <!-- ステップ2: スクリプト実行 -->
+  <rect x="80" y="200" width="60" height="30" rx="5" ry="5" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+  <text x="110" y="220" font-family="Arial" font-size="12" text-anchor="middle">JS実行</text>
+  
+  <path d="M 110 230 Q 110 250 140 250 Q 170 250 170 270 Q 170 290 140 290" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="185" y="270" font-family="Arial" font-size="11" text-anchor="left">2. entry.client.tsx実行</text>
+  
+  <!-- ステップ3: データ読み取り -->
+  <rect x="80" y="290" width="60" height="30" rx="5" ry="5" fill="#d5e8d4" stroke="#82b366" stroke-width="2"/>
+  <text x="110" y="310" font-family="Arial" font-size="12" text-anchor="middle">データ読取</text>
+  
+  <line x1="140" y1="305" x2="680" y2="305" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="400" y="295" font-family="Arial" font-size="11" text-anchor="middle">3. window.__reactRouterContextからデータ取得</text>
+  
+  <!-- ステップ4: ルーター初期化 -->
+  <rect x="680" y="320" width="60" height="30" rx="5" ry="5" fill="#f8cecc" stroke="#b85450" stroke-width="2"/>
+  <text x="710" y="340" font-family="Arial" font-size="12" text-anchor="middle">ルーター初期化</text>
+  
+  <path d="M 710 350 Q 710 370 750 370 Q 790 370 790 390 Q 790 410 750 410" fill="none" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="780" y="380" font-family="Arial" font-size="11" text-anchor="middle">4. createBrowserRouter</text>
+  
+  <!-- ステップ5: ハイドレーション -->
+  <rect x="680" y="410" width="60" height="30" rx="5" ry="5" fill="#f8cecc" stroke="#b85450" stroke-width="2"/>
+  <text x="710" y="430" font-family="Arial" font-size="12" text-anchor="middle">ハイドレート</text>
+  
+  <line x1="680" y1="425" x2="440" y2="425" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="560" y="415" font-family="Arial" font-size="11" text-anchor="middle">5. React.hydrateRoot</text>
+  
+  <!-- ステップ6: イベントアタッチ -->
+  <rect x="380" y="440" width="60" height="30" rx="5" ry="5" fill="#dae8fc" stroke="#6c8ebf" stroke-width="2"/>
+  <text x="410" y="460" font-family="Arial" font-size="12" text-anchor="middle">イベント接続</text>
+  
+  <line x1="380" y1="455" x2="140" y2="455" stroke="#000000" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="260" y="445" font-family="Arial" font-size="11" text-anchor="middle">6. インタラクティブ化完了</text>
+  
+  <!-- 注釈 -->
+  <rect x="460" y="200" width="310" height="70" rx="5" ry="5" fill="#fff2cc" stroke="#d6b656" stroke-width="1"/>
+  <text x="615" y="220" font-family="Arial" font-size="12" text-anchor="middle">HydratedRouterの処理:</text>
+  <text x="615" y="240" font-family="Arial" font-size="11" text-anchor="middle">- サーバーから渡されたデータを使用</text>
+  <text x="615" y="260" font-family="Arial" font-size="11" text-anchor="middle">- クライアントサイドのルーターを初期化</text>
+  
+  <!-- マーカー定義 -->
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#000000"/>
+    </marker>
+  </defs>
+</svg>

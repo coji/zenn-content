@@ -58,6 +58,8 @@ React Router v7 はモノレポ構成を採用しており、機能ごとに複�
 
 ユーザーが最初にページにアクセスした際の、サーバーサイドでの処理の流れを見ていきましょう。
 
+![](/images/react-router-v7-internal-flow/ssg.svg)
+
 1. **[サーバー] リクエスト受信とアダプター**
     * ブラウザからのリクエストが Express などのサーバーに到着します。
     * `@react-router/express` の `createRequestHandler` で生成されたハンドラーが呼び出されます。
