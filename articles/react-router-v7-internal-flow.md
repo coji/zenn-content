@@ -26,6 +26,8 @@ React Router は、React アプリケーションにおけるルーティング�
 
 React Router v7 はモノレポ構成を採用しており、機能ごとに複数のパッケージに分割されています。主要なパッケージとその役割を理解することが、全体の流れを把握する第一歩となります。
 
+![](/images/react-router-v7-internal-flow/packages.png)
+
 * **`react-router`**: ([packages/react-router](https://github.com/remix-run/react-router/tree/252d928179e54e3bf0e99493fb6affb8ad294935/packages/react-router))
   * React Router のコアロジックを提供します。
   * `<Routes>`, `<Route>`, `<Outlet>`, `<Navigate>` といった基本的なコンポーネント。
@@ -58,7 +60,7 @@ React Router v7 はモノレポ構成を採用しており、機能ごとに複�
 
 ユーザーが最初にページにアクセスした際の、サーバーサイドでの処理の流れを見ていきましょう。
 
-![](/images/react-router-v7-internal-flow/ssg.svg)
+![](/images/react-router-v7-internal-flow/ssr.png)
 
 1. **[サーバー] リクエスト受信とアダプター**
     * ブラウザからのリクエストが Express などのサーバーに到着します。
@@ -95,6 +97,8 @@ React Router v7 はモノレポ構成を採用しており、機能ごとに複�
 
 サーバーから送られてきたHTMLを、ブラウザ上でインタラクティブなReactアプリケーションとして復元するプロセスです。
 
+![](/images/react-router-v7-internal-flow/hydration.png)
+
 1. **[ブラウザ] アセット受信と解析:**
     * ブラウザはHTMLを受信し、DOMツリーを構築します。`<link>` タグによりCSSやJSモジュールのダウンロードが始まります。
 2. **[ブラウザ] クライアントエントリー実行:**
@@ -113,6 +117,8 @@ React Router v7 はモノレポ構成を採用しており、機能ごとに複�
 ### ページ遷移の裏側 (クライアントサイドナビゲーション)
 
 ハイドレーション後、ユーザーが `<Link>` をクリックした際の動作です。
+
+![](/images/react-router-v7-internal-flow/csr.png)
 
 1. **`<Link>` クリックとイベント抑制:**
     * クリックイベントが発生しますが、`useLinkClickHandler` が `event.preventDefault()` を呼び、ブラウザのデフォルト動作をキャンセルします。
@@ -146,6 +152,8 @@ React Router v7 はモノレポ構成を採用しており、機能ごとに複�
 ### データの変更 (Form Submission / Action)
 
 `<Form>` 送信時の流れはナビゲーションと似ていますが、Actionの実行とそれに続くRevalidationが含まれます。
+
+![](/images/react-router-v7-internal-flow/form-submission.png)
 
 1. **`<Form>` サブミットとイベント抑制:**
     * サブミットイベントが発生し、`event.preventDefault()` でデフォルト動作をキャンセルします。
