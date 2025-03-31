@@ -6,9 +6,7 @@ topics: ["react", "reactrouter", "vite", "frontend", "javascript"]
 published: true
 ---
 
-## React Router v7 の内部構造を探る：リクエストからレンダリングまでの道のり
-
-### はじめに
+## はじめに
 
 React Router は、React アプリケーションにおけるルーティングライブラリのデファクトスタンダードとして長年利用されてきました。v6 で Data API が導入され、フルスタックフレームワークとしての側面が強化されましたが、v7 ではさらに進化し、Vite との統合、Single Fetch、Lazy Loading といったモダンな機能がデフォルトで組み込まれ、より洗練された開発体験とパフォーマンスを提供します。
 
@@ -22,7 +20,7 @@ React Router は、React アプリケーションにおけるルーティング�
 * React Router の内部的な仕組みやデータフローに興味がある方
 * SSR/CSR、Single Fetch、Lazy Loading といった概念がどのように実装されているか知りたい方
 
-### パッケージ構成の概観
+## パッケージ構成の概観
 
 React Router v7 はモノレポ構成を採用しており、機能ごとに複数のパッケージに分割されています。主要なパッケージとその役割を理解することが、全体の流れを把握する第一歩となります。
 
@@ -56,7 +54,7 @@ React Router v7 はモノレポ構成を採用しており、機能ごとに複�
 * **`@react-router/remix-routes-option-adapter`**: ([packages/react-router-remix-routes-option-adapter](https://github.com/remix-run/react-router/tree/252d928179e54e3bf0e99493fb6affb8ad294935/packages/react-router-remix-routes-option-adapter))
   * 従来の Remix の `remix.config.js` 内の `routes` オプション形式を `routes.ts` で使用するためのアダプター。
 
-### 起動から初回表示までの道のり (SSRフロー)
+## 起動から初回表示までの道のり (SSRフロー)
 
 ユーザーが最初にページにアクセスした際の、サーバーサイドでの処理の流れを見ていきましょう。
 
@@ -93,7 +91,7 @@ React Router v7 はモノレポ構成を採用しており、機能ごとに複�
     * プラットフォームアダプターがこの `Response` をサーバーフレームワークのレスポンスに変換してクライアントに送信します。
         * (関連コード: [packages/react-router-express/server.ts#sendRemixResponse](https://github.com/remix-run/react-router/blob/252d928179e54e3bf0e99493fb6affb8ad294935/packages/react-router-express/server.ts#L138))
 
-### クライアントサイドの魔法: ハイドレーション
+## クライアントサイドの魔法: ハイドレーション
 
 サーバーから送られてきたHTMLを、ブラウザ上でインタラクティブなReactアプリケーションとして復元するプロセスです。
 
@@ -114,7 +112,7 @@ React Router v7 はモノレポ構成を採用しており、機能ごとに複�
 4. **[ブラウザ] 完了:**
     * ハイドレーションが完了し、アプリケーションが操作可能になります。`useEffect` などが実行され、必要に応じて `<ScrollRestoration>` がスクロール位置を調整します。
 
-### ページ遷移の裏側 (クライアントサイドナビゲーション)
+## ページ遷移の裏側 (クライアントサイドナビゲーション)
 
 ハイドレーション後、ユーザーが `<Link>` をクリックした際の動作です。
 
@@ -149,7 +147,7 @@ React Router v7 はモノレポ構成を採用しており、機能ごとに複�
 8. **ナビゲーション完了:**
     * `state.navigation` が `'idle'` に戻ります。
 
-### データの変更 (Form Submission / Action)
+## データの変更 (Form Submission / Action)
 
 `<Form>` 送信時の流れはナビゲーションと似ていますが、Actionの実行とそれに続くRevalidationが含まれます。
 
@@ -177,7 +175,7 @@ React Router v7 はモノレポ構成を採用しており、機能ごとに複�
 7. **UIレンダリング、スクロール処理、完了:**
     * ナビゲーションと同様に、UIが更新され、スクロールが処理され、`state.navigation` が `'idle'` に戻ります。
 
-### キーとなる概念の深掘り
+## キーとなる概念の深掘り
 
 * **Vite統合 (`@react-router/dev`):** ビルド時の最適化（コード分割）、開発時の高速な HMR、サーバーリクエストハンドリングの仲介など、React Router をフレームワークとして機能させるための重要な役割を担います。
   * (関連コード: [packages/react-router-dev/vite/plugin.ts](https://github.com/remix-run/react-router/blob/252d928179e54e3bf0e99493fb6affb8ad294935/packages/react-router-dev/vite/plugin.ts))
@@ -192,7 +190,7 @@ React Router v7 はモノレポ構成を採用しており、機能ごとに複�
   * (関連コード: [packages/react-router/lib/context.ts](https://github.com/remix-run/react-router/blob/252d928179e54e3bf0e99493fb6affb8ad294935/packages/react-router/lib/context.ts))
 * **アダプター:** Express, Cloudflare Workers, Node.js httpサーバーなど、様々な実行環境の差異を吸収し、共通のインターフェースでReact Routerを利用可能にします。
 
-### まとめ
+## まとめ
 
 React Router v7 は、単なるルーティングライブラリを超え、データ取得、ミューテーション、レンダリング、開発ツールを統合したフルスタックに近いフレームワークへと進化しました。Vite との緊密な連携、Single Fetch による効率的なデータ通信、Lazy Loading によるパフォーマンス最適化などがその核となる特徴です。
 
