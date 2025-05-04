@@ -7,7 +7,7 @@ published: true
 ---
 
 :::message
-この文書は neverthrow のリポジトリにある [Working with ResultAsync](https://github.com/supermacro/neverthrow/wiki/Working-with-ResultAsync) を和訳したものです。
+この文書は [neverthrow のリポジトリ](https://github.com/supermacro/neverthrow)にある [Working with ResultAsync](https://github.com/supermacro/neverthrow/wiki/Working-with-ResultAsync) を和訳したものです。
 :::
 
 # ResultAsync の使い方
