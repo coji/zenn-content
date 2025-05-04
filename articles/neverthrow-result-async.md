@@ -1,5 +1,5 @@
 ---
-title: "neverthrow: ResultAsync の使い方 (和訳)"
+title: "neverthrow: ResultAsync の使い方 (Working with ResultAsync 和訳)"
 emoji: "🔄"
 type: "tech"
 topics: ["neverthrow", "typescript", "prisma"]
@@ -7,18 +7,18 @@ published: true
 ---
 
 :::message
-この文書は neverthrow のリポジトリにある wiki [https://github.com/supermacro/neverthrow/wiki/Working-with-ResultAsync](Working with ResultAsync)を和訳したものです。
+この文書は neverthrow のリポジトリにある wiki [https://github.com/supermacro/neverthrow/wiki/Working-with-ResultAsync](Working with ResultAsync) を和訳したものです。
 :::
 
 # ResultAsync の使い方
 
-ResultAsync は、非同期の結果を型安全な方法で扱うために使用できます。
-失敗する可能性のある同期操作の結果を含む `Result<T,E>` と同様に、`ResultAsync<T,E>` を使って非同期操作の結果を表すことができます。
+`ResultAsync` は、非同期処理の結果を型安全に扱うための型です。
+失敗する可能性のある同期操作の結果を扱う `Result<T,E>` と同様に、`ResultAsync<T,E>` は非同期操作の結果を表すために使用できます。
 
 ## `fromPromise` で Promise をラップする
 
-Neverthrow は、`Promise` を `ResultAsync` にラップするユーティリティを公開しています。
-これの非常に典型的なユースケースの1つは、`Prisma`（または他のORM）がデータベースから返す結果を処理することです。
+Neverthrow は、`Promise` を `ResultAsync` に変換するユーティリティ関数 `fromPromise` を提供しています。
+この関数の典型的なユースケースの1つは、`Prisma`（または他のORM）がデータベースから返す `Promise` を処理することです。
 
 ```typescript
 const userPromise = prisma.user.findUnique(...)
@@ -30,21 +30,21 @@ const result = fromPromise(
 )
 ```
 
-`fromPromise` の第二引数として、`(error: unknown)` を受け取り、私たちが作成した新しいエラーオブジェクトを返す関数を渡していることに注意してください。
-これにより、`ResultAsync<T, Error>` における `Error` の型を制御できます。
+`fromPromise` の第二引数には、`Promise` が `reject` されたときに受け取るエラー (`unknown` 型) を引数とし、独自のエラーオブジェクトを返す関数を渡している点に注意してください。
+これにより、`ResultAsync<T, Error>` における `Error` の型を自由に定義できます。
 
-### Promise.catch()
+### Promise.catch() について
 
-Promise ネイティブの `.catch` 関数を使ってエラーをキャッチすることはありません。これはまさに `ResultAsync` を使うことで担う役割です。
+`ResultAsync` を使う場合、`Promise` ネイティブの `.catch` メソッドでエラーを処理する必要はありません。エラー処理は `ResultAsync` が担います。
 
-### async - await と try - catch
+### async/await と try-catch について
 
-`Promise.catch()` と同様に、Promise を `await` したり、エラーを `try-catch` しようとしたりすることはありません。
-`ResultAsync` を扱う関数を `async` としてマークしたいと思った場合、おそらくその関数が何をすべきか、そして非同期アクションをどのように処理すべきかについて誤解があるでしょう。
+`Promise.catch()` と同様に、`Promise` を `await` したり、`try-catch` でエラーを捕捉したりする必要もありません。
+もし `ResultAsync` を扱う関数を `async` にしたいと感じた場合、それはおそらく関数の役割や非同期処理の扱い方について誤解がある可能性があります。
 
 ### 例
 
-以下は3つの関数です。それぞれが同じエラーを異なる方法で処理しています。
+以下に、同じ非同期処理を3つの異なる方法でエラーハンドリングする例を示します。
 
 ```typescript
 // コールバックベース
@@ -84,6 +84,6 @@ const neverthrower = () => {
 }
 ```
 
-通常、`ResultAsync` をラップした直後にその結果を読み取ることはしないでしょう。なぜなら、それは関数を少し冗長にする以外の効果があまりないからです。
+通常、`ResultAsync` でラップした直後に `match` などで結果を処理することは少ないでしょう。なぜなら、それだけではコードが少し冗長になるだけで、`ResultAsync` の利点を十分に活かせないからです。
 
-このパラダイムを使用する利点は、異なる `Result` と `ResultAsync` を `.map` 関数や `.andThen` 関数で連鎖させ始めたときに真価を発揮します。これにより、(`match` や `map`、`mapErr` を使って) 結果を一箇所でまとめてアンラップし、エラーと成功に対応する責任を外部委託することができます。
+`ResultAsync` の真価は、複数の `Result` や `ResultAsync` を `.map` や `.andThen` といったメソッドで連鎖させるときに発揮されます。これにより、最終的な結果を一箇所でまとめてアンラップし (`match`、`map`、`mapErr` などを使用)、成功とエラーの処理をその箇所に集約できます。
