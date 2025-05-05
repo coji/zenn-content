@@ -50,15 +50,15 @@ Cloudflare Workers や D1、React Router v7 を使ったアプリケーション
 
     ![grr モーダル](/images/grr-slack-app-on-cloudflare/modal.png)
 
-3. **記録の一覧表示 (Web UI):**
-    - 記録されたイライラは、Cloudflare Workers でホストされた Web ページで一覧表示されます。（現在は基本的な表示のみです）
-
-    ![grr 一覧画面](/images/grr-slack-app-on-cloudflare/list.png)
-
-4. **Slack 通知:**
+3. **Slack 通知:**
     - イライラが記録されると、記録を開始したチャンネルまたはDMに通知メッセージが投稿されます。
 
     ![登録完了メッセージ](/images/grr-slack-app-on-cloudflare/message.png)
+
+4. **記録の一覧表示 (Web UI):**
+    - 記録されたイライラは、Cloudflare Workers でホストされた Web ページで一覧表示されます。（現在は基本的な表示のみです）
+
+    ![grr 一覧画面](/images/grr-slack-app-on-cloudflare/list.png)
 
 ### リポジトリ
 
