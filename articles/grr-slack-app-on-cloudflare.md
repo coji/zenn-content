@@ -44,8 +44,6 @@ Cloudflare Workers や D1、React Router v7 を使ったアプリケーション
 
     ![スラッシュコマンド](/images/grr-slack-app-on-cloudflare/slash-command.png)
 
-    ![登録完了メッセージ](/images/grr-slack-app-on-cloudflare/message.png)
-
 2. **イライラ度の設定:**
     - 記録時にモーダルが開き、1〜5段階でイライラ度を設定できます。
     - メッセージ内容も編集できます。
@@ -59,6 +57,8 @@ Cloudflare Workers や D1、React Router v7 を使ったアプリケーション
 
 4. **Slack 通知:**
     - イライラが記録されると、記録を開始したチャンネルまたはDMに通知メッセージが投稿されます。
+
+    ![登録完了メッセージ](/images/grr-slack-app-on-cloudflare/message.png)
 
 ### リポジトリ
 
