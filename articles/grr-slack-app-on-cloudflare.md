@@ -10,7 +10,7 @@ published: false # false: 下書き / true: 公開
 
 こんにちは！この記事では、私が開発したSlackアプリ「grr」（グルル）を紹介します。日々のちょっとしたイライラをSlack上で簡単に記録・共有できるWebアプリケーションです。
 
-![grr](/images/grr-slack-app-on-cloud/grr.png)
+![grr](/images/grr-slack-app-on-cloudflare/grr.png)
 
 ![スラッシュコマンド](/images/grr-slack-app-on-cloudflare/slash-command.png)
 
