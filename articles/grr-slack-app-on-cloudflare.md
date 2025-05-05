@@ -1,6 +1,4 @@
-
 ---
-
 title: "Cloudflare Workers/D1 と React Router v7 で作る Slack 感情ログアプリ「grr」"
 emoji: "😠"
 type: "tech" # tech: 技術記事 / idea: アイデア
