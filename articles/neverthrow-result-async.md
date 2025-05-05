@@ -23,7 +23,7 @@ Neverthrow は、`Promise` を `ResultAsync` に変換するユーティリテ�
 ```typescript
 const userPromise = prisma.user.findUnique(...)
 
-// userPromise は ResultAsync<User | null, {err: unknown, message: string}> 型になります
+// result は ResultAsync<User | null, {err: unknown, message: string}> 型になります
 const result = fromPromise(
   userPromise,
   err => ({err, message: "データベース読み取り中にエラーが発生しました"})
