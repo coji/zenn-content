@@ -12,12 +12,6 @@ published: true
 
 ![grr](/images/grr-slack-app-on-cloudflare/grr.png)
 
-![スラッシュコマンド](/images/grr-slack-app-on-cloudflare/slash-command.png)
-
-![モーダル](/images/grr-slack-app-on-cloudflare/modal.png)
-
-![登録完了メッセージ](/images/grr-slack-app-on-cloudflare/message.png)
-
 このアプリは、以下の技術スタックを採用して開発しました。
 
 - **ランタイム:** Cloudflare Workers
@@ -48,16 +42,20 @@ Cloudflare Workers や D1、React Router v7 を使ったアプリケーション
     - `/grr [イラっとしたこと]` のスラッシュコマンドで記録を開始できます。
     - 既存のSlackメッセージに対して、メッセージショートカット（メッセージメニューから「grr」を選択）で記録を開始できます。
 
+    ![スラッシュコマンド](/images/grr-slack-app-on-cloudflare/slash-command.png)
+
+    ![登録完了メッセージ](/images/grr-slack-app-on-cloudflare/message.png)
+
 2. **イライラ度の設定:**
     - 記録時にモーダルが開き、1〜5段階でイライラ度を設定できます。
     - メッセージ内容も編集できます。
 
-    ![grr モーダル](https://raw.githubusercontent.com/coji/grr/main/docs/images/grr-modal.png) *(モーダルスクリーンショットがあればここに挿入)*
+    ![grr モーダル](/images/grr-slack-app-on-cloudflare/modal.png)
 
 3. **記録の一覧表示 (Web UI):**
     - 記録されたイライラは、Cloudflare Workers でホストされた Web ページで一覧表示されます。（現在は基本的な表示のみです）
 
-    ![grr 一覧画面](https://raw.githubusercontent.com/coji/grr/main/docs/images/grr-list.png) *(一覧画面スクリーンショットがあればここに挿入)*
+    ![grr 一覧画面](/images/grr-slack-app-on-cloudflare/list.png)
 
 4. **Slack 通知:**
     - イライラが記録されると、記録を開始したチャンネルまたはDMに通知メッセージが投稿されます。
