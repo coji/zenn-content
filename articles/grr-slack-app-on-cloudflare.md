@@ -574,13 +574,6 @@ README にも記載がありますが、開発からデプロイまでの流れ�
     - デプロイ後に表示される Worker の URL を、Slack アプリ設定の Request URL (Interactivity & Shortcuts, Event Subscriptions, Slash Commands) に **本番用 URL** として設定します。
     - 本番環境用の環境変数 (Slack Token など) は `wrangler secret put` コマンドで設定します。
 
-## ハマった点・工夫した点
-
-- **React Router v7 + Vite + Cloudflare:** 当初、設定の組み合わせに少し戸惑いました。`@react-router/dev` と `@cloudflare/vite-plugin` のドキュメントをよく読み、`react-router.config.ts` や `vite.config.ts` の設定を調整する必要がありました。特に `viteEnvironment: { name: 'ssr' }` の指定が重要でした。
-- **D1 + Kysely の型:** Kysely の `CamelCasePlugin` は便利ですが、DB スキーマ (スネークケース) と TypeScript コード (キャメルケース) の対応を意識する必要があります。`Database` インターフェースの定義を正確に行うことが重要です。
-- **Slack の Request URL:** ローカル開発時と本番デプロイ後で Slack アプリ設定の Request URL を切り替えるのが少し手間です。環境変数などで管理しやすくする工夫が必要かもしれません。
-- **Biome:** Prettier/ESLint からの移行はスムーズでしたが、一部ルール設定 (`organizeImports` を無効化するなど) を `biome.json` で調整しました。
-
 ## 今後の展望
 
 まだ基本的な機能しか実装できていないため、今後は以下のような機能を追加していきたいと考えています。
