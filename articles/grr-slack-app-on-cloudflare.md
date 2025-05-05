@@ -3,7 +3,7 @@ title: "Cloudflare Workers/D1 と React Router v7 で作る Slack 感情ログ�
 emoji: "😠"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["cloudflare", "react", "reactrouter", "slack", "typescript", "kysely", "d1", "vite"]
-published: false # false: 下書き / true: 公開
+published: true
 ---
 
 ## はじめに
