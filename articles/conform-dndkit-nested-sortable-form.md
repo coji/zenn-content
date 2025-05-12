@@ -22,8 +22,7 @@ Webアプリケーション開発において、複雑なフォームの実装�
 **実際に動作するデモはこちらで確認できます:**
 ▶ [**デモを見る**](https://www.techtalk.jp/demo/conform/nested-array)
 
-![完成形フォームのイメージ図](https://user-images.githubusercontent.com/11521994/282627094-05623100-6320-4b8f-a05a-a9d7c4113a89.png)
-*チームカードが並び、各カード内でメンバーをドラッグ＆ドロップで並び替えたり、追加・削除できるUI*
+![完成形フォームの動作イメージ](/images/conform-dndkit-nested-sortable-form/conform-dndkit-form.gif)
 
 Conformで動的に増減するネスト配列を扱い、さらにdnd kitでその要素を並び替える、という組み合わせの実装例はまだ少ないため、同様の実装を目指す方の具体的なガイドとなることを目指します。特に、Reactの`key` propの適切な設定が、この種のUIを実現する上でいかに重要かについても深掘りします。
 
