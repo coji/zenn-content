@@ -1,12 +1,12 @@
 ---
-title: "Conformとdnd kitで作る！ソート可能なネスト配列フォームの実装ガイド (React Router v7"
+title: "Conformとdnd kitで作る！ソート可能なネスト配列動的フォームの実装ガイド (React Router v7"
 emoji: "📝"
 type: "tech"
 topics: ["conform", "dndkit", "zod", "react-router", "shadcnui"]
 published: false
 ---
 
-# Conformとdnd kitで作る！ソート可能なネスト配列フォームの実装ガイド (React Router v7)
+# Conformとdnd kitで作る！ソート可能なネスト配列動的フォームの実装ガイド (React Router v7)
 
 ## はじめに
 
