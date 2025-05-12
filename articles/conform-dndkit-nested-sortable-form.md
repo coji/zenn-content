@@ -6,8 +6,6 @@ topics: ["conform", "dndkit", "zod", "react-router", "shadcnui"]
 published: false
 ---
 
-# Conform　と　dnd kit　で作る！ソート可能なネスト配列フォームの実装ガイド (React Router v7)
-
 ## はじめに
 
 Webアプリケーション開発において、複雑なフォームの実装はしばしば頭痛の種となります。特に、ユーザーが自由に行を追加・削除したり、順番を入れ替えたりできる「動的なリスト」をフォーム内に含める場合、状態管理やバリデーション、UIの整合性を保つのが難しくなります。ネストされた構造（リストの中にさらにリストがある）になると、その複雑さはさらに増します。
@@ -141,8 +139,7 @@ React Router v7 の `loader`, `action`, およびUIコンポーネントを定�
 import { FormProvider, getFormProps, useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod'
 import { EllipsisVerticalIcon } from 'lucide-react'
-import { Form, useActionData, useLoaderData } from '@remix-run/react'
-import { json, type ActionFunctionArgs, type LoaderFunctionArgs } from '@remix-run/node'
+import { Form } from 'react-router'
 import { dataWithSuccess } from 'remix-toast'
 import {
   Button,
@@ -158,63 +155,81 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui'
+import type { Route } from './+types/route'
 import { TeamCard } from './components'
 import {
   fakeEmail,
   fakeGender,
   fakeId,
   fakeName,
+  fakeTeamName,
   fakeTel,
   fakeZip,
 } from './faker.server'
 import { formSchema } from './schema'
-import type { Route } from './+types/route' // 型定義ファイル（オプション）
 
-// Loader: 初期データの読み込み
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = ({ request }: Route.LoaderArgs) => {
+  // ブラウザバンドルが巨大になってしまうので、faker はサーバサイドでのみ使用
   const fakeMembers = Array.from({ length: 30 }, () => ({
-    id: fakeId(), name: fakeName(), gender: fakeGender(),
-    zip: fakeZip(), tel: fakeTel(), email: fakeEmail(),
+    id: fakeId(),
+    name: fakeName(),
+    gender: fakeGender(),
+    zip: fakeZip(),
+    tel: fakeTel(),
+    email: fakeEmail(),
   }))
+
   const teams = [
-    { id: '1', name: 'team1', members: fakeMembers.slice(0, 5) },
-    { id: '2', name: 'team2', members: fakeMembers.slice(5, 10) },
+    {
+      id: fakeId(),
+      name: fakeTeamName(),
+      members: fakeMembers.slice(0, 5),
+    },
+    {
+      id: fakeId(),
+      name: fakeTeamName(),
+      members: fakeMembers.slice(5, 10),
+    },
   ]
-  return json({ teams, fakeMembers })
+  return { teams, fakeMembers }
 }
 
-// Action: フォーム送信処理
-export const action = async ({ request }: ActionFunctionArgs) => {
-  const formData = await request.formData()
-  const submission = parseWithZod(formData, { schema: formSchema })
-
+export const action = async ({ request }: Route.ActionArgs) => {
+  const submission = parseWithZod(await request.formData(), {
+    schema: formSchema,
+  })
   if (submission.status !== 'success') {
-    return json({ lastResult: submission.reply(), result: null })
+    return { lastResult: submission.reply(), result: null }
   }
 
-  const processedResult = submission.value.teams.map((team, teamIndex) => ({
-    id: team.id ?? `${teamIndex + 1}`, ...team,
-    members: team.members.map((member, memberIndex) => ({
-      ...member, id: member.id ?? `${teamIndex + 1}-${memberIndex + 1}`,
-    })),
-  }))
-
-  return json(dataWithSuccess(
-    { lastResult: submission.reply({ resetForm: true }), result: processedResult },
-    { message: '登録しました', description: '登録されたデータを確認してください' },
-  ))
+  return dataWithSuccess(
+    {
+      lastResult: submission.reply({ resetForm: true }),
+      result: submission.value.teams.map((team, teamIndex) => ({
+        id: team.id ?? fakeId(),
+        ...team,
+        members: team.members.map((member, memberIndex) => ({
+          ...member,
+          id: member.id ?? fakeId(),
+        })),
+      })),
+    },
+    {
+      message: '登録しました',
+      description: '登録されたデータを確認してください',
+    },
+  )
 }
 
-// Component: UIのレンダリング
 export default function ConformNestedArrayDemo({
-  loaderData, actionData,
-}: Route.ComponentProps) { // 型定義ファイルからPropsを受け取る
-  const { teams: defaultTeams } = loaderData
-
+  loaderData: { teams: defaultTeams, fakeMembers },
+  actionData,
+}: Route.ComponentProps) {
   const [form, fields] = useForm({
     lastResult: actionData?.lastResult,
     defaultValue: { teams: defaultTeams },
-    onValidate: ({ formData }) => parseWithZod(formData, { schema: formSchema }),
+    onValidate: ({ formData }) =>
+      parseWithZod(formData, { schema: formSchema }),
   })
 
   const teams = fields.teams.getFieldList()
@@ -224,36 +239,73 @@ export default function ConformNestedArrayDemo({
       <FormProvider context={form.context}>
         <Form method="POST" {...getFormProps(form)}>
           <Stack>
-            {/* チームリストの描画 */}
             {teams.map((team, index) => (
               <TeamCard
-                key={team.key} // ★ Conform提供の安定キー
+                key={team.key}
                 formId={form.id}
                 name={team.name}
-                menu={/* チーム操作メニュー */}
+                menu={
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button type="button" variant="ghost" size="icon"><EllipsisVerticalIcon /></Button>
+                      <Button type="button" variant="ghost" size="icon">
+                        <EllipsisVerticalIcon />
+                      </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem disabled={index === 0} onClick={() => form.reorder({ name: fields.teams.name, from: index, to: index - 1 })}>Move Up</DropdownMenuItem>
-                      <DropdownMenuItem disabled={index === teams.length - 1} onClick={() => form.reorder({ name: fields.teams.name, from: index, to: index + 1 })}>Move Down</DropdownMenuItem>
-                      <DropdownMenuItem className="text-destructive" onClick={() => form.remove({ name: fields.teams.name, index })}>Remove</DropdownMenuItem>
+                      <DropdownMenuItem
+                        disabled={index === 0}
+                        onClick={() => {
+                          form.reorder({
+                            name: fields.teams.name,
+                            from: index,
+                            to: index - 1,
+                          })
+                        }}
+                      >
+                        Move Up
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        disabled={index === teams.length - 1}
+                        onClick={() => {
+                          form.reorder({
+                            name: fields.teams.name,
+                            from: index,
+                            to: index + 1,
+                          })
+                        }}
+                      >
+                        Move Down
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={(e) => {
+                          form.remove({ name: fields.teams.name, index })
+                        }}
+                        className="text-destructive"
+                      >
+                        Remove
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 }
               />
             ))}
-            {/* チーム追加ボタン */}
-            <Button variant="outline" {...form.insert.getButtonProps({ name: fields.teams.name })}>Add Team</Button>
-            {/* 送信ボタン */}
+
+            <Button
+              variant="outline"
+              {...form.insert.getButtonProps({ name: fields.teams.name })}
+            >
+              Add Team
+            </Button>
+
             <Button type="submit">Submit</Button>
           </Stack>
         </Form>
       </FormProvider>
+
+
       {/* 登録結果テーブル */}
       {actionData?.result && (
-        <Stack className="mt-8 text-xs">
+        <Stack className="text-xs">
           <div>登録されました。</div>
           <Table>{/* TableHeader, TableBody ... */}</Table>
         </Stack>
