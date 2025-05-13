@@ -43,12 +43,6 @@ React Router v7.3.0 から導入された `unstable_clientMiddleware` を使う�
 // react-router.config.ts
 import type { Config } from '@react-router/dev/config'
 
-declare module 'react-router' {
-  interface Future {
-    unstable_middleware: true
-  }
-}
-
 export default {
   ssr: false,
   future: {
@@ -56,6 +50,12 @@ export default {
   },
 } satisfies Config
 ```
+
+:::message
+unstable_middleware を有効にすると loader / action の引数である context の形が AppLoaderContext から unstable_RouterContextProvider に変更されます。
+
+React Router v7.6.0 以降、このようにfuture フラッグを有効して型が変わる場合は、declare を使ったアンビエント宣言は不要となり、自動的に反映されるようになりました。
+:::
 
 ### 2. コンテキストの作成
 
