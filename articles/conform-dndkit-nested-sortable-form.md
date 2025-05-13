@@ -314,7 +314,7 @@ export default function ConformNestedArrayDemo({
 }
 ```
 
-*React Router v7 の `loader` と `action` でデータの読み書きを行い、UIコンポーネント側では `useLoaderData`, `useActionData` でデータを取得します。Conform の `useForm` で状態を初期化し、`getFieldList` でチーム配列を取得して `TeamCard` をマッピングします。チームの追加・削除・並び替えは Conform の `insert`, `remove`, `reorder` API を使用します。リストの `key` には Conform が提供する `team.key` を使うことが重要です。*
+React Router v7 の `loader` と `action` でデータの読み書きを行い、UIコンポーネント側では `useLoaderData`, `useActionData` でデータを取得します。Conform の `useForm` で状態を初期化し、`getFieldList` でチーム配列を取得して `TeamCard` をマッピングします。チームの追加・削除・並び替えは Conform の `insert`, `remove`, `reorder` API を使用します。こちらのリストの `key` には Conform が提供する `team.key` を使っています。
 
 ### 3. チームカード (`TeamCard.tsx`)
 
@@ -354,7 +354,7 @@ export const TeamCard = ({ formId, name, menu, className }: TeamCardProps) => {
       const from = teamMembers.findIndex((m) => m.id === active.id)
       const to = teamMembers.findIndex((m) => m.id === over.id)
       if (from === -1 || to === -1) return
-      // Conformのreorder APIで状態を更新
+      // Conformのreorder APIで並び替え
       form.reorder({ name: teamFields.members.name, from, to })
     }
   }
@@ -367,27 +367,48 @@ export const TeamCard = ({ formId, name, menu, className }: TeamCardProps) => {
           <input {...getInputProps(teamFields.id, { type: 'hidden' })} />
           {/* チーム名入力 */}
           <Stack gap="sm">
-            <HStack><Label htmlFor={teamFields.name.id}>チーム名</Label><Input {...getInputProps(teamFields.name, { type: 'text' })} /></HStack>
-            <div id={teamFields.name.errorId} className="text-destructive text-xs">{teamFields.name.errors}</div>
+            <HStack>
+              <Label htmlFor={teamFields.name.id}>チーム名</Label>
+              <Input {...getInputProps(teamFields.name, { type: 'text' })} />
+            </HStack>
+            <div
+              id={teamFields.name.errorId}
+              className="text-destructive text-xs"
+            >
+              {teamFields.name.errors}
+            </div>
           </Stack>
 
           {/* メンバーリストとD&D設定 */}
           <MemberList>
             <MemberListHeader />
-            <DndContext id={dndContextId} sensors={sensors} collisionDetection={closestCenter} modifiers={[restrictToVerticalAxis, restrictToParentElement]} onDragEnd={handleDragEnd}>
-              <SortableContext items={teamMembers.map((m) => m.id)} strategy={verticalListSortingStrategy}>
+            <DndContext
+              id={dndContextId}
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+              onDragEnd={handleDragEnd}
+            >
+              <SortableContext
+                items={teamMembers.map((m) => m.id)}
+                strategy={verticalListSortingStrategy}
+              >
                 {/* メンバーリストの描画 */}
                 {teamMembers.map((teamMember, index) => {
                   const memberFields = teamMember.getFieldset();
                   return (
                     <MemberListItem
-                      // ★★★★★ 最重要ポイント ★★★★★
-                      key={memberFields.id.value ?? teamMember.key} // データID or Conformキー
+                      key={memberFields.id.value}
                       formId={form.id}
                       name={teamMember.name}
                       className="group"
                       removeButton={/* 削除ボタン */}
-                        <Button variant="ghost" size="sm" className="opacity-0 group-hover:opacity-100" {...form.remove.getButtonProps({ name: teamFields.members.name, index })}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="opacity-0 group-hover:opacity-100"
+                          {...form.remove.getButtonProps({ name: teamFields.members.name, index })}
+                        >
                           <TrashIcon className="h-4 w-4" />
                         </Button>
                       }
@@ -397,9 +418,19 @@ export const TeamCard = ({ formId, name, menu, className }: TeamCardProps) => {
               </SortableContext>
             </DndContext>
           </MemberList>
-          <div id={teamFields.members.errorId} className="text-destructive text-xs">{teamFields.members.errors}</div>
+          <div
+            id={teamFields.members.errorId}
+            className="text-destructive text-xs">
+            {teamFields.members.errors}
+          </div>
           {/* メンバー追加ボタン */}
-          <Button variant="outline" size="sm" {...form.insert.getButtonProps({ name: teamFields.members.name })}>Add a member</Button>
+          <Button
+            variant="outline"
+            size="sm"
+            {...form.insert.getButtonProps({ name: teamFields.members.name })}
+          >
+            Add a member
+          </Button>
         </Stack>
       </CardContent>
     </Card>
@@ -407,7 +438,7 @@ export const TeamCard = ({ formId, name, menu, className }: TeamCardProps) => {
 }
 ```
 
-*`useField` でチームの情報を取得し、`getFieldList` でメンバーリストを取得します。dnd kit の `DndContext` と `SortableContext` を使い、メンバーリストを並び替え可能にします。`SortableContext` の `items` には Conform のフィールドID (`m.id`) の配列を渡します。`handleDragEnd` では、イベントから取得したID (`active.id`, `over.id`) を使ってリスト内のインデックスを特定し、Conform の `reorder` API を呼び出して状態を更新します。**そして最も重要なのが、`MemberListItem` の `key` prop です。ここには、メンバーデータに紐づく安定した一意な識別子（DBのIDがあれば `memberFields.id.value`、なければ Conform が提供する `teamMember.key`）を設定します。これにより、並び替え後もReactとConformの状態が正しく同期され、UIの不整合を防ぎます。**配列のインデックスを `key` に使ってはいけません。*
+`useField` でチームの情報を取得し、`getFieldList` でメンバーリストを取得します。dnd kit の `DndContext` と `SortableContext` を使い、メンバーリストを並び替え可能にします。`SortableContext` の `items` には Conform のフィールドID (`m.id`) の配列を渡します。`handleDragEnd` では、イベントから取得したID (`active.id`, `over.id`) を使ってリスト内のインデックスを特定し、Conform の `reorder` API を呼び出して状態を更新します。**そして最も重要なのが、`MemberListItem` の `key` prop です。ここには、メンバーデータに紐づく安定した一意な識別子（DBのIDである `memberFields.id.value`）を設定します。これにより、並び替え後もReactとConformの状態が正しく同期され、UIの不整合を防ぎます。配列のインデックスを `key` に使ってはいけません。
 
 ### 4. メンバーリストアイテム (`MemberListItem.tsx`)
 
