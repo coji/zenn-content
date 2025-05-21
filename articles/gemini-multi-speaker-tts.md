@@ -256,7 +256,7 @@ pnpm start
 
 **会話テキスト:**
 
-```
+```txt
 Joe: やあ、元気？
 Jane: うん、元気だよ!
 Joe: 今日は何をしているの？
@@ -293,7 +293,6 @@ SpeakerB: こんにちは、今日は良い天気ですね。`;
 
     ```typescript
     const prompt = `Make Joe sound tired and bored, and Jane sound excited and happy:
-
 Joe: やあ、元気？
 Jane: うん、元気だよ!`;
     ```
