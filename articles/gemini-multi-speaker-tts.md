@@ -3,7 +3,7 @@ title: Google Gemini APIで複数話者テキスト音声合成（TTS）を実�
 emoji: 🎤
 type: tech
 topics: ["生成AI", "gemini",  "text-to-speech", "typescript"]
-published: false # 下書きとして公開する場合は true に変更
+published: true
 ---
 
 ## はじめに
@@ -41,7 +41,6 @@ https://github.com/coji/tts-test
 今回使用するサンプルコードのリポジトリは以下の構造を持っています。
 
 ```txt
-
 ├── .gitignore
 ├── main.ts
 ├── output.wav
@@ -49,7 +48,6 @@ https://github.com/coji/tts-test
 ├── pnpm-lock.yaml
 ├── pnpm-workspace.yaml
 └── tsconfig.json
-
 ```
 
 このリポジトリをベースに、必要な環境構築を進めましょう。
