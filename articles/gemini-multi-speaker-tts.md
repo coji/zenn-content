@@ -265,9 +265,7 @@ Jane: 今日は友達と遊びに行く予定だよ。
 
 **音声ファイル:**
 
-<iframe src="https://raw.githubusercontent.com/coji/tts-test/main/output.wav"></iframe>
-
-（[GitHub上のoutput.wav](https://raw.githubusercontent.com/coji/tts-test/main/output.wav) でも直接聞くことができます。）
+（[GitHub上のoutput.wav](https://raw.githubusercontent.com/coji/tts-test/main/output.wav) をダウンロードして聞くことができます。）
 
 このように、JoeとJaneのセリフがそれぞれ異なる声色で合成されていることがわかります。
 
