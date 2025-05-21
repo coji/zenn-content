@@ -274,31 +274,34 @@ Jane: 今日は友達と遊びに行く予定だよ。
 このサンプルをベースに、さらに様々なカスタマイズが可能です。
 
 * **会話の内容の変更**:
-    `main.ts` ファイルの `prompt` 定数を自由に変更し、色々な会話を試してみてください。
+`main.ts` ファイルの `prompt` 定数を自由に変更し、色々な会話を試してみてください。
 
-    ```typescript
-    const prompt = `TTS the following conversation between SpeakerA and SpeakerB:
+```typescript
+const prompt = `TTS the following conversation between SpeakerA and SpeakerB:
 SpeakerA: こんにちは！
 SpeakerB: こんにちは、今日は良い天気ですね。`;
-    ```
-    ただし、`speaker` の設定とプロンプト内の話者名を一致させるのを忘れないでください。
+```
+
+ただし、`speaker` の設定とプロンプト内の話者名を一致させるのを忘れないでください。
 
 * **声色の変更**:
-    `speakerVoiceConfigs` 内の `voiceName` を、[前述のリスト](https://ai.google.dev/gemini-api/docs/speech-generation#voice-options) から別のものに変更してみましょう。会話の雰囲気に合わせて最適な声色を見つけることができます。
+`speakerVoiceConfigs` 内の `voiceName` を、[前述のリスト](https://ai.google.dev/gemini-api/docs/speech-generation#voice-options) から別のものに変更してみましょう。会話の雰囲気に合わせて最適な声色を見つけることができます。
 
 * **会話スタイルの制御**:
-    プロンプトに話し方の指示を追加することで、声のスタイルをより細かく制御できます。 [1]
-    例:
+プロンプトに話し方の指示を追加することで、声のスタイルをより細かく制御できます。 [1]
+例:
 
-    ```typescript
-    const prompt = `Make Joe sound tired and bored, and Jane sound excited and happy:
+```typescript
+const prompt = `Make Joe sound tired and bored, and Jane sound excited and happy:
 Joe: やあ、元気？
 Jane: うん、元気だよ!`;
-    ```
-    話者の声色とプロンプトの指示を組み合わせることで、さらに表現豊かな音声を生成できます。
+```
+
+話者の声色とプロンプトの指示を組み合わせることで、さらに表現豊かな音声を生成できます。
 
 * **ストリーミング出力**:
-    今回のサンプルでは一度に全ての音声データを取得してファイルに保存していますが、Gemini APIはストリーミング出力もサポートしています。これにより、音声生成が開始され次第、リアルタイムで音声を再生することが可能になります。 [1]
+
+今回のサンプルでは一度に全ての音声データを取得してファイルに保存していますが、Gemini APIはストリーミング出力もサポートしています。これにより、音声生成が開始され次第、リアルタイムで音声を再生することが可能になります。 [1]
 
 ## まとめ
 
