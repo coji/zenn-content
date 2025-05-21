@@ -181,64 +181,74 @@ main();
 
 * **`GoogleGenAI` の初期化**:
 
-    ```typescript
-    import { GoogleGenAI } from '@google/genai';
-    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-    ```
+```typescript
+import { GoogleGenAI } from '@google/genai';
+const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+```
 
-    `@google/genai` ライブラリを使用してクライアントを初期化します。APIキーは環境変数から安全に読み込んでいます。
+`@google/genai` ライブラリを使用してクライアントを初期化します。APIキーは環境変数から安全に読み込んでいます。
+
 * **`generateContent` メソッドの呼び出し**:
 
-    ```typescript
-    const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-preview-tts',
-      contents: prompt,
-      config: { /* ... */ }
-    });
-    ```
+```typescript
+const response = await ai.models.generateContent({
+  model: 'gemini-2.5-flash-preview-tts',
+  contents: prompt,
+  config: { /* ... */ }
+});
+```
 
-    Gemini APIの `generateContent` メソッドを呼び出します。ここで重要なのは `model` に `gemini-2.5-flash-preview-tts` を指定することです。このモデルは音声生成に特化しています。
+Gemini APIの `generateContent` メソッドを呼び出します。ここで重要なのは `model` に `gemini-2.5-flash-preview-tts` を指定することです。このモデルは音声生成に特化しています。
+
 * **`responseModalities: ['AUDIO']`**:
-    レスポンスの形式を音声（オーディオ）として受け取ることを明示的に指定します。
-* **`speechConfig` と `multiSpeakerVoiceConfig`**:
-    複数話者音声合成の肝となる設定です。
-    `multiSpeakerVoiceConfig` 内の `speakerVoiceConfigs` 配列に、各話者の設定をオブジェクトとして渡します。
-  * `speaker`: これは**プロンプト内で使用する話者名**と完全に一致させる必要があります。コード例では `Joe` と `Jane` がこれに当たります。
-  * `voiceConfig.prebuiltVoiceConfig.voiceName`: 各話者に割り当てる声色を指定します。Google Gemini APIは多くの[プリビルド音声](https://ai.google.dev/gemini-api/docs/speech-generation#voice-options)を提供しており、例えば以下のようなものが利用可能です。 [1]
-    * `Zephyr` -- Bright
-    * `Puck` -- Upbeat
-    * `Charon` -- Informative
-    * `Kore` -- Firm
-    * `Fenrir` -- Excitable
-    * `Leda` -- Youthful
-    * `Orus` -- Firm
-    * `Aoede` -- Breezy
-    * `Callirhoe` -- Easy-going
-    * `Autonoe` -- Bright
-    * `Enceladus` -- Breathy
-    * `Iapetus` -- Clear
-    * `Umbriel` -- Easy-going
-    * `Algieba` -- Smooth
-    * `Despina` -- Smooth
-    * `Erinome` -- Clear
-    * `Algenib` -- Gravelly
-    * `Rasalgethi` -- Informative
-    * `Laomedeia` -- Upbeat
-    * `Achernar` -- Soft
-    * `Alnilam` -- Firm
-    * `Schedar` -- Even
-    * `Gacrux` -- Mature
-    * `Pulcherrima` -- Forward
-    * `Achird` -- Friendly
-    * `Zubenelgenubi` -- Casual
-    * `Vindemiatrix` -- Gentle
-    * `Sadachbia` -- Lively
-    * `Sadaltager` -- Knowledgeable
-    * `Sulafar` -- Warm
 
-        これらの声色は [AI Studio](https://aistudio.google.com/) で試聴することもできます。 [1]
+レスポンスの形式を音声（オーディオ）として受け取ることを明示的に指定します。
+
+* **`speechConfig` と `multiSpeakerVoiceConfig`**:
+
+複数話者音声合成の肝となる設定です。
+`multiSpeakerVoiceConfig` 内の `speakerVoiceConfigs` 配列に、各話者の設定をオブジェクトとして渡します。
+
+* `speaker`: これは**プロンプト内で使用する話者名**と完全に一致させる必要があります。コード例では `Joe` と `Jane` がこれに当たります。
+
+* `voiceConfig.prebuiltVoiceConfig.voiceName`: 各話者に割り当てる声色を指定します。Google Gemini APIは多くの[プリビルド音声](https://ai.google.dev/gemini-api/docs/speech-generation#voice-options)を提供しており、例えば以下のようなものが利用可能です。 [1]
+
+  * `Zephyr` -- Bright
+  * `Puck` -- Upbeat
+  * `Charon` -- Informative
+  * `Kore` -- Firm
+  * `Fenrir` -- Excitable
+  * `Leda` -- Youthful
+  * `Orus` -- Firm
+  * `Aoede` -- Breezy
+  * `Callirhoe` -- Easy-going
+  * `Autonoe` -- Bright
+  * `Enceladus` -- Breathy
+  * `Iapetus` -- Clear
+  * `Umbriel` -- Easy-going
+  * `Algieba` -- Smooth
+  * `Despina` -- Smooth
+  * `Erinome` -- Clear
+  * `Algenib` -- Gravelly
+  * `Rasalgethi` -- Informative
+  * `Laomedeia` -- Upbeat
+  * `Achernar` -- Soft
+  * `Alnilam` -- Firm
+  * `Schedar` -- Even
+  * `Gacrux` -- Mature
+  * `Pulcherrima` -- Forward
+  * `Achird` -- Friendly
+  * `Zubenelgenubi` -- Casual
+  * `Vindemiatrix` -- Gentle
+  * `Sadachbia` -- Lively
+  * `Sadaltager` -- Knowledgeable
+  * `Sulafar` -- Warm
+
+これらの声色は [AI Studio](https://aistudio.google.com/) で試聴することもできます。 [1]
+
 * **WAVファイルへの書き出し**:
-    生成された音声データはBase64エンコードされた形式で返されるため、`Buffer.from(audio, 'base64')` でデコードし、`wav` ライブラリの `FileWriter` を使って `output.wav` として保存しています。
+
+生成された音声データはBase64エンコードされた形式で返されるため、`Buffer.from(audio, 'base64')` でデコードし、`wav` ライブラリの `FileWriter` を使って `output.wav` として保存しています。
 
 ## 実行と結果
 
@@ -287,7 +297,7 @@ SpeakerB: こんにちは、今日は良い天気ですね。`;
 
 * **声色の変更**:
 
-`speakerVoiceConfigs` 内の `voiceName` を、[前述のリスト](https://ai.google.dev/gemini-api/docs/speech-generation#voice-options) から別のものに変更してみましょう。会話の雰囲気に合わせて最適な声色を見つけることができます。
+`speakerVoiceConfigs` 内の `voiceName` を、[前述のリスト](https://ai.google.dev/gemini-api/docs/speech-generation#voices) から別のものに変更してみましょう。会話の雰囲気に合わせて最適な声色を見つけることができます。
 
 * **会話スタイルの制御**:
 
