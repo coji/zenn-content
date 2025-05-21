@@ -265,7 +265,7 @@ Jane: 今日は友達と遊びに行く予定だよ。
 
 **音声ファイル:**
 
-<audio controls src="https://raw.githubusercontent.com/coji/tts-test/main/output.wav"></audio>
+<iframe src="https://raw.githubusercontent.com/coji/tts-test/main/output.wav"></iframe>
 
 （[GitHub上のoutput.wav](https://raw.githubusercontent.com/coji/tts-test/main/output.wav) でも直接聞くことができます。）
 
