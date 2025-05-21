@@ -71,7 +71,7 @@ Google Gemini APIを利用するには、Google Cloud ProjectでAPIキーを発�
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/coji/tts-test.git # 必要に応じてURLを更新してください
+git clone https://github.com/coji/tts-test.git
 cd tts-test
 
 # 依存関係をインストール
