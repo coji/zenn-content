@@ -2,11 +2,7 @@
 title: Google Gemini APIで複数話者テキスト音声合成（TTS）を実現！会話を自然な声で生成
 emoji: 🎤
 type: tech
-topics:
-  - generative-ai
-  - google-gemini
-  - text-to-speech
-  - typescript
+topics: ["生成AI", "gemini",  "text-to-speech", "typescript"]
 published: false # 下書きとして公開する場合は true に変更
 ---
 
@@ -26,9 +22,9 @@ published: false # 下書きとして公開する場合は true に変更
 
 Google Gemini APIは、Googleが開発した強力なマルチモーダルAIモデル「Gemini」にアクセスするためのAPIです。テキスト、画像、音声など、多様な形式の情報を理解し、生成することができます。今回注目するのは、その中でも特に新しい「音声生成（Text-to-Speech）」機能です。
 
-Gemini APIのTTS機能は、単一話者だけでなく、最大2話者までの複数話者の会話を合成できるのが特徴です。また、プロンプトで話者のスタイル、アクセント、ペース、トーンを制御できる「Controllable TTS」という機能も備わっています。 [1]
+Gemini APIのTTS機能は、単一話者だけでなく、最大2話者までの複数話者の会話を合成できるのが特徴です。また、プロンプトで話者のスタイル、アクセント、ペース、トーンを制御できる「Controllable TTS」という機能も備わっています。
 
-本記事で使用するモデルは `gemini-2.5-flash-preview-tts` で、これは高速で効率的な音声合成に適しています。 [1]
+本記事で使用するモデルは `gemini-2.5-flash-preview-tts` で、これは高速で効率的な音声合成に適しています。
 
 ## 複数話者音声合成の魅力
 
@@ -211,7 +207,7 @@ Gemini APIの `generateContent` メソッドを呼び出します。ここで重
 
 * `speaker`: これは**プロンプト内で使用する話者名**と完全に一致させる必要があります。コード例では `Joe` と `Jane` がこれに当たります。
 
-* `voiceConfig.prebuiltVoiceConfig.voiceName`: 各話者に割り当てる声色を指定します。Google Gemini APIは多くの[プリビルド音声](https://ai.google.dev/gemini-api/docs/speech-generation#voice-options)を提供しており、例えば以下のようなものが利用可能です。 [1]
+* `voiceConfig.prebuiltVoiceConfig.voiceName`: 各話者に割り当てる声色を指定します。Google Gemini APIは多くの[プリビルド音声](https://ai.google.dev/gemini-api/docs/speech-generation#voice)を提供しており、例えば以下のようなものが利用可能です。
 
   * `Zephyr` -- Bright
   * `Puck` -- Upbeat
@@ -244,7 +240,7 @@ Gemini APIの `generateContent` メソッドを呼び出します。ここで重
   * `Sadaltager` -- Knowledgeable
   * `Sulafar` -- Warm
 
-これらの声色は [AI Studio](https://aistudio.google.com/) で試聴することもできます。 [1]
+これらの声色は [AI Studio](https://aistudio.google.com/) で試聴することもできます。
 
 * **WAVファイルへの書き出し**:
 
@@ -301,7 +297,7 @@ SpeakerB: こんにちは、今日は良い天気ですね。`;
 
 * **会話スタイルの制御**:
 
-プロンプトに話し方の指示を追加することで、声のスタイルをより細かく制御できます。 [1]
+プロンプトに話し方の指示を追加することで、声のスタイルをより細かく制御できます。
 例:
 
 ```typescript
@@ -314,13 +310,10 @@ Jane: うん、元気だよ!`;
 
 * **ストリーミング出力**:
 
-今回のサンプルでは一度に全ての音声データを取得してファイルに保存していますが、Gemini APIはストリーミング出力もサポートしています。これにより、音声生成が開始され次第、リアルタイムで音声を再生することが可能になります。 [1]
+今回のサンプルでは一度に全ての音声データを取得してファイルに保存していますが、Gemini APIはストリーミング出力もサポートしています。これにより、音声生成が開始され次第、リアルタイムで音声を再生することが可能になります。
 
 ## まとめ
 
 本記事では、Google Gemini APIの強力なTTS機能を使って、複数話者の会話を自然な声で合成する方法を解説しました。`gemini-2.5-flash-preview-tts` モデルと `multiSpeakerVoiceConfig` を活用することで、ポッドキャスト、オーディオブック、キャラクターボイスなど、多様な音声コンテンツの可能性が広がります。
 
 ぜひご自身のプロジェクトでこの技術を試してみてください。
-
----
-[1] Speech generation (Text-to-speech) | Gemini API | Google AI for Developers. `https://ai.google.dev/gemini-api/docs/speech-generation#controllable`
