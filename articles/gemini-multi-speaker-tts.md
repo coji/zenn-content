@@ -278,7 +278,6 @@ Jane: 今日は友達と遊びに行く予定だよ。
 
     ```typescript
     const prompt = `TTS the following conversation between SpeakerA and SpeakerB:
-
 SpeakerA: こんにちは！
 SpeakerB: こんにちは、今日は良い天気ですね。`;
     ```
