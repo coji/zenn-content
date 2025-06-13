@@ -20,8 +20,8 @@ Claude Code AI providerを作ることで、いつものVercel AI SDKの書き�
 
 実際に使ってみて感じたメリット：
 
-- 🎯 **Claude MAXを最大活用**: 高性能モデルを思う存分使える
-- 🔧 **開発効率**: いつものAI SDK開発体験そのまま
+- **Claude MAXを最大活用**: 高性能モデルを思う存分使える
+- **開発効率**: いつものAI SDK開発体験そのまま
 
 ## なぜ作ったのか
 
@@ -40,7 +40,7 @@ Claude Code AI providerを作ることで、いつものVercel AI SDKの書き�
 
 [Claude Code](https://claude.ai/code)をVercel AI SDK providerとして実装したものです。これで、いつものAI SDK開発フローをそのまま活用できます。
 
-実は、このprovider自体もClaude Codeに書いてもらいました。qwen-ai-provider、Vercel AI SDK、Claude Code SDKのドキュメントを参考資料として渡して、「こんな感じのproviderを作って」とお願いしたら、2時間程度でちゃんと動くものができあがりました。
+実は、このprovider自体もClaude Codeに書いてもらいました。qwen-ai-provider、Vercel AI SDK、Claude Code SDKのドキュメントを参考資料として渡して、「こんな感じのproviderを作って」とお願いしたら、4時間程度でちゃんと動くものができあがりました。
 
 Claude Codeを使ってClaude Code用のproviderを作る、というメタな感じが面白かったです。
 
@@ -157,7 +157,7 @@ const result = await generateText({
 })
 ```
 
-ローカル環境だからこそ、ファイル操作系のツールも安心して使えそうです。まずはClaude Codeの機能を詳しく調査してみる必要がありますね。
+まずはClaude Codeの機能を詳しく調査してみる必要がありますね。
 
 ### その他の機能拡張
 
