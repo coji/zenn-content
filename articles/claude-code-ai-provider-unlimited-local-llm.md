@@ -14,7 +14,7 @@ https://github.com/coji/claude-code-ai-provider
 
 せっかくClaude MAXに入っているので、高性能なモデルをフルに活用して自分用のLLMアプリを作りたくて。
 
-最近普段遣いにしてる [Claude Code](https://claude.ai/code)、「これをVercel AI SDKで使えたら便利そう」と思ったのがきっかけです。
+最近普段使いにしてる [Claude Code](https://claude.ai/code)、「これをVercel AI SDKで使えたら便利そう」と思ったのがきっかけです。
 
 ## 先に結論
 
