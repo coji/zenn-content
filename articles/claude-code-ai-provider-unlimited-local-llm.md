@@ -55,10 +55,8 @@ npm install claude-code-ai-provider
 
 ```typescript
 // 使用例
-import { createClaudeCode } from 'claude-code-ai-provider'
+import { claudeCode } from 'claude-code-ai-provider'
 import { generateText } from 'ai'
-
-const claudeCode = createClaudeCode()
 
 const result = await generateText({
   model: claudeCode('sonnet'),
@@ -114,10 +112,8 @@ Claude Code SDKを使ったので、プロセス管理周りは簡単に実装�
 ### Next.jsでのチャットボット
 
 ```typescript
-import { createClaudeCode } from 'claude-code-ai-provider'
+import { claudeCode } from 'claude-code-ai-provider'
 import { streamText } from 'ai'
-
-const claudeCode = createClaudeCode()
 
 export async function POST(request: Request) {
   const { messages } = await request.json()
