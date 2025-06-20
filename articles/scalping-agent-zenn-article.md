@@ -3,7 +3,7 @@ title: "React Router v7 × Vercel AI SDKで作る自律的マルチステップA
 emoji: "🤖"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["reactrouter", "vercelaisdk", "ai", "gemini", "typescript"]
-published: false
+published: true
 ---
 
 # はじめに
@@ -48,8 +48,7 @@ export default function ScalpingResearch() {
 
 ```typescript
 // Resource Route（API Route）
-// app/routes/_app+/autonomous+/api/route.ts
-export async function POST(request: Request) {
+export const action = async ({ request }: Route.ActionArgs) => {
   const { messages } = await request.json()
   
   const result = await runScalpingAgent(messages)
