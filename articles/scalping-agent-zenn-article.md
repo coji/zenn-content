@@ -326,6 +326,6 @@ scalpingAgentの成功の鍵は、**Vercel AI SDKの強力な機能**を活用�
 
 ## 参考リンク
 
-- [Vercel AI SDK](https://sdk.vercel.ai/)
+- [Vercel AI SDK](https://ai-sdk.dev/)
 - [Google AI SDK](https://ai.google.dev/)
 - [Yahoo Finance API](https://finance.yahoo.com/)
