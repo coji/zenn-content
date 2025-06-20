@@ -49,7 +49,7 @@ export default function ScalpingResearch() {
 ```typescript
 // Resource Route（API Route）
 export const action = async ({ request }: Route.ActionArgs) => {
-  const { messages } = await request.json()
+  const { messages } = (await request.json()) as { messages: UIMessage[] }
   
   const result = await runScalpingAgent(messages)
   
