@@ -342,7 +342,7 @@ scalpingAgentの成功の鍵は、**Vercel AI SDKの強力な機能**を活用�
 
 今回の記事について **6/23(月) 19:00** から行う **Remix Tokyo** で Lightning Talk でお話する予定です。よければご参加ください。
 
-イベントページ：https://lu.ma/paz62qi5
+https://lu.ma/paz62qi5
 
 ## 参考リンク
 
