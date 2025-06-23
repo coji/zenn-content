@@ -70,6 +70,14 @@ npx textlint books/
 - UI libraries (shadcn/ui, Conform, XState)
 - Database performance optimization
 
+### Writing Style Guide
+
+- **体験ベースの語り口**: 「〜を作ってみました」「〜してみた結果です」など、実際の体験を共有する形式
+- **読者との距離感**: 「〜ですね」「〜じゃないですか」「〜と感じています」など、親しみやすい口調
+- **能動的な表現**: 「〜できます」→「〜できる」、「〜により」→「〜で」、受動態より能動態を優先
+- **簡潔な構成**: 長い前置きを避け、すぐ本題に入る。各セクションの導入文は最小限に
+- **自然な日本語**: 「〜について解説します」→「〜を作ってみました」、形式的すぎる表現を避ける
+
 ## Development Notes
 
 - Content is primarily in Japanese
