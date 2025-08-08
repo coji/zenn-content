@@ -24,7 +24,7 @@ https://www.npmjs.com/package/@coji/zodix
 
 ### 2. React Router v7 への対応
 
-Remix が React Router v7 に統合されて、型定義が `LoaderFunctionArgs` から `Route.LoaderArgs` に変わったりしています。最新版に対応させたかったんです。
+Remix が React Router v7 に統合されたことに伴い、`@remix-run` パッケージへの依存を削除しました。これにより Remix でも React Router v7 でも、どちらでも使えるようになりました。
 
 ### 3. メンテナンス状況
 
@@ -82,15 +82,22 @@ src/
 - **ビルド時の最適化** - 使わないバージョンのコードは含まれない
 - **移行が簡単** - インポートパスを変えるだけで v3 から v4 に移行可能
 
-### React Router v7 対応
+### React Router v7 / Remix 両対応
 
-型定義を React Router v7 の新しいインターフェースに対応させました：
+`@remix-run` パッケージへの依存を削除し、どちらでも使えるようにしました：
 
 ```typescript
-// Before (Remix)
+// Remix でも
 import type { LoaderFunctionArgs } from '@remix-run/node'
 
-// After (React Router v7)
+export async function loader({ params }: LoaderFunctionArgs) {
+  const { postId } = zx.parseParams(params, {
+    postId: zx.NumAsString
+  })
+  // ...
+}
+
+// React Router v7 でも
 import type { Route } from './+types.posts.$postId'
 
 export async function loader({ params }: Route.LoaderArgs) {
