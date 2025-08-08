@@ -8,6 +8,12 @@ published: true
 
 # これは何？
 
+:::message
+📢 **2025年8月追記**: Zodix を fork して Zod v3/v4 両対応と React Router v7 対応を実現した `@coji/zodix` を公開しました。詳細は以下の記事をご覧ください。
+
+https://zenn.dev/coji/articles/zodix-fork-zod-v3-v4-react-router-v7
+:::
+
 Remix でアプリケーションを開発する際、route でのパラメータやクエリのバリデーションは必須です。通常、このバリデーションは手動で行う必要がありますが、`zod` と `zodix` というモジュールを使うことでとてもシンプルに書くことができます。
 
 たとえば、URL パラメータのバリデーションと値の取り出しでは以下のように定型句が多く煩雑になりがちですが、`zodix` はそこで威力を発揮します。
