@@ -1,5 +1,5 @@
 ---
-title: "Zodix を fork して Zod v3/v4 両対応にしてみた"
+title: "React Router v7 のバリデーションライブラリを Zod v3/v4 両対応にしてみた"
 emoji: "🚀"
 type: "tech"
 topics: ["reactrouter", "zod", "typescript", "opensource", "remix"]
