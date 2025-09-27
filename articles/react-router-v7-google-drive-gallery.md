@@ -6,19 +6,25 @@ topics: ["reactrouter", "googleapi", "oauth", "typescript", "cloudflareworkers"]
 published: true
 ---
 
-React Router v7 の Framework mode を触っていたら、Google Drive API を使ったギャラリーアプリを作ってしまったので、実装のポイントをまとめてみました。
+# これはなに？
 
-デモは https://www.techtalk.jp/demo/google-drive で触れます。コードは https://github.com/techtalkjp/techtalk.jp/tree/main/app/routes/demo%2B/google-drive%2B に置いてあります。
+Google Drive API を使ったことがなかったので、試しに React Router v7 でフォルダの中の画像を表示するギャラリーアプリを作って、実装のポイントをまとめてみました。
+
+デモは https://www.techtalk.jp/demo/google-drive で触れます。
+
+コードは https://github.com/techtalkjp/techtalk.jp/tree/main/app/routes/demo%2B/google-drive%2B に置いてあります。
 
 ## 作ったもの
 
-Google Drive の画像をギャラリー表示するアプリです。Google アカウントでログインすると、自分の Drive に保存してある画像が見られるという、シンプルなものですね。
+![スクリーンショット](/images/react-router-v7-google-drive-gallery/google-drive-gallery.jpg)
+
+Google Drive の画像をギャラリー表示するアプリです。Google アカウントでログインすると、自分の Drive に保存してある画像が見られるという、シンプルなものです。
 
 フォルダの中も移動できるし、ページネーションもあります。サムネイルをクリックすると元画像が見られる、よくあるギャラリーアプリです。
 
 ## React Router v7 の Framework mode が便利
 
-React Router v7 って、もうただのルーターじゃないんですよ。フルスタックフレームワークになってて、SSR もできるし、API ルートも書けるし、セッション管理もできる。
+React Router v7 はフルスタックフレームワークになっていて、SSR もできるし、API ルートも書けるし、セッション管理もできます。
 
 今回使った機能はこんな感じ：
 - **loader 関数** でサーバーサイドのデータ取得
@@ -35,9 +41,9 @@ Google の OAuth 2.0 認証を実装しました。流れはこんな感じで�
 4. 認可コードをアクセストークンに交換
 5. セッションに保存して元のページへ
 
-### Resource Route が便利すぎる
+### Resource Route が便利
 
-認証用のエンドポイントを Resource Route として実装できるのがいいんです。`auth.ts` はこんな感じ：
+認証用のエンドポイントを Resource Route (APIルート)として実装します。`auth.ts` はこんな感じ：
 
 ```typescript
 // auth.ts - Google OAuth URLを作ってリダイレクト
@@ -54,7 +60,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 }
 ```
 
-コールバックも同じように Resource Route で処理できます。Express とか別の API サーバー立てなくていいのが楽ですね。
+コールバックも同じように Resource Route で処理します。Express や Hono など、別の API サーバー立てなくていいのが楽ですね。
 
 ## Google Drive API を叩く
 
@@ -82,15 +88,15 @@ export async function loader({ request }: Route.LoaderArgs) {
 
 ### アクセストークンの自動リフレッシュ
 
-アクセストークンって1時間で期限切れるんですよね。でも大丈夫、リフレッシュトークンを使って自動更新する仕組みを作りました。
+アクセストークンは1時間で期限切れので、リフレッシュトークンを使って自動更新する仕組みを作りました。
 
-`withGoogleAccess` という関数でラップして、401 エラーが来たら自動でリフレッシュ → リトライ、という感じです。ユーザーは何も意識しなくていい。
+`withGoogleAccess` という関数でラップして、401 エラーが来たら自動でリフレッシュ → リトライ、という感じです。
 
 ## 画像プロキシの実装
 
-Google Drive の画像って、直接表示しようとすると CORS エラーになったり、アクセストークンが露出したりするじゃないですか。
+Google Drive に保存した画像を直接表示しようとすると CORS エラーになったり、アクセストークンが露出しないように注意する必要があります。
 
-なので、`proxy.$fileId.ts` という Resource Route を作って、画像をプロキシすることにしました：
+その対応として、`proxy.$fileId.ts` という Resource Route を作って、画像をプロキシすることにしました：
 
 ```typescript
 export async function loader({ params }: Route.LoaderArgs) {
@@ -114,7 +120,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 }
 ```
 
-これで画像の URL は `/demo/google-drive/proxy/[fileId]` になって、アクセストークンも隠せるし、キャッシュも効かせられる。
+これで画像の URL は `/demo/google-drive/proxy/[fileId]` になって、アクセストークンも隠せるし、CDNキャッシュも効かせられます。
 
 ## セキュリティ対策
 
@@ -132,11 +138,11 @@ OAuth の state パラメータを使って、リクエストの正当性を確�
 
 ## 感想
 
-React Router v7 の Framework mode、なかなか使い勝手がいいです。特に Resource Routes が便利で、API エンドポイントをルート定義の中で完結できるのがいい。
+React Router v7 の Framework mode、なかなか使い勝手がいいです。特に Resource Routes が便利で、API エンドポイントをルート定義の中で完結できるのがいいですね。
 
-Google Drive API も、最初は OAuth とか面倒そうだなと思ってたんですが、ちゃんと抽象化すれば意外とシンプルに実装できました。トークンのリフレッシュとか、エラーハンドリングとか、一度作っちゃえば使い回せますしね。
+Google Drive API も、最初は OAuth とか面倒そうだなと思ってたんですが、ちゃんと抽象化すれば意外とシンプルに実装できました。トークンのリフレッシュとか、エラーハンドリングとか、一度作っちゃえば使い回せますし。
 
-React Router v7、まだ新しいですが、こういう外部 API 連携が必要なアプリには向いてると思います。Cloudflare Workers で動かせるのも魅力的ですね。
+React Router v7は、こういう外部 API 連携が必要なアプリには向いてると思います。Cloudflare Workers で動かせるのも魅力ですね。
 
 詳しい実装はGitHubのコードを見てもらえればと思います！
 https://github.com/techtalkjp/techtalk.jp/tree/main/app/routes/demo%2B/google-drive%2B
