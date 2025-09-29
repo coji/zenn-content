@@ -9,6 +9,7 @@ This is a Zenn content repository containing Japanese technical articles and boo
 ## Common Commands
 
 ### Content Management
+
 ```bash
 # Preview content locally with hot reload
 zenn preview
@@ -27,6 +28,7 @@ zenn list:books
 ```
 
 ### Package Management
+
 ```bash
 # Install dependencies (uses pnpm)
 pnpm install
@@ -36,6 +38,7 @@ pnpm outdated
 ```
 
 ### Content Linting
+
 ```bash
 # Run textlint on content (textlint is available as dependency)
 npx textlint articles/
@@ -52,18 +55,21 @@ npx textlint books/
 ## Content Architecture
 
 ### Articles
+
 - Written in Japanese for Japanese developer audience
 - Use YAML frontmatter with title, emoji, type, topics, published status
 - Focus on modern web development, AI integration, and performance optimization
 - Include practical code examples and benchmarks
 
 ### Books
+
 - Multi-chapter comprehensive guides
 - Each book has `config.yaml` defining structure and chapters
 - Chapters are numbered markdown files (01-introduction.md, 02-setup.md, etc.)
 - `conform-guide` is the main complete book with 35 chapters
 
 ### Content Topics
+
 - React/Remix ecosystem (routing, forms, SPA development)
 - AI/LLM development (Claude, Vercel AI SDK, Gemini)
 - Backend technologies (FastAPI, Prisma, PostgreSQL, Supabase)
@@ -72,8 +78,8 @@ npx textlint books/
 
 ### Writing Style Guide
 
+- **基本の文体**: 丁寧語（です・ます調）を基本とし、誠実で親しみやすい口調を心がける
 - **体験ベースの語り口**: 「〜を作ってみました」「〜してみた結果です」など、実際の体験を共有する形式
-- **読者との距離感**: 「〜ですね」「〜じゃないですか」「〜と感じています」など、親しみやすい口調
 - **能動的な表現**: 「〜できます」→「〜できる」、「〜により」→「〜で」、受動態より能動態を優先
 - **簡潔な構成**: 長い前置きを避け、すぐ本題に入る。各セクションの導入文は最小限に
 - **自然な日本語**: 「〜について解説します」→「〜を作ってみました」、形式的すぎる表現を避ける
