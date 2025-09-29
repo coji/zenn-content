@@ -10,6 +10,12 @@ published: true
 
 React Router v7 のデータモード（loader/action）を実際に触ってみた検証記事です。将来自作のブラウザ拡張で使うことを想定して Memory Router での実装を試し、ついでに Conform の future 機能も試してみました。データモードを使ったことがなかったので、まずは基本的な動作を確認したかったんです。
 
+実際に動作するデモは以下URLに公開しています。
+https://data-router-test.vercel.app/
+
+ソースコードは以下リポジトリで公開しています。
+https://github.com/coji/data-router-test
+
 ## 動機：データモードを触ってみたかった
 
 ブラウザ拡張を作る予定があって、React Router v7 を使いたいなと思っていました。でも、そもそもデータモード（loader/action）を使ったことがなかったので、まずは基本的な動作を理解したくて検証プロジェクトを作ってみました。
