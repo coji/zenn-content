@@ -215,4 +215,5 @@ export const action = async ({ request }: ActionFunctionArgs) => {
 
 - [React Router v7 Documentation](https://reactrouter.com/)
 - [Conform](https://conform.guide/)
-- [サンプルコード（GitHub）](https://github.com/coji/data-router-test)
+- [デモサイト](https://data-router-test.vercel.app/)
+- [ソースコード（GitHub）](https://github.com/coji/data-router-test)
