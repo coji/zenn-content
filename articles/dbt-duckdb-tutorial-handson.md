@@ -31,6 +31,61 @@ dbt（data build tool）を触ったことがなかったため、Claude Codeの
 - DuckDB: 1.4.0
 - uv（Pythonパッケージマネージャー）
 
+## 環境構築
+
+### 1. uvのインストール
+
+まず、高速なPythonパッケージマネージャー `uv` をインストールします：
+
+```bash
+# macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# またはHomebrewで
+brew install uv
+```
+
+Windowsの場合は[公式サイト](https://github.com/astral-sh/uv)を参照してください。
+
+### 2. プロジェクトのセットアップ
+
+プロジェクトディレクトリを作成し、必要なパッケージをインストール：
+
+```bash
+# プロジェクトディレクトリ作成
+mkdir hello-dbt
+cd hello-dbt
+
+# pyproject.tomlを作成
+cat > pyproject.toml << 'EOF'
+[project]
+name = "hello-dbt"
+version = "0.1.0"
+dependencies = [
+    "dbt-core>=1.10.0",
+    "dbt-duckdb>=1.9.6",
+]
+requires-python = ">= 3.11"
+EOF
+
+# 依存関係をインストール
+uv sync
+```
+
+これで `dbt-core` と `dbt-duckdb` がインストールされ、すぐに使える状態になります。
+
+### 3. dbtコマンドの実行方法
+
+この記事では `uv run dbt` という形式でdbtコマンドを実行します：
+
+```bash
+uv run dbt --version
+# dbt-core: 1.10.13
+# dbt-duckdb: 1.9.6
+```
+
+`uv run` を付けることで、仮想環境を自動的に有効化してコマンドを実行できます。
+
 ## dbtプロジェクトのセットアップ
 
 まず、プロジェクト構造を作成します。
