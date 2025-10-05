@@ -3,7 +3,7 @@ title: "dbt初心者が手を動かして学ぶ！DuckDBで作るデータパイ
 emoji: "🔨"
 type: "tech"
 topics: ["dbt", "duckdb", "dataengineering", "sql"]
-published: false
+published: true
 ---
 
 ## これはなに?
