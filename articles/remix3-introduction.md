@@ -10,8 +10,6 @@ published: false
 
 2025年1月、Remix Jam で Ryan Florence と Michael Jackson が **Remix 3** を発表しました。このセッションは、React Router の生みの親たちが、なぜ React から離れ、独自のフレームワークを作ることにしたのか、その理由と新しいビジョンを語った歴史的な発表です。
 
-https://www.youtube.com/watch?v=xt_iEOn2a6Y
-
 本記事では、1時間47分に及ぶセッションの内容を詳しく解説します。
 
 :::message
