@@ -84,9 +84,9 @@ React の `use server` では、RPC 関数の URL がビルドごとに変わっ
 Remix 3 の最も革新的な概念が **Setup Scope（セットアップスコープ）** です。
 
 ```javascript
-import { events } from "@remix-run/events";
-import { tempo } from "./01-intro/tempo";
-import { createRoot, type Remix } from "@remix-run/dom";
+import { events } from "@remix-run/events"
+import { tempo } from "./01-intro/tempo"
+import { createRoot, type Remix } from "@remix-run/dom"
 
 function App(this: Remix.Handle) {
   // このスコープは1回だけ実行される（セットアップスコープ）
@@ -96,8 +96,8 @@ function App(this: Remix.Handle) {
   return () => (
     <button
       on={tempo((event) => {
-        bpm = event.detail;
-        this.update();
+        bpm = event.detail
+        this.update()
       })}
     >
       BPM: {bpm}
@@ -138,18 +138,18 @@ Ryan は、`click` イベントの複雑さを説明します：
 Remix Events を使うと、独自のインタラクションを作成できます：
 
 ```javascript
-import { createInteraction, events } from "@remix-run/events";
+import { createInteraction, events } from "@remix-run/events"
 import { pressDown } from "@remix-run/events/press"
 
 export const tempo = createInteraction<HTMLElement, number>(
   "rmx:tempo",
   ({ target, dispatch }) => {
-    let taps: number[] = [];
-    let resetTimer: number = 0;
+    let taps: number[] = []
+    let resetTimer: number = 0
 
     function handleTap() {
-      clearTimeout(resetTimer);
-      taps.push(Date.now());
+      clearTimeout(resetTimer)
+      taps.push(Date.now())
       taps = taps.filter((tap) => Date.now() - tap < 4000)
       if (taps.length >= 4) {
         let intervals = [];
@@ -285,13 +285,13 @@ Remix 3 には重要な原則があります：
 
 ```javascript
 // プレーンな DOM API から始める
-const button = document.createElement('button');
-let count = 0;
+const button = document.createElement('button')
+let count = 0
 
-button.textContent = `Count: ${count}`;
+button.textContent = `Count: ${count}`
 button.onclick = () => {
-  count++;
-  button.textContent = `Count: ${count}`;
+  count++
+  button.textContent = `Count: ${count}`
 };
 ```
 
@@ -305,8 +305,8 @@ function Counter(this: RemixHandle) {
     return (
       <button
         on:click={() => {
-          count++;
-          this.update();
+          count++
+          this.update()
         }}
       >
         Count: {count}
