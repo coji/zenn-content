@@ -84,15 +84,28 @@ React の `use server` では、RPC 関数の URL がビルドごとに変わっ
 Remix 3 の最も革新的な概念が **Setup Scope（セットアップスコープ）** です。
 
 ```javascript
-function App() {
+import { events } from "remix-run/events"
+import { tempo } from "./01-intro/tempo"
+import { createRoot, type Remix } from "@remix-run/dom"
+
+function App(this: Remix.Handle) {
   // このスコープは1回だけ実行される（セットアップスコープ）
   let bpm = 60;
 
   // レンダー関数を返す
-  return function render() {
-    return <button>{bpm} BPM</button>;
-  };
-}
+  return () => (
+    <button
+      on={tempo((event) => {
+        bpm = event.detail
+        this.update()
+      })}
+    >
+      BPM: {bpm}
+    </button>
+  );
+};
+
+createRoot(document.body).render(<App />)
 ```
 
 重要なポイント：
@@ -100,25 +113,6 @@ function App() {
 1. **セットアップコードは1回だけ実行される**
 2. **状態は JavaScript のクロージャに保存される**（Remix の特別な機能ではない）
 3. **再レンダリングは `this.update()` を明示的に呼ぶ**
-
-```javascript
-function App(this: RemixHandle) {
-  let bpm = 60;
-
-  return function render() {
-    return (
-      <button
-        on:click={() => {
-          bpm++;
-          this.update(); // 明示的に再レンダリング
-        }}
-      >
-        {bpm} BPM
-      </button>
-    );
-  };
-}
-```
 
 > 「ボタンはどうやって BPM が変わったことを知るの？ **知らない**。それが Remix 3 の素晴らしいところ。これはただの JavaScript スコープ。君が `update()` を呼んだ時だけ、レンダー関数を再実行する」- Ryan Florence
 
