@@ -3,7 +3,7 @@ title: "Remix 3 発表まとめ - React を捨て、Web標準で新しい世界�
 emoji: "💿️"
 type: "tech"
 topics: ["remix", "react", "typescript", "web", "javascript"]
-published: false
+published: true
 ---
 
 ## はじめに
