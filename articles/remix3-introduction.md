@@ -84,9 +84,9 @@ React の `use server` では、RPC 関数の URL がビルドごとに変わっ
 Remix 3 の最も革新的な概念が **Setup Scope（セットアップスコープ）** です。
 
 ```javascript
-import { events } from "remix-run/events"
-import { tempo } from "./01-intro/tempo"
-import { createRoot, type Remix } from "@remix-run/dom"
+import { events } from "@remix-run/events";
+import { tempo } from "./01-intro/tempo";
+import { createRoot, type Remix } from "@remix-run/dom";
 
 function App(this: Remix.Handle) {
   // このスコープは1回だけ実行される（セットアップスコープ）
@@ -96,8 +96,8 @@ function App(this: Remix.Handle) {
   return () => (
     <button
       on={tempo((event) => {
-        bpm = event.detail
-        this.update()
+        bpm = event.detail;
+        this.update();
       })}
     >
       BPM: {bpm}
@@ -138,49 +138,41 @@ Ryan は、`click` イベントの複雑さを説明します：
 Remix Events を使うと、独自のインタラクションを作成できます：
 
 ```javascript
-import { createInteraction } from '@remix/events';
+import { createInteraction, events } from "@remix-run/events";
+import { pressDown } from "@remix-run/events/press"
 
-export const tempo = createInteraction({
-  bindTo: HTMLButtonElement,
-  detail: Number, // TypeScript で型安全
+export const tempo = createInteraction<HTMLElement, number>(
+  "rmx:tempo",
+  ({ target, dispatch }) => {
+    let taps: number[] = [];
+    let resetTimer: number = 0;
 
-  setup({ target, dispatch }) {
-    let taps = [];
-    let timer;
-
-    return {
-      events: {
-        on: [pointerDown, keyDown],
-        handler: (event) => {
-          const now = Date.now();
-          taps.push(now);
-
-          // 過去4秒のタップのみ保持
-          taps = taps.filter(t => now - t < 4000);
-
-          if (taps.length >= 4) {
-            // 間隔を計算
-            const intervals = [];
-            for (let i = 1; i < taps.length; i++) {
-              intervals.push(taps[i] - taps[i-1]);
-            }
-
-            // BPM を計算
-            const avgInterval = intervals.reduce((a, b) => a + b) / intervals.length;
-            const bpm = Math.round(60000 / avgInterval);
-
-            // イベントをディスパッチ
-            dispatch(bpm);
-          }
-
-          // タイマーをリセット
-          clearTimeout(timer);
-          timer = setTimeout(() => { taps = []; }, 4000);
+    function handleTap() {
+      clearTimeout(resetTimer);
+      taps.push(Date.now());
+      taps = taps.filter((tap) => Date.now() - tap < 4000)
+      if (taps.length >= 4) {
+        let intervals = [];
+        for (let i = 1; i < taps.length; i++) {
+          intervals.push(taps[i] - taps[i - 1])
         }
+        let bpm = intervals.map(
+          (interval) => 60000 / interval
+        )
+        let avgTempo = Math.round(
+          bpm.reduce((sum, value) => sum + value, 0) /
+            bpm.length
+        )
+        dispatch({ detail: avgTempo })
       }
-    };
+      resetTimer = window.setTimeout(() => {
+        taps = []
+      }, 4000)
+    }
+
+    return events(target, [pressDown(handleTap)])
   }
-});
+)
 ```
 
 使い方：
