@@ -178,11 +178,11 @@ export const tempo = createInteraction<HTMLElement, number>(
 使い方：
 
 ```javascript
-<button on:tempo={(e) => {
-  console.log(`BPM: ${e.detail}`);
+<button on={tempo((event) => {
+  bpm = event.detail
   this.update();
-}}>
-  Tap
+})}>
+  BPM: {bpm}
 </button>
 ```
 
