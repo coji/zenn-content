@@ -3,12 +3,14 @@ title: "Remix 3 発表まとめ - React を捨て、Web標準で新しい世界�
 emoji: "💿️"
 type: "tech"
 topics: ["remix", "react", "typescript", "web", "javascript"]
-published: true
+published: false
 ---
 
 ## はじめに
 
 2025年1月、Remix Jam で Ryan Florence と Michael Jackson が **Remix 3** を発表しました。このセッションは、React Router の生みの親たちが、なぜ React から離れ、独自のフレームワークを作ることにしたのか、その理由と新しいビジョンを語った歴史的な発表です。
+
+https://www.youtube.com/live/xt_iEOn2a6Y?t=11764s
 
 本記事では、1時間47分に及ぶセッションの内容を詳しく解説します。
 
