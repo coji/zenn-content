@@ -281,6 +281,11 @@ Remix 3 には重要な原則があります：
 
 ## 実際のデモから学ぶ
 
+:::message alert
+- ここ以降に出てくるソースコードは、文字起こしで話されている内容から、AI がコードを推測したものなので、正しくない可能性が高いです。
+- 今後、動画を見直してソースコードを確認して修正してきます。
+:::
+
 ### デモ1: カウンターからテンポタッパーへ
 
 > 💡 [動画で確認する (3:29:03~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=12543s)
@@ -493,11 +498,6 @@ createRoot(document.body).render(<App />)
 
 ### デモ2: ドラムマシン
 
-:::message alert
-- ここ以降に出てくるソースコードは、文字起こしで話されている内容から、AI がコードを推測したものなので、正しくない可能性が高いです。
-- 今後、動画を見直してソースコードを確認して修正してきます。
-:::
-
 > 💡 [動画で確認する (3:56:02~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=14162s)
 
 完全なドラムマシンアプリを構築します。
@@ -620,6 +620,230 @@ function CitySelector(this: RemixHandle) {
 ![レースコンディション](/images/remix3-introduction/demo3-race-condition-problem.png)
 *図: 連続して選択を変更した場合の問題*
 
+### デモ4: コンポーネントライブラリ
+
+> 💡 [動画で確認する (4:48:56~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=17336s)
+>
+> 「UIフレームワークとして relevantであるためには、簡単に組み合わせられるコンポーネントが必要だ。フルスタック体験を目指している」- Ryan Florence
+
+Ryan は、Remix 3 と並行して **コンポーネントライブラリ** も開発していることを明かします。
+
+#### 最も難しいものから: ネストされたドロップダウンメニュー
+
+> 「コンポーネントモデルが動くようになった瞬間、最も難しいネストされたドロップダウンメニューを作り始めた」- Ryan Florence
+
+実装されている機能：
+
+- **ホバーインテント**: マウスが境界を横切っても意図を理解して消えない
+- **3階層のネスト**: サブメニューのサブメニューまで対応
+- **キーボードナビゲーション**: 完全なアクセシビリティ対応
+- **イベント駆動**: Remix Events を活用
+
+```javascript
+// ドロップダウンメニューの使用例（推測）
+import { Menu, MenuItem, MenuTrigger } from "@remix/ui"
+
+function NavMenu(this: Remix.Handle) {
+  return () => (
+    <Menu>
+      <MenuTrigger>File</MenuTrigger>
+      <Menu>
+        <MenuItem>New</MenuItem>
+        <MenuItem>Open</MenuItem>
+        <Menu>
+          <MenuTrigger>Recent</MenuTrigger>
+          <Menu>
+            <MenuItem>Document 1</MenuItem>
+            <MenuItem>Document 2</MenuItem>
+          </Menu>
+        </Menu>
+      </Menu>
+    </Menu>
+  )
+}
+```
+
+#### レイアウトとテーマシステム
+
+コンポーネントライブラリには、レイアウトシステムとテーマ機能も含まれています：
+
+```javascript
+import { Stack, Row } from "@remix/ui"
+
+function ComponentShowcase(this: Remix.Handle) {
+  return () => (
+    <Stack size="xxl">
+      <Stack size="medium">
+        <MenuExample />
+      </Stack>
+      <Row>
+        <Button>Primary</Button>
+        <Button>Secondary</Button>
+      </Row>
+    </Stack>
+  )
+}
+```
+
+**テーマシステムの特徴:**
+
+- **CSS カスタムプロパティベース**: サーバーレンダリングと相性が良い
+- **型安全なサイズ指定**: `"xxl"`, `"medium"` などが型チェックされる
+- **柔軟なレイアウト**: `Stack`（縦）と `Row`（横）で簡単にレイアウト
+
+> 「Tim（デザイナー）のデザインが素晴らしすぎて、それに見合うものを作らなきゃという気持ちになる」- Ryan Florence
+
+![コンポーネントライブラリ](/images/remix3-introduction/demo4-component-library.png)
+*図: Remix UI コンポーネントライブラリのプレビュー*
+
+#### Popover API との統合
+
+> 💡 [動画で確認する (4:43:07~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16987s)
+
+Ryan は、Web 標準の **Popover API** を Remix Events と組み合わせて使用できることを示します：
+
+```javascript
+// Popover を使ったカスタムコンポーネント
+function CustomSelect(this: Remix.Handle) {
+  return () => (
+    <button popover="auto">
+      <div popover>
+        {/* このdivはbuttonの中にあるが、top layerに表示される */}
+        <ListBox />
+      </div>
+    </button>
+  )
+}
+```
+
+**Popover API の利点:**
+- トップレイヤーに自動的に配置される
+- `popoverTargetToggle` イベントで接続できる
+- Remix Events でボタンとポップオーバーを簡単に連携
+
+> 「Popover API は素晴らしい。カスタムイベントを使えば、通常は接続されていないものを接続できる」- Ryan Florence
+
+#### イベントのバブリング
+
+> 💡 [動画で確認する (4:46:03~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=17163s)
+
+Remix のカスタムイベントは、通常の DOM イベントと同様に **バブリング** します。これにより、親要素で子要素のイベントをまとめてハンドリングできます：
+
+```javascript
+function FormWithListBox(this: Remix.Handle) {
+  return () => (
+    <form
+      on={[
+        // フォーム内のListBoxの変更を検知
+        ListBox.change((event) => {
+          console.log("ListBox changed:", event.detail)
+          this.update()
+        })
+      ]}
+    >
+      {/* ListBox自体にはonプロップを付けない */}
+      <ListBox options={["Apple", "Banana", "Orange"]} />
+      <button type="submit">Submit</button>
+    </form>
+  )
+}
+```
+
+> 「div の中に画像があったら、div に `onLoad` を付けられるよね？div 自体は何もロードしないけど、load イベントはバブリングする。同じことだ」- Ryan Florence
+
+**実用例: フォームのリセット**
+
+カスタムコンポーネントがフォームの `reset` イベントをリッスンすることで、ネイティブフォーム要素と同じ動作を実現：
+
+```javascript
+// ListBoxコンポーネント内部
+function ListBox(this: Remix.Handle, props: { options: string[] }) {
+  let selectedValue = props.defaultValue || null
+
+  return () => (
+    <div
+      on={[
+        // 親フォームのresetイベントをリッスン
+        DOM.reset(() => {
+          selectedValue = props.defaultValue || null
+          this.update()
+        })
+      ]}
+    >
+      {/* ListBox UI */}
+    </div>
+  )
+}
+```
+
+#### Web Components との互換性
+
+> 💡 [動画で確認する (4:50:55~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=17455s)
+
+セッションのクライマックスで、Ryan は **Web Components** との互換性を実演します。
+
+> 「僕らのイベントシステム全体は、ただのカスタムイベントなんだ。通常のDOMを通してバブリングする。だから、Web Componentsを含む世界の他のすべてと、すぐに互換性がある」- Ryan Florence
+
+**カスタム要素として Remix コンポーネントを使用:**
+
+```html
+<!-- 普通のHTMLファイル -->
+<!DOCTYPE html>
+<html>
+  <body>
+    <!-- カスタム要素として使用 -->
+    <rmx-disclosure>
+      <disclosure-button>Toggle Content</disclosure-button>
+      <disclosure-content>
+        Hidden content here
+      </disclosure-content>
+    </rmx-disclosure>
+
+    <script>
+      // カスタム要素の定義
+      class RmxDisclosure extends HTMLElement {
+        connectedCallback() {
+          // 既存のHTMLを取得
+          const button = this.querySelector('disclosure-button')
+          const content = this.querySelector('disclosure-content')
+
+          // Remixコンポーネントでラップ
+          const root = createRoot(this)
+          root.render(
+            <Disclosure>
+              <Disclosure.Button innerHTML={button.innerHTML} />
+              <Disclosure.Content innerHTML={content.innerHTML} />
+            </Disclosure>
+          )
+        }
+      }
+
+      customElements.define('rmx-disclosure', RmxDisclosure)
+
+      // 通常のDOM APIでイベントをリッスン
+      document.querySelector('rmx-disclosure')
+        .addEventListener('disclosure:toggle', (e) => {
+          console.log('Disclosure toggled!', e.detail)
+        })
+    </script>
+  </body>
+</html>
+```
+
+![Web Components デモ](/images/remix3-introduction/demo5-web-components.png)
+*図: HTMLファイル内でカスタム要素として使用される Remix コンポーネント*
+
+**マイクロフロントエンドへの応用:**
+
+> 「Remix で完全なアプリを作れるだけじゃない。Web Components の中に隠すこともできる。そうすれば、世界の他の部分と簡単に互換性を持たせられる。レガシーシステムや、AI チャットアプリに埋め込むとか、そういう新しいユースケースにも対応できる」- Ryan Florence
+
+**この設計の意義:**
+
+1. **既存システムへの段階的導入**: レガシーアプリに Remix コンポーネントを少しずつ追加できる
+2. **フレームワーク間の相互運用**: 他のフレームワークと共存できる
+3. **AI エージェントへの埋め込み**: チャットボットや AI インターフェースにコンポーネントを提供
+4. **標準への準拠**: Web 標準に基づいているため、将来性がある
+
 ## Remix 3 の設計思想
 
 ### 抽象化は最小限に
@@ -687,9 +911,6 @@ Ryan は、AI が Drummer クラスを生成したことを何度も強調しま
 - 個別パッケージとして公開中（`@remix/events`、`@remix/ui` など）
 - 最終的には統合されたフレームワークとして提供予定
 - **コンポーネントライブラリも開発中**（ドロップダウンメニュー、テーマシステムなど）
-
-![ドラムマシンアプリ](/images/remix3-introduction/demo2-drum-machine.png)
-*図: Remix 3 で構築した完全なドラムマシンアプリ*
 
 ## まとめ
 
