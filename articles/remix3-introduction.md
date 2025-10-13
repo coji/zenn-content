@@ -286,11 +286,15 @@ Remix 3 には重要な原則があります：
 - 今後、動画を見直してソースコードを確認して修正してきます。
 :::
 
-### デモ1: カウンターアプリ
+### デモ1: カウンターからテンポタッパーへ
 
 > 💡 [動画で確認する (3:29:03~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=12543s)
 
-最もシンプルな例から始まります。
+Ryan は最もシンプルな例から始めます。
+
+#### ステップ1: シンプルなカウンター
+
+まずは、プレーンな JavaScript でカウンターを作ります：
 
 ```javascript
 // プレーンな DOM API から始める
@@ -304,63 +308,128 @@ button.onclick = () => {
 }
 ```
 
-これを Remix 3 のコンポーネントに：
-
-```javascript
-function Counter(this: RemixHandle) {
-  let count = 0
-
-  return function render() {
-    return (
-      <button
-        on:click={() => {
-          count++
-          this.update()
-        }}
-      >
-        Count: {count}
-      </button>
-    )
-  }
-}
-```
-
 > 「山を下りているんだ。プラットフォームには何がある？」- Ryan Florence
 
-![カウンターアプリ](/images/remix3-introduction/counter-demo.png)
-*図: シンプルなカウンターの実装*
-
-### デモ2: BPM (Tempo Tapper) アプリ
-
-> 💡 [動画で確認する (3:33:02~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=12782s)
-
-ボタンをタップして BPM（テンポ）を計算するアプリです。
+次に、状態を明示的にするため、変数を使ってロジックをカプセル化します：
 
 ```javascript
-function TempoTapper(this: RemixHandle) {
-  let bpm = 60
+const button = document.createElement("button")
+let count = 0
 
-  return function render() {
-    return (
-      <button
-        on:tempo={(e) => {
-          bpm = e.detail
-          this.update()
-        }}
-      >
-        {bpm} BPM
-      </button>
-    )
-  }
+function updateCounter() {
+  button.textContent = `Count: ${count}`
 }
+
+button.onclick = () => {
+  count++
+  updateCounter()
+}
+
+updateCounter()
 ```
 
-`tempo` カスタムインタラクションが、複雑なタップ計算ロジックをカプセル化しています。コンポーネントは結果を受け取るだけです。
+#### ステップ2: テンポタッパー（BPM カウンター）へ進化
+
+> 💡 [動画で確認する (3:32:13~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=12733s)
+
+> 「退屈だな。Remix Jam なのに、何でくだらないカウンターの話をしてるんだ？もっとエキサイティングなものを作ろう」- Ryan Florence
+
+ここで Ryan は、クリックの**速さ（BPM）**を測定するテンポタッパーに変更します：
+
+```javascript
+const button = document.createElement("button")
+let taps = []
+let tempo = 0
+let resetTimer = 0
+
+function handleTap() {
+  clearTimeout(resetTimer)
+  taps.push(Date.now())
+  taps = taps.filter((tap) => Date.now() - tap < 4000)
+
+  if (taps.length >= 4) {
+    let intervals = []
+    for (let i = 1; i < taps.length; i++) {
+      intervals.push(taps[i] - taps[i - 1])
+    }
+    let bpm = intervals.map((interval) => 60000 / interval)
+    tempo = Math.round(
+      bpm.reduce((sum, value) => sum + value, 0) / bpm.length
+    )
+    updateButton()
+  }
+
+  resetTimer = window.setTimeout(() => {
+    taps = []
+  }, 4000)
+}
+
+function updateButton() {
+  button.textContent = `${tempo} BPM`
+}
+
+button.addEventListener("pointerdown", handleTap)
+```
+
+このコードは、タップの間隔を計算して平均 BPM を算出しています：
+
+1. 直近4秒間のタップを配列に保存
+2. タップ間の間隔（ミリ秒）を計算
+3. 各間隔から BPM を計算（60000 / interval）
+4. すべての BPM を平均して表示
 
 ![BPM計算ロジック](/images/remix3-introduction/bpm-calculation.png)
 *図: タップ間隔を計算して平均BPMを算出*
 
-### デモ3: ドラムマシン
+#### ステップ3: Remix 3 のコンポーネント化
+
+> 💡 [動画で確認する (3:50:03~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=13803s)
+
+> 「みんな、コンポーネントを見せろって言ってる。よし、コンポーネントにしよう」- Ryan Florence
+
+ここで、プレーンな JavaScript から Remix 3 のコンポーネントに変換します：
+
+```javascript
+import { events } from "@remix-run/events"
+import { tempo } from "./01-intro/tempo"
+import { createRoot, type Remix } from "@remix-run/dom"
+
+function App(this: Remix.Handle) {
+  // セットアップスコープ（1回だけ実行される）
+  let bpm = 60
+
+  // レンダー関数を返す
+  return () => (
+    <button
+      on={tempo((event) => {
+        bpm = event.detail
+        this.update()
+      })}
+    >
+      BPM: {bpm}
+    </button>
+  )
+}
+
+createRoot(document.body).render(<App />)
+```
+
+ここで Ryan が強調する重要なポイント：
+
+> 「ボタンはどうやって BPM が変わったことを知るの？ **知らない**。それが Remix 3 の素晴らしいところ。これはただの JavaScript スコープ。君が `update()` を呼んだ時だけ、レンダー関数を再実行する」- Ryan Florence
+
+**セットアップスコープの特徴：**
+
+1. **1回だけ実行される**: コンポーネントの初期化時のみ
+2. **状態は JavaScript のクロージャに保存**: 特別な機能ではなく、普通の JavaScript
+3. **`this.update()` で明示的に再レンダリング**: 自動的な依存性追跡はなし
+
+`tempo` カスタムインタラクションが、先ほどの複雑なタップ計算ロジックをすべてカプセル化しています。コンポーネントは結果を受け取って表示するだけです。
+
+![カウンターからテンポタッパーへ](/images/remix3-introduction/counter-to-tempo.png)
+*図: シンプルなカウンターから BPM タッパーへの進化*
+
+### デモ2: ドラムマシン
 
 > 💡 [動画で確認する (3:56:02~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=14162s)
 
@@ -432,7 +501,7 @@ function App(this: RemixHandle) {
 ![キーボードショートカット](/images/remix3-introduction/keyboard-shortcuts.png)
 *図: Space、Arrow Up/Down でドラムマシンを操作*
 
-### デモ4: フォームと非同期処理
+### デモ3: フォームと非同期処理
 
 > 💡 [動画で確認する (4:37:24~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16644s)
 
