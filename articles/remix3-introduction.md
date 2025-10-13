@@ -90,7 +90,7 @@ import { createRoot, type Remix } from "@remix-run/dom"
 
 function App(this: Remix.Handle) {
   // このスコープは1回だけ実行される（セットアップスコープ）
-  let bpm = 60;
+  let bpm = 60
 
   // レンダー関数を返す
   return () => (
@@ -102,8 +102,8 @@ function App(this: Remix.Handle) {
     >
       BPM: {bpm}
     </button>
-  );
-};
+  )
+}
 
 createRoot(document.body).render(<App />)
 ```
@@ -180,7 +180,7 @@ export const tempo = createInteraction<HTMLElement, number>(
 ```javascript
 <button on={tempo((event) => {
   bpm = event.detail
-  this.update();
+  this.update()
 })}>
   BPM: {bpm}
 </button>
@@ -193,39 +193,39 @@ export const tempo = createInteraction<HTMLElement, number>(
 
 ### Context API: 再レンダリングを引き起こさない
 
-:::message alert
-- ここ以降に出てくるソースコードは、文字起こしで話されている内容から、AI がコードを推測したものなので、正しくない可能性が高いです。
-- 今後、動画を見直してソースコードを確認して修正してきます。
-:::
-
 > 💡 [動画で確認する (4:07:36~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=14856s)
 
 Remix 3 の Context API は、React とは根本的に異なります。
 
 ```typescript
-// コンテキストを提供
-function App(this: RemixHandle<{ drummer: Drummer }>) {
-  const drummer = new Drummer();
+function App(this: Remix.Handle<Drummer>) {
+  const drummer = new Drummer(120)
+  // コンテキストをセット（再レンダリングは発生しない）
+  this.context.set(drummer)
 
-  // コンテキストをセット（レンダリングは発生しない）
-  this.context.set({ drummer });
-
-  return function render() {
-    return <DrumMachine />;
-  };
+  return () => (
+    <Layout>
+      <DrumControls />
+    </Layout>
+  )
 }
 
-// コンテキストを取得
-function TempoDisplay(this: RemixHandle) {
-  // 型安全にコンテキストを取得
-  const drummer = this.context.get(App).drummer;
-
+function DrumControls(this: Remix.Handle) {
+  // コンテキストを型安全に取得
+  let drummer = this.context.get(App)
   // drummer の変更を購読
-  drummer.addEventListener('change', this.update);
+  events(drummer, [Drummer.change(() => this.update())])
 
-  return function render() {
-    return <div>{drummer.bpm} BPM</div>;
-  };
+  return () => (
+    <ControlGroup>
+      <Button on={dom.pointerdown(() => drummer.play())}>
+        PLAY
+      </Button>
+      <Button on={dom.pointerdown(() => drummer.stop())}>
+        STOP
+      </Button>
+    </ControlGroup>
+  )
 }
 ```
 
@@ -240,6 +240,11 @@ function TempoDisplay(this: RemixHandle) {
 
 ### Signal: 非同期処理の管理
 
+:::message alert
+- ここ以降に出てくるソースコードは、文字起こしで話されている内容から、AI がコードを推測したものなので、正しくない可能性が高いです。
+- 今後、動画を見直してソースコードを確認して修正してきます。
+:::
+
 > 💡 [動画で確認する (4:32:50~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16370s)
 
 Remix 3 には重要な原則があります：
@@ -251,20 +256,20 @@ Remix 3 には重要な原則があります：
 ```javascript
 <select
   on:change={async (event, signal) => {
-    state = 'loading';
-    this.update();
+    state = "loading"
+    this.update()
 
     // signal を fetch に渡す
     const response = await fetch(`/api/cities?state=${event.target.value}`, {
       signal
-    });
+    })
 
     // 古いリクエストは自動的に中断される
-    if (signal.aborted) return;
+    if (signal.aborted) return
 
-    cities = await response.json();
-    state = 'loaded';
-    this.update();
+    cities = await response.json()
+    state = "loaded"
+    this.update()
   }}
 >
 ```
@@ -290,21 +295,21 @@ Remix 3 には重要な原則があります：
 
 ```javascript
 // プレーンな DOM API から始める
-const button = document.createElement('button')
+const button = document.createElement("button")
 let count = 0
 
 button.textContent = `Count: ${count}`
 button.onclick = () => {
   count++
   button.textContent = `Count: ${count}`
-};
+}
 ```
 
 これを Remix 3 のコンポーネントに：
 
 ```javascript
 function Counter(this: RemixHandle) {
-  let count = 0;
+  let count = 0
 
   return function render() {
     return (
@@ -316,8 +321,8 @@ function Counter(this: RemixHandle) {
       >
         Count: {count}
       </button>
-    );
-  };
+    )
+  }
 }
 ```
 
@@ -334,20 +339,20 @@ function Counter(this: RemixHandle) {
 
 ```javascript
 function TempoTapper(this: RemixHandle) {
-  let bpm = 60;
+  let bpm = 60
 
   return function render() {
     return (
       <button
         on:tempo={(e) => {
-          bpm = e.detail;
-          this.update();
+          bpm = e.detail
+          this.update()
         }}
       >
         {bpm} BPM
       </button>
-    );
-  };
+    )
+  }
 }
 ```
 
@@ -373,26 +378,26 @@ function TempoTapper(this: RemixHandle) {
 
 ```javascript
 class Drummer extends EventTarget {
-  #bpm = 90;
+  #bpm = 90
 
   play(bpm) {
-    this.#bpm = bpm;
+    this.#bpm = bpm
     // ドラムサウンドを再生...
-    this.dispatchEvent(new CustomEvent('change'));
+    this.dispatchEvent(new CustomEvent("change"))
   }
 
   stop() {
     // 再生を停止...
-    this.dispatchEvent(new CustomEvent('change'));
+    this.dispatchEvent(new CustomEvent("change"))
   }
 
   set bpm(value) {
-    this.#bpm = value;
-    this.dispatchEvent(new CustomEvent('change'));
+    this.#bpm = value
+    this.dispatchEvent(new CustomEvent("change"))
   }
 
   get bpm() {
-    return this.#bpm;
+    return this.#bpm
   }
 }
 ```
@@ -402,10 +407,10 @@ class Drummer extends EventTarget {
 #### キーボードイベントの統合
 
 ```javascript
-import { space, arrowUp, arrowDown } from '@remix/events';
+import { space, arrowUp, arrowDown } from "@remix/events"
 
 function App(this: RemixHandle) {
-  const drummer = new Drummer();
+  const drummer = new Drummer()
 
   return function render() {
     return (
@@ -418,8 +423,8 @@ function App(this: RemixHandle) {
       >
         <DrumMachine />
       </div>
-    );
-  };
+    )
+  }
 }
 ```
 
@@ -436,27 +441,27 @@ function App(this: RemixHandle) {
 
 ```javascript
 function CitySelector(this: RemixHandle) {
-  let state = 'idle';
-  let cities = [];
+  let state = "idle"
+  let cities = []
 
   return function render() {
     return (
       <form>
         <select
           on:change={async (event, signal) => {
-            state = 'loading';
-            this.update();
+            state = "loading"
+            this.update()
 
             const response = await fetch(
               `/api/cities?state=${event.target.value}`,
               { signal }
-            );
+            )
 
-            if (signal.aborted) return;
+            if (signal.aborted) return
 
-            cities = await response.json();
-            state = 'loaded';
-            this.update();
+            cities = await response.json()
+            state = "loaded"
+            this.update()
           }}
         >
           <option>Alabama</option>
@@ -464,14 +469,14 @@ function CitySelector(this: RemixHandle) {
           {/* ... */}
         </select>
 
-        <select disabled={state === 'loading'}>
+        <select disabled={state === "loading"}>
           {cities.map(city => (
             <option>{city}</option>
           ))}
         </select>
       </form>
-    );
-  };
+    )
+  }
 }
 ```
 
@@ -489,13 +494,13 @@ function CitySelector(this: RemixHandle) {
 Remix 3 のコンポーネントは、特別な状態管理ライブラリを使いません：
 
 ```javascript
-let bpm = 60; // ただの変数
+let bpm = 60 // ただの変数
 ```
 
 更新も明示的：
 
 ```javascript
-this.update(); // これだけ
+this.update() // これだけ
 ```
 
 ### Web 標準を最大限活用
