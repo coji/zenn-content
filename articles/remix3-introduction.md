@@ -188,7 +188,7 @@ export const tempo = createInteraction<HTMLElement, number>(
 
 > 「コンポーネントが要素に対する抽象化であるように、カスタムインタラクションはイベントに対する抽象化だ」- Ryan Florence
 
-![Remix Events の概念図](/images/remix3-introduction/remix-events-concept.png)
+![Remix Events の概念図](/images/remix3-introduction/demo1-step2-events-concept.png)
 *図: Components are to elements as custom interactions are to events*
 
 ### Context API: 再レンダリングを引き起こさない
@@ -235,7 +235,7 @@ function DrumControls(this: Remix.Handle) {
 2. **`context.get(Component)` でプロバイダーを直接参照**（"Go to Definition" が効く！）
 3. **型安全**: プロバイダーコンポーネントの型から自動推論
 
-![Context API の実装](/images/remix3-introduction/context-api-implementation.png)
+![Context API の実装](/images/remix3-introduction/demo2-context-api.png)
 *図: Go to Definition でプロバイダーに直接ジャンプできる*
 
 ### Signal: 非同期処理の管理
@@ -274,7 +274,7 @@ Remix 3 には重要な原則があります：
 2. `fetch()` が自動的にキャンセルされる
 3. `signal.aborted` チェックで古い処理をスキップ
 
-![Signal でレースコンディションを解決](/images/remix3-introduction/signal-race-condition-solved.png)
+![Signal でレースコンディションを解決](/images/remix3-introduction/demo3-race-condition-solved.png)
 *図: ネットワークタブで古いリクエストがキャンセルされている様子*
 
 これにより、**レースコンディションを手動で、しかしシンプルに解決**できます。
@@ -292,43 +292,34 @@ Remix 3 には重要な原則があります：
 
 Ryan は最もシンプルな例から始めます。
 
-#### ステップ1: シンプルなカウンター
+#### ステップ1: プレーンJSでカウンター → テンポタッパー
 
-まずは、プレーンな JavaScript でカウンターを作ります：
+まずは、プレーンな JavaScript でシンプルなカウンターを作ります：
 
 ```javascript
 // プレーンな DOM API から始める
-const button = document.createElement("button")
+let button = document.createElement("button")
 let count = 0
 
-button.textContent = `Count: ${count}`
-button.onclick = () => {
+button.addEventListener("click", () => {
   count++
+  update()
+})
+
+function update() {
   button.textContent = `Count: ${count}`
 }
+
+update()
+document.body.appendChild(button)
 ```
 
 > 「山を下りているんだ。プラットフォームには何がある？」- Ryan Florence
 
-次に、状態を明示的にするため、変数を使ってロジックをカプセル化します：
+![シンプルなカウンター](/images/remix3-introduction/demo1-step1-counter.png)
+*図: プレーンJavaScriptで実装したカウンター*
 
-```javascript
-const button = document.createElement("button")
-let count = 0
-
-function updateCounter() {
-  button.textContent = `Count: ${count}`
-}
-
-button.onclick = () => {
-  count++
-  updateCounter()
-}
-
-updateCounter()
-```
-
-#### ステップ2: テンポタッパー（BPM カウンター）へ進化
+**退屈だから、もっと面白いものへ**
 
 > 💡 [動画で確認する (3:32:13~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=12733s)
 
@@ -337,9 +328,9 @@ updateCounter()
 ここで Ryan は、クリックの**速さ（BPM）**を測定するテンポタッパーに変更します：
 
 ```javascript
-const button = document.createElement("button")
+let button = document.createElement("button")
+let tempo = 60
 let taps = []
-let tempo = 0
 let resetTimer = 0
 
 function handleTap() {
@@ -356,7 +347,7 @@ function handleTap() {
     tempo = Math.round(
       bpm.reduce((sum, value) => sum + value, 0) / bpm.length
     )
-    updateButton()
+    update()
   }
 
   resetTimer = window.setTimeout(() => {
@@ -364,11 +355,20 @@ function handleTap() {
   }, 4000)
 }
 
-function updateButton() {
+button.addEventListener("pointerdown", handleTap)
+button.addEventListener("keydown", (event) => {
+  if (event.repeat) return
+  if (event.key === "Enter" || event.key === " ") {
+    handleTap()
+  }
+})
+
+function update() {
   button.textContent = `${tempo} BPM`
 }
 
-button.addEventListener("pointerdown", handleTap)
+update()
+document.body.appendChild(button)
 ```
 
 このコードは、タップの間隔を計算して平均 BPM を算出しています：
@@ -378,8 +378,75 @@ button.addEventListener("pointerdown", handleTap)
 3. 各間隔から BPM を計算（60000 / interval）
 4. すべての BPM を平均して表示
 
-![BPM計算ロジック](/images/remix3-introduction/bpm-calculation.png)
+![BPM計算ロジック](/images/remix3-introduction/demo1-step1-bpm-logic.png)
 *図: タップ間隔を計算して平均BPMを算出*
+
+#### ステップ2: Remix Events でイベントを抽象化
+
+> 💡 [動画で確認する (3:34:50~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=12890s)
+
+Ryan は `click` イベントの複雑さを説明します：
+
+> 「みんな、`click` イベントって本当に知ってる？`click` は実は複雑なんだ」- Ryan Florence
+
+**`click` イベントの内部動作:**
+- マウスダウン + マウスアップ（同じ要素上）
+- キーボードの Space ダウン + Space アップ（Escape なし）
+- キーボードの Enter ダウン（即座にクリック + リピート）
+- タッチスタート + タッチアップ（スワイブなし）
+
+これらすべてが `click` として発火します。
+
+そこで、Remix Events を使って**カスタムインタラクション**を作成します：
+
+```javascript
+import { createInteraction, events } from "@remix-run/events"
+import { pressDown } from "@remix-run/events/press"
+
+export const tempo = createInteraction<HTMLElement, number>(
+  "rmx:tempo",
+  ({ target, dispatch }) => {
+    let taps = []
+    let resetTimer = 0
+
+    function handleTap() {
+      clearTimeout(resetTimer)
+      taps.push(Date.now())
+      taps = taps.filter((tap) => Date.now() - tap < 4000)
+
+      if (taps.length >= 4) {
+        let intervals = []
+        for (let i = 1; i < taps.length; i++) {
+          intervals.push(taps[i] - taps[i - 1])
+        }
+        let bpm = intervals.map((interval) => 60000 / interval)
+        let avgTempo = Math.round(
+          bpm.reduce((sum, value) => sum + value, 0) / bpm.length
+        )
+        dispatch({ detail: avgTempo })
+      }
+
+      resetTimer = window.setTimeout(() => {
+        taps = []
+      }, 4000)
+    }
+
+    return events(target, [pressDown(handleTap)])
+  }
+)
+```
+
+> 「コンポーネントが要素に対する抽象化であるように、カスタムインタラクションはイベントに対する抽象化だ」- Ryan Florence
+
+![Remix Events の概念図](/images/remix3-introduction/demo1-step2-events-concept.png)
+*図: Components are to elements as custom interactions are to events*
+
+**重要なポイント:**
+
+1. **状態とイベントをカプセル化**: `taps` 配列や `resetTimer` は `tempo` インタラクション内部に隠蔽
+2. **型安全**: `createInteraction<HTMLElement, number>` で型を定義
+3. **再利用可能**: どこでも `tempo` インタラクションを使える
+4. **合成可能**: `pressDown` は内部で `pointerdown` と `keydown` を統合
 
 #### ステップ3: Remix 3 のコンポーネント化
 
@@ -426,8 +493,8 @@ createRoot(document.body).render(<App />)
 
 `tempo` カスタムインタラクションが、先ほどの複雑なタップ計算ロジックをすべてカプセル化しています。コンポーネントは結果を受け取って表示するだけです。
 
-![カウンターからテンポタッパーへ](/images/remix3-introduction/counter-to-tempo.png)
-*図: シンプルなカウンターから BPM タッパーへの進化*
+![コンポーネント化されたテンポタッパー](/images/remix3-introduction/demo1-step3-component.png)
+*図: Remix 3 コンポーネントとして実装されたテンポタッパー*
 
 ### デモ2: ドラムマシン
 
@@ -498,7 +565,7 @@ function App(this: RemixHandle) {
 
 `window` にイベントを追加しているのに、コンポーネント内のコードと変わりません。
 
-![キーボードショートカット](/images/remix3-introduction/keyboard-shortcuts.png)
+![キーボードショートカット](/images/remix3-introduction/demo2-keyboard-shortcuts.png)
 *図: Space、Arrow Up/Down でドラムマシンを操作*
 
 ### デモ3: フォームと非同期処理
@@ -550,7 +617,7 @@ function CitySelector(this: RemixHandle) {
 
 > 「イベントから考え始める。それが僕のやり方。ユーザーが最初のセレクトボックスを変更した → ローディング状態にする → データを取得 → ロード完了。これが一番自然な考え方だと思わない？」- Ryan Florence
 
-![レースコンディション](/images/remix3-introduction/race-condition-problem.png)
+![レースコンディション](/images/remix3-introduction/demo3-race-condition-problem.png)
 *図: 連続して選択を変更した場合の問題*
 
 ## Remix 3 の設計思想
@@ -621,8 +688,8 @@ Ryan は、AI が Drummer クラスを生成したことを何度も強調しま
 - 最終的には統合されたフレームワークとして提供予定
 - **コンポーネントライブラリも開発中**（ドロップダウンメニュー、テーマシステムなど）
 
-![コンポーネントライブラリ](/images/remix3-introduction/component-library.png)
-*図: Remix UI コンポーネントライブラリのプレビュー*
+![ドラムマシンアプリ](/images/remix3-introduction/demo2-drum-machine.png)
+*図: Remix 3 で構築した完全なドラムマシンアプリ*
 
 ## まとめ
 
