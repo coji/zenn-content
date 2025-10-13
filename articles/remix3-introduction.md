@@ -435,7 +435,7 @@ function App(this: RemixHandle) {
 
 ### デモ4: フォームと非同期処理
 
-> 💡 [動画で確認する (4:27:24~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16044s)
+> 💡 [動画で確認する (4:37:24~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16644s)
 
 州を選択すると、その州の都市リストを fetch する典型的な UI です。
 
