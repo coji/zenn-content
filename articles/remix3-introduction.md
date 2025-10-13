@@ -83,7 +83,7 @@ React の `use server` では、RPC 関数の URL がビルドごとに変わっ
 
 Remix 3 の最も革新的な概念が **Setup Scope（セットアップスコープ）** です。
 
-```javascript
+```typescript
 import { events } from "@remix-run/events"
 import { tempo } from "./01-intro/tempo"
 import { createRoot, type Remix } from "@remix-run/dom"
@@ -137,7 +137,7 @@ Ryan は、`click` イベントの複雑さを説明します：
 
 Remix Events を使うと、独自のインタラクションを作成できます：
 
-```javascript
+```typescript
 import { createInteraction, events } from "@remix-run/events"
 import { pressDown } from "@remix-run/events/press"
 
@@ -177,7 +177,7 @@ export const tempo = createInteraction<HTMLElement, number>(
 
 使い方：
 
-```javascript
+```typescript
 <button on={tempo((event) => {
   bpm = event.detail
   this.update()
@@ -248,7 +248,7 @@ Remix 3 には重要な原則があります：
 
 イベントハンドラーには自動的に `signal` が渡されます（`AbortController` の signal）：
 
-```javascript
+```typescript
 <select
   id="state"
   on={dom.change(async (event, signal) => {
@@ -291,7 +291,7 @@ Ryan は最もシンプルな例から始めます。
 
 まずは、プレーンな JavaScript でシンプルなカウンターを作ります：
 
-```javascript
+```typescript
 // プレーンな DOM API から始める
 let button = document.createElement("button")
 let count = 0
@@ -322,7 +322,7 @@ document.body.appendChild(button)
 
 ここで Ryan は、クリックの**速さ（BPM）**を測定するテンポタッパーに変更します：
 
-```javascript
+```typescript
 let button = document.createElement("button")
 let tempo = 60
 let taps = []
@@ -394,7 +394,7 @@ Ryan は `click` イベントの複雑さを説明します：
 
 そこで、Remix Events を使って**カスタムインタラクション**を作成します：
 
-```javascript
+```typescript
 import { createInteraction, events } from "@remix-run/events"
 import { pressDown } from "@remix-run/events/press"
 
@@ -451,7 +451,7 @@ export const tempo = createInteraction<HTMLElement, number>(
 
 ここで、プレーンな JavaScript から Remix 3 のコンポーネントに変換します：
 
-```javascript
+```typescript
 import { events } from "@remix-run/events"
 import { tempo } from "./01-intro/tempo"
 import { createRoot, type Remix } from "@remix-run/dom"
@@ -493,14 +493,9 @@ createRoot(document.body).render(<App />)
 
 ### デモ2: ドラムマシン
 
-:::message alert
-- ここ以降に出てくるソースコードは、文字起こしで話されている内容から、AI がコードを推測したものなので、正しくない可能性が高いです。
-- 今後、動画を見直してソースコードを確認して修正してきます。
-:::
-
 > 💡 [動画で確認する (3:56:02~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=14162s)
 
-完全なドラムマシンアプリを構築し、**Context API**、**EventTarget**、**qTask** など Remix 3 の核心機能を実演します。
+完全なドラムマシンアプリを構築し、**Context API**、**EventTarget**、**queueTask** など Remix 3 の核心機能を実演します。
 
 **構築する機能：**
 
@@ -513,25 +508,88 @@ createRoot(document.body).render(<App />)
 
 > 「Cursor に『キック、スネア、ハイハットを持ったドラマーを作って』って頼んだら、こいつが吐き出してくれた」- Ryan Florence
 
-```javascript
+```typescript
 // AI が生成した Drummer クラス（EventTarget を継承）
 class Drummer extends EventTarget {
-  #bpm = 90
-  #playing = false
-  #kick = 0
-  #snare = 0
-  #hihat = 0
+  private audioCtx: AudioContext | null = null
+  private masterGain: GainNode | null = null
+  private noiseBuffer: AudioBuffer | null = null
 
-  play(bpm) {
-    this.#bpm = bpm
-    this.#playing = true
-    // ドラムループを開始...
+  private _isPlaying = false
+  private tempoBpm = 90
+  private current16th = 0
+  private nextNoteTime = 0
+  private intervalId: number | null = null
+
+  // Scheduler settings
+  private readonly lookaheadMs = 25 // how frequently to 
+  private readonly scheduleAheadS = 0.1 // how far ahead to
+
+  constructor(tempoBpm: number = 90) {
+    super()
+    this.tempoBpm = tempoBpm
+  }
+
+  get isPlaying() {
+    return this._isPlaying
+  }
+
+  get bpm() {
+    return this.tempoBpm
+  }
+
+  async toggle() {
+    if (this.isPlaying) {
+      await this.stop()
+    } else {
+      await this.play()
+    }
+  }
+
+  setTempo(bmp: number) {
+    this.tempoBpm = Math.max(
+      30,
+      Math.min(300, Math.floor(bpm || this.tempoBpm))
+    )
     this.dispatchEvent(new CustomEvent("change"))
   }
 
-  stop() {
-    this.#playing = false
+  async play(bpm?: number) {
+    this.ensureContext()
+    if (!this.audioCtx) return
+    if (bpm) {
+      this.setTempo(bpm)
+    }
+    await this.audioCtx.resume()
+    if (this._isPlaying) return
+    this._isPlaying = true
+    this.nextNoteTime = this.audioCtx.currentTime
+    // don't reset current16th so setTempo can adjust mid-
+    if (this.intervalId != null)
+      window.clearInterval(this.intervalId)
+    this.intervalId = window.setInterval(
+      this.scheduler,
+      this.lookaheadMs
+    )
     this.dispatchEvent(new CustomEvent("change"))
+  }
+
+  async stop() {
+    if (!this.audioCtx) return
+    if (this.intervalId != null) {
+      window.clearInterval(this.intervalId)
+      this.intervalId = null
+    }
+    this._isPlaying = false
+    this.current16th = 0
+    this.nextNoteTime = this.audioCtx.currentTime
+    this.dispatchEvent(new CustomEvent("change"))
+  }
+
+  private ensureContext() {
+    if (!this.audioCtx) {
+      const Ctx = (window as any).AudioContext
+    }
   }
 
   toggle() {
@@ -575,7 +633,7 @@ class Drummer extends EventTarget {
 >
 > **前半で学んだ [Context API](#context-api-再レンダリングを引き起こさない) の実践例です！**
 
-```javascript
+```typescript
 function App(this: Remix.Handle<{ drummer: Drummer }>) {
   // セットアップスコープで Drummer を作成
   const drummer = new Drummer()
@@ -595,37 +653,38 @@ function App(this: Remix.Handle<{ drummer: Drummer }>) {
 
 **Context API の利点:**
 
-```javascript
+```typescript
 function DrumControls(this: Remix.Handle) {
   // App コンポーネントから Context を取得
-  const drummer = this.context.get(App)
-
-  // drummer の変更を監視
+  let drummer = this.context.get(App)
   drummer.addEventListener("change", () => this.update())
 
-  // DOM 更新後に Stop ボタンにフォーカスを移動（後述）
-  let stopButton = null
-
   return () => (
-    <div>
-      <button
-        on={pressDown(() => {
+    <ControlGroup>
+      <Button
+        on={temp((event) => {
           drummer.play(drummer.bpm)
-          // qTask: DOM 更新後の処理
-          this.qTask(() => stopButton?.focus())
         })}
         disabled={drummer.playing}
       >
-        Play
-      </button>
-      <button
-        ref={(el) => stopButton = el}
-        on={pressDown(() => drummer.stop())}
-        disabled={!drummer.playing}
+        SET TEMPO
+      </Button>
+      <TempoDisplay bpm={drummer.bpm} />
+      <Button
+        on={dom.pointerdown(() => {
+          drummer.play()
+        })}
       >
-        Stop
-      </button>
-    </div>
+        PLAY
+      </Button>
+      <Button
+        on={dom.pinterdown(() => {
+          drummer.stop()
+        })}
+      >
+        STOP 
+      </Button>
+    </ControlGroup>
   )
 }
 ```
@@ -642,39 +701,41 @@ function DrumControls(this: Remix.Handle) {
 
 #### ステップ3: 型安全なイベントを作る（createEventType）
 
-> 💡 [動画で確認する (4:04:31~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=14671s)
+> 💡 [動画で確認する (4:04:25~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=14667s)
 
 カスタムイベントを型安全にするため、`createEventType` を使います：
 
-```javascript
-import { createEventType } from "@remix/events"
+```typescript
+import { createEventType } from "@remix-run/events"
 
 // 型安全な "change" イベントを作成
-const [change, createChange] = createEventType<void>("change")
+let [change, createChange] = createEventType("drum:change")
 
 class Drummer extends EventTarget {
-  // ... 他のメソッド
+  static change = change // 静的メソッドとして公開（推奨パターン）
+  // ... 他のメソッド / プロパティ
+  private  tempoBpm = 90
 
-  set bpm(value) {
-    this.#bpm = value
+  setTempo(bpm: number) {
+    this.tempoBpm = Math.max(
+      30,
+      Math.min(300, Math.floor(bpm || this.tempoBpm))
+    )
     // 型安全な方法で dispatch
     this.dispatchEvent(createChange())
   }
-
-  // 静的メソッドとして公開（推奨パターン）
-  static change = change
 }
 
 // 使用例
+import { events } from "@remix-run/events"
+
 function TempoDisplay(this: Remix.Handle) {
   const drummer = this.context.get(App)
+  // 型安全なイベントリスナー
+  events(drummer, [Drummer.change(() => this.update())])
 
   return () => (
     <div
-      on={[
-        // 型安全なイベントリスナー
-        Drummer.change(() => this.update())
-      ]}
     >
       BPM: {drummer.bpm}
     </div>
@@ -684,164 +745,153 @@ function TempoDisplay(this: Remix.Handle) {
 
 > 「カスタムイベントを文字列で管理するのは型安全じゃない。`createEventType` を使えば、イベント名も detail の型も完全に安全になる」- Ryan Florence
 
-#### ステップ4: qTask で DOM 更新後の処理
+#### ステップ4: queueTask で DOM 更新後の処理
 
-> 💡 [動画で確認する (4:13:15~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=15195s)
+> 💡 [動画で確認する (4:24:38~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=15878s)
 
 Play ボタンを押すと、Stop ボタンに自動的にフォーカスを移動したい：
 
-```javascript
+```typescript
 function DrumControls(this: Remix.Handle) {
-  const drummer = this.context.get(App)
-  let stopButtonRef = null
+  let drummer = this.context.get(App)
+  events(drummer, [Drummer.change(() => this.update())])
+
+  let stop: HTMLButtonElements
+  let play: HTMLButtonElements
 
   return () => (
-    <>
-      <button
-        on={pressDown(() => {
-          drummer.play(drummer.bpm)
-
-          // ❌ ここで focus() してもまだ DOM が更新されていない
-          // stopButtonRef.focus() // エラー: disabled 状態のボタンにフォーカスできない
-
-          // ✅ qTask: DOM 更新が完了してから実行
-          this.qTask(() => {
-            stopButtonRef?.focus()
-          })
-        })}
+    <ControlGrouop>
+      <Button
         disabled={drummer.playing}
+        on={[
+          connect((event) => (play = event.currentTarget)),
+          pressDown(() => {
+            drummer.play()
+            // ❌ ここで focus() してもまだ DOM が更新されていない
+            // stop.focus() // エラー: disabled 状態のボタンにフォーカスできない
+            this.queueTask(() => {
+              // ✅ queueTask: DOM 更新が完了してから実行
+              stop.focus()
+            })
+          })
+        ]
       >
-        Play
-      </button>
-      <button
-        ref={(el) => stopButtonRef = el}
-        on={pressDown(() => drummer.stop())}
+        PLAY
+      </Button>
+      <Button
         disabled={!drummer.playing}
+        on={[
+          connect((event) => (stop = event.currentTarget))
+          pressDown(() => {
+            drummer.stop()
+            // ❌ ここで focus() してもまだ DOM が更新されていない
+            // play.focus() // エラー: disabled 状態のボタンにフォーカスできない
+            this.queueTask(() => {
+              // ✅ queueTask: DOM 更新が完了してから実行
+              play.focus()
+            })
+          })
+        ]}
       >
-        Stop
-      </button>
-    </>
+        STOP
+      </Button>
+    </ControlGrouop>
   )
 }
 ```
 
-**qTask の仕組み:**
+**queueTask の仕組み:**
 
-> 「Remix は microtask でレンダリングをバッチ処理する。`qTask` は DOM 更新が完了した後に実行されるキューだ。リスナーじゃない。次のレンダリングで一度だけ実行される」- Ryan Florence
+> 「Remix は microtask でレンダリングをバッチ処理する。`queueTask` は DOM 更新が完了した後に実行されるキューだ。リスナーじゃない。次のレンダリングで一度だけ実行される」- Ryan Florence
 
 ```text
 1. drummer.play() → 状態変更
 2. this.update() → レンダリングをキューに追加
 3. [microtask] レンダリング実行 → DOM 更新
-4. [qTask] stopButtonRef.focus() 実行 ← DOM が更新された後！
+4. [queueTask] stop.focus() 実行 ← DOM が更新された後！
 ```
 
 #### ステップ5: キーボードイベントの統合
 
-> 💡 [動画で確認する (4:21:06~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=15666s)
+> 💡 [動画で確認する (4:31:08~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16268s)
 
 **前半で学んだ [Remix Events](#remix-events-イベントを第一級市民に) の実践例です！**
 
-```javascript
-import { space, arrowUp, arrowDown, arrowLeft, arrowRight } from "@remix/events"
-import { win } from "@remix/events"
+```typescript
+import { connect, type Remix } from "@remix-run/dom"
+import { pressDown } from "@remix-run/events/press"
+import {
+  space,
+  arrowUp,
+  arrowDown,
+  arrowLeft,
+  arrowRight
+} from "@remix-run/events/key"
 
 function App(this: Remix.Handle<{ drummer: Drummer }>) {
   const drummer = new Drummer()
   this.context.set(drummer)
 
+  events(window, [
+    // Space: 再生/停止
+    space(() => {  
+      drummer.toggle()
+    }),
+    // Arrow Up: テンポアップ
+    arrowUp(() => {
+      drummer.setTempo(drummer.bpm + 1)
+    }),
+    // Arrow Down: テンポダウン
+    arrowDown(() => {
+      drummer.setTempo(drummer.bpm - 1)
+    },
+    // Arrow Left: テンポアップ
+    arrowLeft(() => {
+      drummer.setTempo(drummer.bpm - 1)
+    }),
+    // Arrow Right: テンポダウン
+    arrowRight(() => {
+      drummer.setTempo(drummer.bpm + 1)
+    })
+  ])
+
   return () => (
-    <div
-      on={win([
-        // Space: 再生/停止
-        [space, () => drummer.toggle()],
-        // Arrow Up/Left: テンポアップ
-        [arrowUp, () => { drummer.bpm += 5 }],
-        [arrowLeft, () => { drummer.bpm += 5 }],
-        // Arrow Down/Right: テンポダウン
-        [arrowDown, () => { drummer.bpm -= 5 }],
-        [arrowRight, () => { drummer.bpm -= 5 }],
-      ])}
-    >
+    <Layout>
       <DrumControls />
       <Equalizer />
-    </div>
+    </Layout>
   )
 }
 ```
 
-> 「window にイベントを追加しているのに、コンポーネント内のコードと変わらない。`on` プロップは、カスタムインタラクションもDOM要素もwindowも、全部同じように扱える」- Ryan Florence
+> 「windowにキーボードイベントを追加しても、Remixの他の部分と何も違わない感じだ。この `on` プロップは、見ての通り、カスタムインタラクションも、どこでも同じように使える。要素にも使えるし、windowだけじゃない」- Ryan Florence
 
 **セマンティックなキーイベント:**
 
 - `space` → スペースキー
-- `arrowUp` / `arrowDown` → 上下矢印キー
+- `arrowUp` / `arrowDown` / `arrowLeft` / `arrowRight` → 上下左右矢印キー
 - 内部的には `keydown` をラップしているだけだが、**意図が明確**
 
 ![キーボードショートカット](/images/remix3-introduction/demo2-keyboard-shortcuts.png)
 *図: Space、Arrow キーでドラムマシンを操作*
-
-#### ステップ6: Equalizer でビジュアライザー
-
-> 💡 [動画で確認する (3:57:48~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=14268s)
-
-リアルタイムで音量を視覚化するコンポーネント：
-
-```javascript
-function Equalizer(this: Remix.Handle) {
-  const drummer = this.context.get(App)
-
-  drummer.addEventListener("change", () => this.update())
-
-  return () => {
-    const { kick, snare, hihat } = drummer.volumes
-
-    return (
-      <div class="equalizer">
-        {/* kick: 4本のバー */}
-        <Bar height={kick} />
-        <Bar height={kick} />
-        <Bar height={kick} />
-        <Bar height={kick} />
-
-        {/* snare: 3本のバー */}
-        <Bar height={snare} />
-        <Bar height={snare} />
-        <Bar height={snare} />
-
-        {/* hihat: 2本のバー */}
-        <Bar height={hihat} />
-        <Bar height={hihat} />
-      </div>
-    )
-  }
-}
-
-function Bar(props: { height: number }) {
-  return (
-    <div
-      class="bar"
-      style={{ height: `${props.height * 100}%` }}
-    />
-  )
-}
-```
-
-> 「kick が4本のバー、snare が3本、hihat が2本持ってる。状態をどうレンダリングするかはもう決めた。あとはアニメーションするだけ」- Ryan Florence
-
-![ドラムマシンのコンテキストAPI](/images/remix3-introduction/demo2-context-api.png)
-*図: Context API で Drummer を全コンポーネントに共有*
 
 **このデモで学んだこと:**
 
 1. ✅ **EventTarget の活用**: 標準的な DOM イベントモデルで状態を管理
 2. ✅ **Context API**: 再レンダリングなしでアプリ全体に値を共有
 3. ✅ **型安全なイベント**: `createEventType` でカスタムイベントを型安全に
-4. ✅ **qTask**: DOM 更新後の処理を安全に実行
+4. ✅ **queueTask**: DOM 更新後の処理を安全に実行
 5. ✅ **セマンティックなキーイベント**: `space`、`arrowUp` などで意図を明確に
 6. ✅ **AI フレンドリー**: Drummer クラスは AI が生成できる普通の JavaScript
 
 ### デモ3: フォームと非同期処理（Signal によるレースコンディション解決）
+
+#### ステップ4: qTask で DOM 更新後の処理
+
+:::message alert
+- ここ以降に出てくるソースコードは、文字起こしで話されている内容から、AI がコードを推測したものなので、正しくない可能性が高いです。
+- 今後、動画を見直してソースコードを確認して修正してきます。
+:::
 
 > 💡 [動画で確認する (4:37:24~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16644s)
 >
@@ -851,7 +901,7 @@ function Bar(props: { height: number }) {
 
 #### 問題: レースコンディション
 
-```javascript
+```typescript
 function CitySelector(this: Remix.Handle) {
   let state = "idle" // "idle" | "loading" | "loaded"
   let cities = []
@@ -926,7 +976,7 @@ Remix 3 の原則：
 
 **Signal を使った修正版:**
 
-```javascript
+```typescript
 function CitySelector(this: Remix.Handle) {
   let state = "idle"
   let cities = []
@@ -990,7 +1040,7 @@ function CitySelector(this: Remix.Handle) {
 
 **1. fetch API に渡す（推奨）**
 
-```javascript
+```typescript
 const response = await fetch(url, { signal })
 ```
 
@@ -998,7 +1048,7 @@ fetch API は、signal が abort されると自動的に `AbortError` を throw
 
 **2. 手動でチェック**
 
-```javascript
+```typescript
 if (signal.aborted) return
 ```
 
@@ -1066,7 +1116,7 @@ Ryan は、Remix 3 と並行して **コンポーネントライブラリ** を�
 
 コンポーネントライブラリには、`Stack`（縦）と `Row`（横）のレイアウトシステムも含まれています：
 
-```javascript
+```typescript
 import { Stack, Row } from "@remix/ui"
 
 function ComponentShowcase(this: Remix.Handle) {
@@ -1102,7 +1152,7 @@ function ComponentShowcase(this: Remix.Handle) {
 
 Web 標準の **Popover API** を使って、ドロップダウンリストを実装します：
 
-```javascript
+```typescript
 function ListBox(this: Remix.Handle, props: { options: string[] }) {
   let selectedValue = props.defaultValue || null
   let isOpen = false
@@ -1163,7 +1213,7 @@ function ListBox(this: Remix.Handle, props: { options: string[] }) {
 
 ListBox は、内部に実際の `<input>` を持ち、フォームの一部として動作します：
 
-```javascript
+```typescript
 function ListBox(this: Remix.Handle, props: { name: string, options: string[] }) {
   let selectedValue = props.defaultValue || null
 
@@ -1208,7 +1258,7 @@ function FruitForm(this: Remix.Handle) {
 
 **フォームのリセットへの対応:**
 
-```javascript
+```typescript
 function ListBox(this: Remix.Handle, props: { options: string[], defaultValue?: string }) {
   let selectedValue = props.defaultValue || null
 
@@ -1238,7 +1288,7 @@ Remix のカスタムイベントは、DOM標準のイベントと同様に **�
 
 **親要素でのイベント処理:**
 
-```javascript
+```typescript
 function FormWithListBox(this: Remix.Handle) {
   let selectedFruit = null
 
@@ -1276,7 +1326,7 @@ function FormWithListBox(this: Remix.Handle) {
 
 **実用例: 複数の ListBox を1つのハンドラで処理**
 
-```javascript
+```typescript
 function MultiSelectForm(this: Remix.Handle) {
   let selections = { fruit: null, vegetable: null }
 
@@ -1391,13 +1441,13 @@ function MultiSelectForm(this: Remix.Handle) {
 
 Remix 3 のコンポーネントは、特別な状態管理ライブラリを使いません：
 
-```javascript
+```typescript
 let bpm = 60 // ただの変数
 ```
 
 更新も明示的：
 
-```javascript
+```typescript
 this.update() // これだけ
 ```
 
