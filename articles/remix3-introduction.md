@@ -240,12 +240,7 @@ function DrumControls(this: Remix.Handle) {
 
 ### Signal: 非同期処理の管理
 
-:::message alert
-- ここ以降に出てくるソースコードは、文字起こしで話されている内容から、AI がコードを推測したものなので、正しくない可能性が高いです。
-- 今後、動画を見直してソースコードを確認して修正してきます。
-:::
-
-> 💡 [動画で確認する (4:32:50~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16370s)
+> 💡 [動画で確認する (4:42:39~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16959s)
 
 Remix 3 には重要な原則があります：
 
@@ -255,22 +250,21 @@ Remix 3 には重要な原則があります：
 
 ```javascript
 <select
-  on:change={async (event, signal) => {
-    state = "loading"
+  id="state"
+  on={dom.change(async (event, signal) => {
+    fetchState = "loading"
     this.update()
 
-    // signal を fetch に渡す
-    const response = await fetch(`/api/cities?state=${event.target.value}`, {
-      signal
-    })
-
-    // 古いリクエストは自動的に中断される
-    if (signal.aborted) return
-
+    const response = await fetch(
+      `/api/cities?state=${event.target.value}`, 
+      { signal } // signal を fetch に渡す
+    )
     cities = await response.json()
-    state = "loaded"
+    if (signal.aborted) return // 古いリクエストは自動的に中断される
+
+    fetchState = "loaded"
     this.update()
-  }}
+  })}
 >
 ```
 
@@ -286,6 +280,11 @@ Remix 3 には重要な原則があります：
 これにより、**レースコンディションを手動で、しかしシンプルに解決**できます。
 
 ## 実際のデモから学ぶ
+
+:::message alert
+- ここ以降に出てくるソースコードは、文字起こしで話されている内容から、AI がコードを推測したものなので、正しくない可能性が高いです。
+- 今後、動画を見直してソースコードを確認して修正してきます。
+:::
 
 ### デモ1: カウンターアプリ
 
