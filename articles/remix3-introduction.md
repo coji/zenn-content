@@ -587,35 +587,10 @@ class Drummer extends EventTarget {
   }
 
   private ensureContext() {
-    if (!this.audioCtx) {
-      const Ctx = (window as any).AudioContext
-    }
+    // ...
   }
 
-  toggle() {
-    if (this.#playing) {
-      this.stop()
-    } else {
-      this.play(this.#bpm)
-    }
-  }
-
-  set bpm(value) {
-    this.#bpm = value
-    this.dispatchEvent(new CustomEvent("change"))
-  }
-
-  get bpm() {
-    return this.#bpm
-  }
-
-  get volumes() {
-    return {
-      kick: this.#kick,
-      snare: this.#snare,
-      hihat: this.#hihat
-    }
-  }
+  // ...
 }
 ```
 
