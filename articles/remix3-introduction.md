@@ -281,11 +281,6 @@ Remix 3 には重要な原則があります：
 
 ## 実際のデモから学ぶ
 
-:::message alert
-- ここ以降に出てくるソースコードは、文字起こしで話されている内容から、AI がコードを推測したものなので、正しくない可能性が高いです。
-- 今後、動画を見直してソースコードを確認して修正してきます。
-:::
-
 ### デモ1: カウンターからテンポタッパーへ
 
 > 💡 [動画で確認する (3:29:03~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=12543s)
@@ -498,32 +493,53 @@ createRoot(document.body).render(<App />)
 
 ### デモ2: ドラムマシン
 
+:::message alert
+- ここ以降に出てくるソースコードは、文字起こしで話されている内容から、AI がコードを推測したものなので、正しくない可能性が高いです。
+- 今後、動画を見直してソースコードを確認して修正してきます。
+:::
+
 > 💡 [動画で確認する (3:56:02~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=14162s)
 
-完全なドラムマシンアプリを構築します。
+完全なドラムマシンアプリを構築し、**Context API**、**EventTarget**、**qTask** など Remix 3 の核心機能を実演します。
 
-主な機能：
+**構築する機能：**
 
 - Play/Stop ボタン
 - テンポ調整（BPM）
-- ビジュアライザー（音量表示）
+- リアルタイムビジュアライザー（kick、snare、hi-hat の音量表示）
 - キーボードショートカット（Space: 再生/停止、Arrow Up/Down: テンポ変更）
 
-#### Drummer クラス（AI が生成）
+#### ステップ1: Drummer クラスを AI に生成させる
+
+> 「Cursor に『キック、スネア、ハイハットを持ったドラマーを作って』って頼んだら、こいつが吐き出してくれた」- Ryan Florence [00:46:15]
 
 ```javascript
+// AI が生成した Drummer クラス（EventTarget を継承）
 class Drummer extends EventTarget {
   #bpm = 90
+  #playing = false
+  #kick = 0
+  #snare = 0
+  #hihat = 0
 
   play(bpm) {
     this.#bpm = bpm
-    // ドラムサウンドを再生...
+    this.#playing = true
+    // ドラムループを開始...
     this.dispatchEvent(new CustomEvent("change"))
   }
 
   stop() {
-    // 再生を停止...
+    this.#playing = false
     this.dispatchEvent(new CustomEvent("change"))
+  }
+
+  toggle() {
+    if (this.#playing) {
+      this.stop()
+    } else {
+      this.play(this.#bpm)
+    }
   }
 
   set bpm(value) {
@@ -534,138 +550,521 @@ class Drummer extends EventTarget {
   get bpm() {
     return this.#bpm
   }
+
+  get volumes() {
+    return {
+      kick: this.#kick,
+      snare: this.#snare,
+      hihat: this.#hihat
+    }
+  }
 }
 ```
 
-> 「Cursor に『キック、スネア、ハイハットを持ったドラマーを作って』って頼んだら、こいつが吐き出してくれた。最高だろ？」- Ryan Florence
+**重要なポイント:**
 
-#### キーボードイベントの統合
+1. `EventTarget` を継承 → 標準的な DOM イベントモデルを利用
+2. `CustomEvent` で変更を通知 → どんなコンポーネントでもリッスンできる
+3. **特別な Remix 用の型は不要** → 普通の JavaScript クラス
+
+> 「重要なのは、これが特別な型である必要がないってこと。Cursor に頼めば吐き出してくれる。動けば使う。動かなければもう一回試す」- Ryan Florence [00:50:04]
+
+#### ステップ2: Context API でアプリ全体に Drummer を共有
+
+> 💡 [動画で確認する (4:06:54~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=14814s)
+>
+> **前半で学んだ [Context API](#context-api-再レンダリングを引き起こさない) の実践例です！**
 
 ```javascript
-import { space, arrowUp, arrowDown } from "@remix/events"
-
-function App(this: RemixHandle) {
+function App(this: Remix.Handle<{ drummer: Drummer }>) {
+  // セットアップスコープで Drummer を作成
   const drummer = new Drummer()
 
-  return function render() {
-    return (
-      <div
-        on:window={[
-          [space, () => drummer.toggle()],
-          [arrowUp, () => drummer.bpm += 5],
-          [arrowDown, () => drummer.bpm -= 5],
-        ]}
-      >
-        <DrumMachine />
-      </div>
-    )
-  }
-}
-```
+  // Context に設定（再レンダリングは不要）
+  this.context.set(drummer)
 
-`window` にイベントを追加しているのに、コンポーネント内のコードと変わりません。
-
-![キーボードショートカット](/images/remix3-introduction/demo2-keyboard-shortcuts.png)
-*図: Space、Arrow Up/Down でドラムマシンを操作*
-
-### デモ3: フォームと非同期処理
-
-> 💡 [動画で確認する (4:37:24~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16644s)
-
-州を選択すると、その州の都市リストを fetch する典型的な UI です。
-
-```javascript
-function CitySelector(this: RemixHandle) {
-  let state = "idle"
-  let cities = []
-
-  return function render() {
-    return (
-      <form>
-        <select
-          on:change={async (event, signal) => {
-            state = "loading"
-            this.update()
-
-            const response = await fetch(
-              `/api/cities?state=${event.target.value}`,
-              { signal }
-            )
-
-            if (signal.aborted) return
-
-            cities = await response.json()
-            state = "loaded"
-            this.update()
-          }}
-        >
-          <option>Alabama</option>
-          <option>Alaska</option>
-          {/* ... */}
-        </select>
-
-        <select disabled={state === "loading"}>
-          {cities.map(city => (
-            <option>{city}</option>
-          ))}
-        </select>
-      </form>
-    )
-  }
-}
-```
-
-> 「イベントから考え始める。それが僕のやり方。ユーザーが最初のセレクトボックスを変更した → ローディング状態にする → データを取得 → ロード完了。これが一番自然な考え方だと思わない？」- Ryan Florence
-
-![レースコンディション](/images/remix3-introduction/demo3-race-condition-problem.png)
-*図: 連続して選択を変更した場合の問題*
-
-### デモ4: コンポーネントライブラリ
-
-> 💡 [動画で確認する (4:48:56~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=17336s)
->
-> 「UIフレームワークとして relevantであるためには、簡単に組み合わせられるコンポーネントが必要だ。フルスタック体験を目指している」- Ryan Florence
-
-Ryan は、Remix 3 と並行して **コンポーネントライブラリ** も開発していることを明かします。
-
-#### 最も難しいものから: ネストされたドロップダウンメニュー
-
-> 「コンポーネントモデルが動くようになった瞬間、最も難しいネストされたドロップダウンメニューを作り始めた」- Ryan Florence
-
-実装されている機能：
-
-- **ホバーインテント**: マウスが境界を横切っても意図を理解して消えない
-- **3階層のネスト**: サブメニューのサブメニューまで対応
-- **キーボードナビゲーション**: 完全なアクセシビリティ対応
-- **イベント駆動**: Remix Events を活用
-
-```javascript
-// ドロップダウンメニューの使用例（推測）
-import { Menu, MenuItem, MenuTrigger } from "@remix/ui"
-
-function NavMenu(this: Remix.Handle) {
+  // レンダー関数を返す
   return () => (
-    <Menu>
-      <MenuTrigger>File</MenuTrigger>
-      <Menu>
-        <MenuItem>New</MenuItem>
-        <MenuItem>Open</MenuItem>
-        <Menu>
-          <MenuTrigger>Recent</MenuTrigger>
-          <Menu>
-            <MenuItem>Document 1</MenuItem>
-            <MenuItem>Document 2</MenuItem>
-          </Menu>
-        </Menu>
-      </Menu>
-    </Menu>
+    <div>
+      <DrumControls />
+      <Equalizer />
+    </div>
   )
 }
 ```
 
-#### レイアウトとテーマシステム
+**Context API の利点:**
 
-コンポーネントライブラリには、レイアウトシステムとテーマ機能も含まれています：
+```javascript
+function DrumControls(this: Remix.Handle) {
+  // App コンポーネントから Context を取得
+  const drummer = this.context.get(App)
+
+  // drummer の変更を監視
+  drummer.addEventListener("change", () => this.update())
+
+  // DOM 更新後に Stop ボタンにフォーカスを移動（後述）
+  let stopButton = null
+
+  return () => (
+    <div>
+      <button
+        on={pressDown(() => {
+          drummer.play(drummer.bpm)
+          // qTask: DOM 更新後の処理
+          this.qTask(() => stopButton?.focus())
+        })}
+        disabled={drummer.playing}
+      >
+        Play
+      </button>
+      <button
+        ref={(el) => stopButton = el}
+        on={pressDown(() => drummer.stop())}
+        disabled={!drummer.playing}
+      >
+        Stop
+      </button>
+    </div>
+  )
+}
+```
+
+> 「Context の取得で `this.context.get(App)` を使うと、どのコンポーネントがそれを提供しているか一目瞭然。Go to Definition で飛べる。型も完全に安全」- Ryan Florence [00:54:12]
+
+**React の Context との違い:**
+
+| React Context | Remix Context |
+|---|---|
+| Provider コンポーネントが必要 | `this.context.set()` だけ |
+| Context 変更 = 再レンダリング | Context 変更しても再レンダリングなし |
+| Provider を探すのが大変 | Go to Definition で即座に見つかる |
+
+#### ステップ3: 型安全なイベントを作る（createEventType）
+
+> 💡 [動画で確認する (4:04:31~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=14671s)
+
+カスタムイベントを型安全にするため、`createEventType` を使います：
+
+```javascript
+import { createEventType } from "@remix/events"
+
+// 型安全な "change" イベントを作成
+const [change, createChange] = createEventType<void>("change")
+
+class Drummer extends EventTarget {
+  // ... 他のメソッド
+
+  set bpm(value) {
+    this.#bpm = value
+    // 型安全な方法で dispatch
+    this.dispatchEvent(createChange())
+  }
+
+  // 静的メソッドとして公開（推奨パターン）
+  static change = change
+}
+
+// 使用例
+function TempoDisplay(this: Remix.Handle) {
+  const drummer = this.context.get(App)
+
+  return () => (
+    <div
+      on={[
+        // 型安全なイベントリスナー
+        Drummer.change(() => this.update())
+      ]}
+    >
+      BPM: {drummer.bpm}
+    </div>
+  )
+}
+```
+
+> 「カスタムイベントを文字列で管理するのは型安全じゃない。`createEventType` を使えば、イベント名も detail の型も完全に安全になる」- Ryan Florence [00:48:55]
+
+#### ステップ4: qTask で DOM 更新後の処理
+
+> 💡 [動画で確認する (4:13:15~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=15195s)
+
+Play ボタンを押すと、Stop ボタンに自動的にフォーカスを移動したい：
+
+```javascript
+function DrumControls(this: Remix.Handle) {
+  const drummer = this.context.get(App)
+  let stopButtonRef = null
+
+  return () => (
+    <>
+      <button
+        on={pressDown(() => {
+          drummer.play(drummer.bpm)
+
+          // ❌ ここで focus() してもまだ DOM が更新されていない
+          // stopButtonRef.focus() // エラー: disabled 状態のボタンにフォーカスできない
+
+          // ✅ qTask: DOM 更新が完了してから実行
+          this.qTask(() => {
+            stopButtonRef?.focus()
+          })
+        })}
+        disabled={drummer.playing}
+      >
+        Play
+      </button>
+      <button
+        ref={(el) => stopButtonRef = el}
+        on={pressDown(() => drummer.stop())}
+        disabled={!drummer.playing}
+      >
+        Stop
+      </button>
+    </>
+  )
+}
+```
+
+**qTask の仕組み:**
+
+> 「Remix は microtask でレンダリングをバッチ処理する。`qTask` は DOM 更新が完了した後に実行されるキューだ。リスナーじゃない。次のレンダリングで一度だけ実行される」- Ryan Florence [00:57:35]
+
+```text
+1. drummer.play() → 状態変更
+2. this.update() → レンダリングをキューに追加
+3. [microtask] レンダリング実行 → DOM 更新
+4. [qTask] stopButtonRef.focus() 実行 ← DOM が更新された後！
+```
+
+#### ステップ5: キーボードイベントの統合
+
+> 💡 [動画で確認する (4:21:06~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=15666s)
+
+**前半で学んだ [Remix Events](#remix-events-イベントを第一級市民に) の実践例です！**
+
+```javascript
+import { space, arrowUp, arrowDown, arrowLeft, arrowRight } from "@remix/events"
+import { win } from "@remix/events"
+
+function App(this: Remix.Handle<{ drummer: Drummer }>) {
+  const drummer = new Drummer()
+  this.context.set(drummer)
+
+  return () => (
+    <div
+      on={win([
+        // Space: 再生/停止
+        [space, () => drummer.toggle()],
+        // Arrow Up/Left: テンポアップ
+        [arrowUp, () => { drummer.bpm += 5 }],
+        [arrowLeft, () => { drummer.bpm += 5 }],
+        // Arrow Down/Right: テンポダウン
+        [arrowDown, () => { drummer.bpm -= 5 }],
+        [arrowRight, () => { drummer.bpm -= 5 }],
+      ])}
+    >
+      <DrumControls />
+      <Equalizer />
+    </div>
+  )
+}
+```
+
+> 「window にイベントを追加しているのに、コンポーネント内のコードと変わらない。`on` プロップは、カスタムインタラクションもDOM要素もwindowも、全部同じように扱える」- Ryan Florence [01:07:26]
+
+**セマンティックなキーイベント:**
+
+- `space` → スペースキー
+- `arrowUp` / `arrowDown` → 上下矢印キー
+- 内部的には `keydown` をラップしているだけだが、**意図が明確**
+
+![キーボードショートカット](/images/remix3-introduction/demo2-keyboard-shortcuts.png)
+*図: Space、Arrow キーでドラムマシンを操作*
+
+#### ステップ6: Equalizer でビジュアライザー
+
+> 💡 [動画で確認する (3:57:48~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=14268s)
+
+リアルタイムで音量を視覚化するコンポーネント：
+
+```javascript
+function Equalizer(this: Remix.Handle) {
+  const drummer = this.context.get(App)
+
+  drummer.addEventListener("change", () => this.update())
+
+  return () => {
+    const { kick, snare, hihat } = drummer.volumes
+
+    return (
+      <div class="equalizer">
+        {/* kick: 4本のバー */}
+        <Bar height={kick} />
+        <Bar height={kick} />
+        <Bar height={kick} />
+        <Bar height={kick} />
+
+        {/* snare: 3本のバー */}
+        <Bar height={snare} />
+        <Bar height={snare} />
+        <Bar height={snare} />
+
+        {/* hihat: 2本のバー */}
+        <Bar height={hihat} />
+        <Bar height={hihat} />
+      </div>
+    )
+  }
+}
+
+function Bar(props: { height: number }) {
+  return (
+    <div
+      class="bar"
+      style={{ height: `${props.height * 100}%` }}
+    />
+  )
+}
+```
+
+> 「kick が4本のバー、snare が3本、hihat が2本持ってる。状態をどうレンダリングするかはもう決めた。あとはアニメーションするだけ」- Ryan Florence [00:42:09]
+
+![ドラムマシンのコンテキストAPI](/images/remix3-introduction/demo2-context-api.png)
+*図: Context API で Drummer を全コンポーネントに共有*
+
+**このデモで学んだこと:**
+
+1. ✅ **EventTarget の活用**: 標準的な DOM イベントモデルで状態を管理
+2. ✅ **Context API**: 再レンダリングなしでアプリ全体に値を共有
+3. ✅ **型安全なイベント**: `createEventType` でカスタムイベントを型安全に
+4. ✅ **qTask**: DOM 更新後の処理を安全に実行
+5. ✅ **セマンティックなキーイベント**: `space`、`arrowUp` などで意図を明確に
+6. ✅ **AI フレンドリー**: Drummer クラスは AI が生成できる普通の JavaScript
+
+### デモ3: フォームと非同期処理（Signal によるレースコンディション解決）
+
+> 💡 [動画で確認する (4:37:24~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16644s)
+>
+> **前半で学んだ [Signal: 非同期処理の管理](#signal-非同期処理の管理) の実践例です！**
+
+州を選択すると、その州の都市リストを fetch する典型的な UI を構築します。これは、**非同期処理のレースコンディション**という古典的な問題を扱います。
+
+#### 問題: レースコンディション
+
+```javascript
+function CitySelector(this: Remix.Handle) {
+  let state = "idle" // "idle" | "loading" | "loaded"
+  let cities = []
+
+  return () => (
+    <form>
+      <select
+        on={DOM.change(async (event) => {
+          // ローディング開始
+          state = "loading"
+          this.update()
+
+          // データ取得
+          const response = await fetch(
+            `/api/cities?state=${event.target.value}`
+          )
+          cities = await response.json()
+
+          // ローディング完了
+          state = "loaded"
+          this.update()
+        })}
+      >
+        <option value="AL">Alabama</option>
+        <option value="AK">Alaska</option>
+        <option value="AZ">Arizona</option>
+        <option value="IL">Illinois</option>
+        <option value="KY">Kentucky</option>
+        <option value="KS">Kansas</option>
+      </select>
+
+      <select disabled={state === "loading"}>
+        {cities.map(city => (
+          <option key={city}>{city}</option>
+        ))}
+      </select>
+    </form>
+  )
+}
+```
+
+> 「イベントから考え始める。それが僕のやり方だ。ユーザーが最初のセレクトボックスを変更した。それで機能が始まる。ローディング状態にする → データ取得 → ロード完了。これが一番自然じゃない？」- Ryan Florence [01:12:49]
+
+**問題の再現:**
+
+Ryan は、デモ用に各州の fetch に異なる遅延を設定しています：
+
+- Alabama: 300ms
+- Alaska: 500ms
+- Kansas: 5000ms（意図的に遅い）
+
+ユーザーが素早く選択を変更すると：
+
+1. Kentucky を選択 → fetch 開始（500ms）
+2. Illinois を選択 → fetch 開始（1000ms）
+3. Arizona を選択 → fetch 開始（800ms）
+
+**結果:** どの fetch が最後に完了するかによって、表示される都市リストが変わってしまう！
+
+> 「Louisville（Kentucky）、Illinois、Phoenix（Arizona）って表示された。問題だよね？」- Ryan Florence [01:16:00]
+
+![レースコンディション問題](/images/remix3-introduction/demo3-race-condition-problem.png)
+*図: 連続して選択を変更すると、最後に完了した fetch の結果が表示される*
+
+#### 解決策: Signal を使う
+
+> 💡 [動画で確認する (4:42:50~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16970s)
+
+Remix 3 の原則：
+
+> 「Remix 3 の原則として、あなたが関数を渡したら、僕らはあなたに signal を渡す。あなたは非同期関数の中で好きなことができるべきだから、レースコンディションから自分を守る方法を提供する必要がある」- Ryan Florence [01:16:50]
+
+**Signal を使った修正版:**
+
+```javascript
+function CitySelector(this: Remix.Handle) {
+  let state = "idle"
+  let cities = []
+
+  return () => (
+    <form>
+      <select
+        on={DOM.change(async (event, signal) => {
+          //                            ^^^^^^ Remix が渡す AbortSignal
+          state = "loading"
+          this.update()
+
+          // ✅ fetch に signal を渡す
+          const response = await fetch(
+            `/api/cities?state=${event.target.value}`,
+            { signal } // <- これが重要！
+          )
+
+          // ✅ JSON パース中に abort されるかもチェック
+          if (signal.aborted) return
+
+          cities = await response.json()
+          state = "loaded"
+          this.update()
+        })}
+      >
+        <option value="AL">Alabama</option>
+        <option value="AK">Alaska</option>
+        <option value="AZ">Arizona</option>
+        <option value="IL">Illinois</option>
+        <option value="KY">Kentucky</option>
+        <option value="KS">Kansas</option>
+      </select>
+
+      <select disabled={state === "loading"}>
+        {cities.map(city => (
+          <option key={city}>{city}</option>
+        ))}
+      </select>
+    </form>
+  )
+}
+```
+
+**Signal の仕組み:**
+
+```text
+1. Kentucky 選択 → fetch 開始（関数A実行中）
+2. Illinois 選択 → 関数Aの signal を abort
+                  → fetch 開始（関数B実行中）
+3. Arizona 選択 → 関数Bの signal を abort
+                 → fetch 開始（関数C実行中）
+```
+
+> 「この関数は1つだけだが、ユーザーがセレクトボックスをクリックするたびに、複数の呼び出しが同時に進行してる。非同期だからね。1回選択したら関数を呼んで待ってる。もう一回クリックしたら、また関数を呼んで待ってる。関数が再度呼ばれた時、Remix は前の signal を abort する」- Ryan Florence [01:17:56]
+
+![Signal でレースコンディション解決](/images/remix3-introduction/demo3-race-condition-solved.png)
+*図: Signal を使うと、最新のリクエストだけが完了する*
+
+#### Signal の2つの使い方
+
+**1. fetch API に渡す（推奨）**
+
+```javascript
+const response = await fetch(url, { signal })
+```
+
+fetch API は、signal が abort されると自動的に `AbortError` を throw します。
+
+**2. 手動でチェック**
+
+```javascript
+if (signal.aborted) return
+```
+
+JSON のパースなど、時間がかかる処理の後にチェックします。
+
+> 「abort controller を fetch に渡すと、throw する。だから、それ以降のコードは実行されない」- Ryan Florence [01:19:35]
+
+> 「2番目のチェックは実は不要だった。fetch が throw するから。でも、JSON のパースが巨大だったら、そこでもレースコンディションになりうる。だから、非同期処理の後は signal をチェックする癖をつけるといい」- Ryan Florence [01:19:35]
+
+#### Remix 3 のシンプルな原則
+
+> 「手動でやる必要がある。`this.update()` を呼ぶのと同じように、手動で `signal` を使う。でも、**いつも abort させたいわけじゃない**。投票システムみたいに、全部通したいこともある。重要な時だけ signal を使えばいい」- Ryan Florence [01:20:30]
+
+**重要な設計思想:**
+
+- **自動的な依存関係追跡はしない** → 明示的に `this.update()` を呼ぶ
+- **自動的な abort もしない** → 明示的に `signal` を使う
+- **シンプルで予測可能** → コードを読めば何が起こるか分かる
+
+#### 利用可能な Signal の種類
+
+Remix 3 では、3種類の signal が提供されます：
+
+1. **`this.signal`**: コンポーネントがマウント/アンマウントされた時に abort
+2. **イベントコールバックの `signal`**: 関数が再度呼ばれた時、または、コンポーネントがアンマウントされた時に abort
+3. **レンダー中の `signal`**: 再レンダリングされた時に abort（通常は使わない）
+
+> 「関数を渡したら、signal をあげる。これがルール。あなたがその中で何をするか分からないからね」- Ryan Florence [01:21:25]
+
+**このデモで学んだこと:**
+
+1. ✅ **レースコンディションの理解**: 複数の非同期処理が同時進行する問題
+2. ✅ **Signal の基本**: `AbortSignal` を使って古い処理をキャンセル
+3. ✅ **fetch API との統合**: `{ signal }` を渡すだけで自動キャンセル
+4. ✅ **手動チェック**: 長時間処理の後は `signal.aborted` をチェック
+5. ✅ **明示的な制御**: 必要な時だけ abort する設計
+6. ✅ **Web 標準**: `AbortController` は Web 標準 API
+
+### デモ4: ListBox - Web標準の統合デモ
+
+> 💡 [動画で確認する (4:48:56~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=17336s)
+>
+> **これまで学んだ複数の概念（[Remix Events](#remix-events-イベントを第一級市民に)、Web標準API）を統合した実例です！**
+
+Ryan は、Remix 3 と並行して **コンポーネントライブラリ** を開発しており、その中核となる **ListBox** コンポーネントを通じて、Web 標準との統合方法を示します。
+
+> 「UIフレームワークとして relevantであるためには、簡単に組み合わせられるコンポーネントが必要だ。フルスタック体験を目指している」- Ryan Florence [01:23:07]
+
+#### ステップ1: 基礎 - ネストされたドロップダウンメニュー
+
+> 💡 [動画で確認する (4:49:11~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=17351s)
+>
+> 「コンポーネントモデルが動くようになった瞬間、最も難しいネストされたドロップダウンメニューを作り始めた」- Ryan Florence [01:24:11]
+
+まず、最も複雑なコンポーネントから開始します：
+
+**実装されている機能:**
+
+- **ホバーインテント**: マウスが境界を横切っても意図を理解して消えない
+- **3階層のネスト**: サブメニューのサブメニューまで対応
+- **キーボードナビゲーション**: 完全なアクセシビリティ対応
+- **Remix Events**: カスタムイベントで駆動
+
+**レイアウトとテーマシステム:**
+
+コンポーネントライブラリには、`Stack`（縦）と `Row`（横）のレイアウトシステムも含まれています：
 
 ```javascript
 import { Stack, Row } from "@remix/ui"
@@ -685,79 +1084,132 @@ function ComponentShowcase(this: Remix.Handle) {
 }
 ```
 
-**テーマシステムの特徴:**
-
 - **CSS カスタムプロパティベース**: サーバーレンダリングと相性が良い
 - **型安全なサイズ指定**: `"xxl"`, `"medium"` などが型チェックされる
-- **柔軟なレイアウト**: `Stack`（縦）と `Row`（横）で簡単にレイアウト
 
-> 「Tim（デザイナー）のデザインが素晴らしすぎて、それに見合うものを作らなきゃという気持ちになる」- Ryan Florence
+> 「Tim（デザイナー）のデザインが素晴らしすぎて、それに見合うものを作らなきゃという気持ちになる」- Ryan Florence [01:26:49]
 
 ![コンポーネントライブラリ](/images/remix3-introduction/demo4-component-library.png)
 *図: Remix UI コンポーネントライブラリのプレビュー*
 
-#### Popover API との統合
+#### ステップ2: ListBox の構築 - Popover API とフォーム統合
 
 > 💡 [動画で確認する (4:43:07~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=16987s)
 
-Ryan は、Web 標準の **Popover API** を Remix Events と組み合わせて使用できることを示します：
+ここからが本題です。ネイティブの `<select>` 要素を超える **ListBox** を構築します。
+
+**Popover API との統合:**
+
+Web 標準の **Popover API** を使って、ドロップダウンリストを実装します：
 
 ```javascript
-// Popover を使ったカスタムコンポーネント
-function CustomSelect(this: Remix.Handle) {
+function ListBox(this: Remix.Handle, props: { options: string[] }) {
+  let selectedValue = props.defaultValue || null
+  let isOpen = false
+
   return () => (
-    <button popover="auto">
-      <div popover>
+    <>
+      <button
+        type="button"
+        popovertarget="listbox-popover"
+        on={[
+          // Popover の開閉を検知
+          DOM.toggle(() => {
+            isOpen = !isOpen
+            this.update()
+          })
+        ]}
+      >
+        {selectedValue || "Select..."}
+      </button>
+
+      <div id="listbox-popover" popover>
         {/* このdivはbuttonの中にあるが、top layerに表示される */}
-        <ListBox />
+        <ul role="listbox">
+          {props.options.map(option => (
+            <li
+              role="option"
+              on={pressDown(() => {
+                selectedValue = option
+                // カスタムイベントを dispatch
+                this.dispatchEvent(new CustomEvent("listbox:change", {
+                  detail: { value: option },
+                  bubbles: true // ← バブリングを有効化
+                }))
+                this.update()
+              })}
+            >
+              {option}
+            </li>
+          ))}
+        </ul>
       </div>
-    </button>
+    </>
   )
 }
 ```
 
-**Popover API の利点:**
-- トップレイヤーに自動的に配置される
-- `popoverTargetToggle` イベントで接続できる
-- Remix Events でボタンとポップオーバーを簡単に連携
+**Popover API のポイント:**
 
-> 「Popover API は素晴らしい。カスタムイベントを使えば、通常は接続されていないものを接続できる」- Ryan Florence
+1. **`popover` 属性** → 自動的にトップレイヤーに配置
+2. **`popovertarget`** → ボタンとポップオーバーを接続
+3. **`toggle` イベント** → 開閉を検知できる
 
-#### イベントのバブリング
+> 「Popover API は素晴らしい。トップレイヤーに行く。イベントもある。`popoverTargetToggle` を使えば、ボタンが所有するポップオーバーがいつ開くかリッスンできる。カスタムイベントを使えば、通常は接続されていないものを接続できるんだ」- Ryan Florence [01:27:48]
 
-> 💡 [動画で確認する (4:46:03~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=17163s)
+**リアルなフォーム要素として動作:**
 
-Remix のカスタムイベントは、通常の DOM イベントと同様に **バブリング** します。これにより、親要素で子要素のイベントをまとめてハンドリングできます：
+> 💡 [動画で確認する (4:44:18~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=17058s)
+
+ListBox は、内部に実際の `<input>` を持ち、フォームの一部として動作します：
 
 ```javascript
-function FormWithListBox(this: Remix.Handle) {
+function ListBox(this: Remix.Handle, props: { name: string, options: string[] }) {
+  let selectedValue = props.defaultValue || null
+
+  return () => (
+    <>
+      {/* 隠しinput: フォーム送信時に値を送る */}
+      <input type="hidden" name={props.name} value={selectedValue} />
+
+      <button type="button" popovertarget="listbox-popover">
+        {selectedValue || "Select..."}
+      </button>
+
+      <div id="listbox-popover" popover>
+        {/* ... オプションリスト ... */}
+      </div>
+    </>
+  )
+}
+
+// 使用例
+function FruitForm(this: Remix.Handle) {
+  let formData = null
+
   return () => (
     <form
-      on={[
-        // フォーム内のListBoxの変更を検知
-        ListBox.change((event) => {
-          console.log("ListBox changed:", event.detail)
-          this.update()
-        })
-      ]}
+      on={DOM.submit((event, signal) => {
+        event.preventDefault()
+        formData = new FormData(event.target)
+        console.log("Selected:", formData.get("fruit"))
+        this.update()
+      })}
     >
-      {/* ListBox自体にはonプロップを付けない */}
-      <ListBox options={["Apple", "Banana", "Orange"]} />
+      <ListBox name="fruit" options={["Apple", "Banana", "Orange"]} />
       <button type="submit">Submit</button>
+      <button type="reset">Reset</button>
     </form>
   )
 }
 ```
 
-> 「div の中に画像があったら、div に `onLoad` を付けられるよね？div 自体は何もロードしないけど、load イベントはバブリングする。同じことだ」- Ryan Florence
+> 「これらは本物のフォーム要素なんだ。submit すると、実際の input が入ってる。リセットボタンを押すと、デフォルト状態に戻る。なぜなら、所属するフォームの submit イベントをリッスンしてるからだ。これが通常のフォーム要素がやることだよね」- Ryan Florence [01:28:42]
 
-**実用例: フォームのリセット**
-
-カスタムコンポーネントがフォームの `reset` イベントをリッスンすることで、ネイティブフォーム要素と同じ動作を実現：
+**フォームのリセットへの対応:**
 
 ```javascript
-// ListBoxコンポーネント内部
-function ListBox(this: Remix.Handle, props: { options: string[] }) {
+function ListBox(this: Remix.Handle, props: { options: string[], defaultValue?: string }) {
   let selectedValue = props.defaultValue || null
 
   return () => (
@@ -770,28 +1222,103 @@ function ListBox(this: Remix.Handle, props: { options: string[] }) {
         })
       ]}
     >
-      {/* ListBox UI */}
+      {/* ... ListBox UI ... */}
     </div>
   )
 }
 ```
 
-#### Web Components との互換性
+> 「リセットボタンを押すと、watch this（これ見て）... デフォルト状態に戻る。なぜなら、所属するフォームの reset イベントをリッスンしているからだ」- Ryan Florence [01:28:42]
+
+#### ステップ3: イベントのバブリング
+
+> 💡 [動画で確認する (4:46:03~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=17163s)
+
+Remix のカスタムイベントは、DOM標準のイベントと同様に **バブリング** します。
+
+**親要素でのイベント処理:**
+
+```javascript
+function FormWithListBox(this: Remix.Handle) {
+  let selectedFruit = null
+
+  return () => (
+    <form
+      on={[
+        // ★ フォーム要素で ListBox の変更を検知
+        ListBox.change((event) => {
+          selectedFruit = event.detail.value
+          console.log("ListBox changed:", selectedFruit)
+          this.update()
+        })
+      ]}
+    >
+      {/* ListBox 自体には on プロップを付けない */}
+      <ListBox options={["Apple", "Banana", "Orange"]} />
+
+      <p>Selected: {selectedFruit}</p>
+    </form>
+  )
+}
+```
+
+**バブリングの仕組み:**
+
+```text
+<form>  ← イベントがバブリングして到達
+  <ListBox>  ← ここで dispatch
+    <button />
+    <div popover>
+      <li onClick>  ← ここでクリック
+```
+
+> 「div の中に画像があったら、div に `onLoad` を付けられるよね？div 自体は何もロードしないけど、load イベントはバブリングする。同じことだ。面白いパターンが生まれるはずだよ。ListBox が本当のイベントを dispatch して、親にバブリングする。だから、イベントを上の方で処理することも、下の方で処理することも、好きなところに置ける」- Ryan Florence [01:32:44]
+
+**実用例: 複数の ListBox を1つのハンドラで処理**
+
+```javascript
+function MultiSelectForm(this: Remix.Handle) {
+  let selections = { fruit: null, vegetable: null }
+
+  return () => (
+    <form
+      on={[
+        // ★ すべての ListBox の変更を1つのハンドラで処理
+        ListBox.change((event) => {
+          const name = event.target.getAttribute("name")
+          selections[name] = event.detail.value
+          this.update()
+        })
+      ]}
+    >
+      <ListBox name="fruit" options={["Apple", "Banana"]} />
+      <ListBox name="vegetable" options={["Carrot", "Broccoli"]} />
+
+      <pre>{JSON.stringify(selections, null, 2)}</pre>
+    </form>
+  )
+}
+```
+
+#### ステップ4: Web Components との互換性
 
 > 💡 [動画で確認する (4:50:55~)](https://www.youtube.com/watch?v=xt_iEOn2a6Y&t=17455s)
 
-セッションのクライマックスで、Ryan は **Web Components** との互換性を実演します。
+セッションのクライマックス。Ryan は、Remix コンポーネントを **Web Components** として公開できることを実演します。
 
-> 「僕らのイベントシステム全体は、ただのカスタムイベントなんだ。通常のDOMを通してバブリングする。だから、Web Componentsを含む世界の他のすべてと、すぐに互換性がある」- Ryan Florence
+> 「僕らのイベントシステム全体は、ただのカスタムイベントなんだ。通常のDOMを通してバブリングする。だから、Web Componentsを含む世界の他のすべてと、すぐに互換性がある」- Ryan Florence [01:35:41]
 
-**カスタム要素として Remix コンポーネントを使用:**
+**カスタム要素としての使用:**
 
 ```html
 <!-- 普通のHTMLファイル -->
 <!DOCTYPE html>
 <html>
+  <head>
+    <script type="module" src="/remix-components.js"></script>
+  </head>
   <body>
-    <!-- カスタム要素として使用 -->
+    <!-- ★ カスタム要素として使用 -->
     <rmx-disclosure>
       <disclosure-button>Toggle Content</disclosure-button>
       <disclosure-content>
@@ -799,7 +1326,7 @@ function ListBox(this: Remix.Handle, props: { options: string[] }) {
       </disclosure-content>
     </rmx-disclosure>
 
-    <script>
+    <script type="module">
       // カスタム要素の定義
       class RmxDisclosure extends HTMLElement {
         connectedCallback() {
@@ -807,12 +1334,13 @@ function ListBox(this: Remix.Handle, props: { options: string[] }) {
           const button = this.querySelector('disclosure-button')
           const content = this.querySelector('disclosure-content')
 
-          // Remixコンポーネントでラップ
+          // innerHTML を消去して Remix コンポーネントをレンダリング
+          this.innerHTML = ""
           const root = createRoot(this)
           root.render(
             <Disclosure>
-              <Disclosure.Button innerHTML={button.innerHTML} />
-              <Disclosure.Content innerHTML={content.innerHTML} />
+              <Disclosure.Button>{button.innerHTML}</Disclosure.Button>
+              <Disclosure.Content>{content.innerHTML}</Disclosure.Content>
             </Disclosure>
           )
         }
@@ -820,7 +1348,7 @@ function ListBox(this: Remix.Handle, props: { options: string[] }) {
 
       customElements.define('rmx-disclosure', RmxDisclosure)
 
-      // 通常のDOM APIでイベントをリッスン
+      // ★ 通常のDOM APIでイベントをリッスン
       document.querySelector('rmx-disclosure')
         .addEventListener('disclosure:toggle', (e) => {
           console.log('Disclosure toggled!', e.detail)
@@ -830,19 +1358,30 @@ function ListBox(this: Remix.Handle, props: { options: string[] }) {
 </html>
 ```
 
+> 「これは証明のためのコンセプトだ。ハイドレーションとかやるべきだけど、これは単なる HTML ファイル。`rmx-disclosure` と `disclosure-button` があって、これらはただの Web Components だ。`addEventListener` で `disclosure:toggle` をリッスンできる」- Ryan Florence [01:36:39]
+
 ![Web Components デモ](/images/remix3-introduction/demo5-web-components.png)
 *図: HTMLファイル内でカスタム要素として使用される Remix コンポーネント*
 
 **マイクロフロントエンドへの応用:**
 
-> 「Remix で完全なアプリを作れるだけじゃない。Web Components の中に隠すこともできる。そうすれば、世界の他の部分と簡単に互換性を持たせられる。レガシーシステムや、AI チャットアプリに埋め込むとか、そういう新しいユースケースにも対応できる」- Ryan Florence
+> 「Remix で完全なアプリを作れるだけじゃない。Web Components の中に隠すこともできる。そうすれば、世界の他の部分と簡単に互換性を持たせられる。レガシーシステムや、AI チャットアプリに埋め込むとか、そういう新しいユースケースにも対応できる」- Ryan Florence [01:37:34]
 
 **この設計の意義:**
 
-1. **既存システムへの段階的導入**: レガシーアプリに Remix コンポーネントを少しずつ追加できる
-2. **フレームワーク間の相互運用**: 他のフレームワークと共存できる
+1. **既存システムへの段階的導入**: レガシーアプリに Remix コンポーネントを少しずつ追加
+2. **フレームワーク間の相互運用**: React、Vue、Angular などと共存
 3. **AI エージェントへの埋め込み**: チャットボットや AI インターフェースにコンポーネントを提供
 4. **標準への準拠**: Web 標準に基づいているため、将来性がある
+
+**このデモで学んだこと:**
+
+1. ✅ **Popover API**: Web標準のAPIとの統合
+2. ✅ **フォーム統合**: submit/resetイベントへの自動対応
+3. ✅ **イベントのバブリング**: 親要素での一括処理
+4. ✅ **Web Components**: 標準技術との完全な互換性
+5. ✅ **型安全なコンポーネント**: TypeScript でのDX向上
+6. ✅ **AI フレンドリー**: 標準技術ベースで LLM が理解しやすい
 
 ## Remix 3 の設計思想
 
