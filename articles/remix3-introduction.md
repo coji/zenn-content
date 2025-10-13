@@ -511,7 +511,7 @@ createRoot(document.body).render(<App />)
 
 #### ステップ1: Drummer クラスを AI に生成させる
 
-> 「Cursor に『キック、スネア、ハイハットを持ったドラマーを作って』って頼んだら、こいつが吐き出してくれた」- Ryan Florence [00:46:15]
+> 「Cursor に『キック、スネア、ハイハットを持ったドラマーを作って』って頼んだら、こいつが吐き出してくれた」- Ryan Florence
 
 ```javascript
 // AI が生成した Drummer クラス（EventTarget を継承）
@@ -567,7 +567,7 @@ class Drummer extends EventTarget {
 2. `CustomEvent` で変更を通知 → どんなコンポーネントでもリッスンできる
 3. **特別な Remix 用の型は不要** → 普通の JavaScript クラス
 
-> 「重要なのは、これが特別な型である必要がないってこと。Cursor に頼めば吐き出してくれる。動けば使う。動かなければもう一回試す」- Ryan Florence [00:50:04]
+> 「重要なのは、これが特別な型である必要がないってこと。Cursor に頼めば吐き出してくれる。動けば使う。動かなければもう一回試す」- Ryan Florence
 
 #### ステップ2: Context API でアプリ全体に Drummer を共有
 
@@ -630,7 +630,7 @@ function DrumControls(this: Remix.Handle) {
 }
 ```
 
-> 「Context の取得で `this.context.get(App)` を使うと、どのコンポーネントがそれを提供しているか一目瞭然。Go to Definition で飛べる。型も完全に安全」- Ryan Florence [00:54:12]
+> 「Context の取得で `this.context.get(App)` を使うと、どのコンポーネントがそれを提供しているか一目瞭然。Go to Definition で飛べる。型も完全に安全」- Ryan Florence
 
 **React の Context との違い:**
 
@@ -682,7 +682,7 @@ function TempoDisplay(this: Remix.Handle) {
 }
 ```
 
-> 「カスタムイベントを文字列で管理するのは型安全じゃない。`createEventType` を使えば、イベント名も detail の型も完全に安全になる」- Ryan Florence [00:48:55]
+> 「カスタムイベントを文字列で管理するのは型安全じゃない。`createEventType` を使えば、イベント名も detail の型も完全に安全になる」- Ryan Florence
 
 #### ステップ4: qTask で DOM 更新後の処理
 
@@ -727,7 +727,7 @@ function DrumControls(this: Remix.Handle) {
 
 **qTask の仕組み:**
 
-> 「Remix は microtask でレンダリングをバッチ処理する。`qTask` は DOM 更新が完了した後に実行されるキューだ。リスナーじゃない。次のレンダリングで一度だけ実行される」- Ryan Florence [00:57:35]
+> 「Remix は microtask でレンダリングをバッチ処理する。`qTask` は DOM 更新が完了した後に実行されるキューだ。リスナーじゃない。次のレンダリングで一度だけ実行される」- Ryan Florence
 
 ```text
 1. drummer.play() → 状態変更
@@ -770,7 +770,7 @@ function App(this: Remix.Handle<{ drummer: Drummer }>) {
 }
 ```
 
-> 「window にイベントを追加しているのに、コンポーネント内のコードと変わらない。`on` プロップは、カスタムインタラクションもDOM要素もwindowも、全部同じように扱える」- Ryan Florence [01:07:26]
+> 「window にイベントを追加しているのに、コンポーネント内のコードと変わらない。`on` プロップは、カスタムインタラクションもDOM要素もwindowも、全部同じように扱える」- Ryan Florence
 
 **セマンティックなキーイベント:**
 
@@ -827,7 +827,7 @@ function Bar(props: { height: number }) {
 }
 ```
 
-> 「kick が4本のバー、snare が3本、hihat が2本持ってる。状態をどうレンダリングするかはもう決めた。あとはアニメーションするだけ」- Ryan Florence [00:42:09]
+> 「kick が4本のバー、snare が3本、hihat が2本持ってる。状態をどうレンダリングするかはもう決めた。あとはアニメーションするだけ」- Ryan Florence
 
 ![ドラムマシンのコンテキストAPI](/images/remix3-introduction/demo2-context-api.png)
 *図: Context API で Drummer を全コンポーネントに共有*
@@ -893,7 +893,7 @@ function CitySelector(this: Remix.Handle) {
 }
 ```
 
-> 「イベントから考え始める。それが僕のやり方だ。ユーザーが最初のセレクトボックスを変更した。それで機能が始まる。ローディング状態にする → データ取得 → ロード完了。これが一番自然じゃない？」- Ryan Florence [01:12:49]
+> 「イベントから考え始める。それが僕のやり方だ。ユーザーが最初のセレクトボックスを変更した。それで機能が始まる。ローディング状態にする → データ取得 → ロード完了。これが一番自然じゃない？」- Ryan Florence
 
 **問題の再現:**
 
@@ -911,7 +911,7 @@ Ryan は、デモ用に各州の fetch に異なる遅延を設定していま�
 
 **結果:** どの fetch が最後に完了するかによって、表示される都市リストが変わってしまう！
 
-> 「Louisville（Kentucky）、Illinois、Phoenix（Arizona）って表示された。問題だよね？」- Ryan Florence [01:16:00]
+> 「Louisville（Kentucky）、Illinois、Phoenix（Arizona）って表示された。問題だよね？」- Ryan Florence
 
 ![レースコンディション問題](/images/remix3-introduction/demo3-race-condition-problem.png)
 *図: 連続して選択を変更すると、最後に完了した fetch の結果が表示される*
@@ -922,7 +922,7 @@ Ryan は、デモ用に各州の fetch に異なる遅延を設定していま�
 
 Remix 3 の原則：
 
-> 「Remix 3 の原則として、あなたが関数を渡したら、僕らはあなたに signal を渡す。あなたは非同期関数の中で好きなことができるべきだから、レースコンディションから自分を守る方法を提供する必要がある」- Ryan Florence [01:16:50]
+> 「Remix 3 の原則として、あなたが関数を渡したら、僕らはあなたに signal を渡す。あなたは非同期関数の中で好きなことができるべきだから、レースコンディションから自分を守る方法を提供する必要がある」- Ryan Florence
 
 **Signal を使った修正版:**
 
@@ -981,7 +981,7 @@ function CitySelector(this: Remix.Handle) {
                  → fetch 開始（関数C実行中）
 ```
 
-> 「この関数は1つだけだが、ユーザーがセレクトボックスをクリックするたびに、複数の呼び出しが同時に進行してる。非同期だからね。1回選択したら関数を呼んで待ってる。もう一回クリックしたら、また関数を呼んで待ってる。関数が再度呼ばれた時、Remix は前の signal を abort する」- Ryan Florence [01:17:56]
+> 「この関数は1つだけだが、ユーザーがセレクトボックスをクリックするたびに、複数の呼び出しが同時に進行してる。非同期だからね。1回選択したら関数を呼んで待ってる。もう一回クリックしたら、また関数を呼んで待ってる。関数が再度呼ばれた時、Remix は前の signal を abort する」- Ryan Florence
 
 ![Signal でレースコンディション解決](/images/remix3-introduction/demo3-race-condition-solved.png)
 *図: Signal を使うと、最新のリクエストだけが完了する*
@@ -1004,7 +1004,7 @@ if (signal.aborted) return
 
 JSON のパースなど、時間がかかる処理の後にチェックします。
 
-> 「abort controller を fetch に渡すと、throw する。だから、それ以降のコードは実行されない」- Ryan Florence [01:19:35]
+> 「abort controller を fetch に渡すと、throw する。だから、それ以降のコードは実行されない」- Ryan Florence
 
 > 「2番目のチェックは実は不要だった。fetch が throw するから。でも、JSON のパースが巨大だったら、そこでもレースコンディションになりうる。だから、非同期処理の後は signal をチェックする癖をつけるといい」- Ryan Florence [01:19:35]
 
@@ -1026,7 +1026,7 @@ Remix 3 では、3種類の signal が提供されます：
 2. **イベントコールバックの `signal`**: 関数が再度呼ばれた時、または、コンポーネントがアンマウントされた時に abort
 3. **レンダー中の `signal`**: 再レンダリングされた時に abort（通常は使わない）
 
-> 「関数を渡したら、signal をあげる。これがルール。あなたがその中で何をするか分からないからね」- Ryan Florence [01:21:25]
+> 「関数を渡したら、signal をあげる。これがルール。あなたがその中で何をするか分からないからね」- Ryan Florence
 
 **このデモで学んだこと:**
 
@@ -1087,7 +1087,7 @@ function ComponentShowcase(this: Remix.Handle) {
 - **CSS カスタムプロパティベース**: サーバーレンダリングと相性が良い
 - **型安全なサイズ指定**: `"xxl"`, `"medium"` などが型チェックされる
 
-> 「Tim（デザイナー）のデザインが素晴らしすぎて、それに見合うものを作らなきゃという気持ちになる」- Ryan Florence [01:26:49]
+> 「Tim（デザイナー）のデザインが素晴らしすぎて、それに見合うものを作らなきゃという気持ちになる」- Ryan Florence
 
 ![コンポーネントライブラリ](/images/remix3-introduction/demo4-component-library.png)
 *図: Remix UI コンポーネントライブラリのプレビュー*
@@ -1155,7 +1155,7 @@ function ListBox(this: Remix.Handle, props: { options: string[] }) {
 2. **`popovertarget`** → ボタンとポップオーバーを接続
 3. **`toggle` イベント** → 開閉を検知できる
 
-> 「Popover API は素晴らしい。トップレイヤーに行く。イベントもある。`popoverTargetToggle` を使えば、ボタンが所有するポップオーバーがいつ開くかリッスンできる。カスタムイベントを使えば、通常は接続されていないものを接続できるんだ」- Ryan Florence [01:27:48]
+> 「Popover API は素晴らしい。トップレイヤーに行く。イベントもある。`popoverTargetToggle` を使えば、ボタンが所有するポップオーバーがいつ開くかリッスンできる。カスタムイベントを使えば、通常は接続されていないものを接続できるんだ」- Ryan Florence
 
 **リアルなフォーム要素として動作:**
 
@@ -1204,7 +1204,7 @@ function FruitForm(this: Remix.Handle) {
 }
 ```
 
-> 「これらは本物のフォーム要素なんだ。submit すると、実際の input が入ってる。リセットボタンを押すと、デフォルト状態に戻る。なぜなら、所属するフォームの submit イベントをリッスンしてるからだ。これが通常のフォーム要素がやることだよね」- Ryan Florence [01:28:42]
+> 「これらは本物のフォーム要素なんだ。submit すると、実際の input が入ってる。リセットボタンを押すと、デフォルト状態に戻る。なぜなら、所属するフォームの submit イベントをリッスンしてるからだ。これが通常のフォーム要素がやることだよね」- Ryan Florence
 
 **フォームのリセットへの対応:**
 
@@ -1228,7 +1228,7 @@ function ListBox(this: Remix.Handle, props: { options: string[], defaultValue?: 
 }
 ```
 
-> 「リセットボタンを押すと、watch this（これ見て）... デフォルト状態に戻る。なぜなら、所属するフォームの reset イベントをリッスンしているからだ」- Ryan Florence [01:28:42]
+> 「リセットボタンを押すと、watch this（これ見て）... デフォルト状態に戻る。なぜなら、所属するフォームの reset イベントをリッスンしているからだ」- Ryan Florence
 
 #### ステップ3: イベントのバブリング
 
@@ -1272,7 +1272,7 @@ function FormWithListBox(this: Remix.Handle) {
       <li onClick>  ← ここでクリック
 ```
 
-> 「div の中に画像があったら、div に `onLoad` を付けられるよね？div 自体は何もロードしないけど、load イベントはバブリングする。同じことだ。面白いパターンが生まれるはずだよ。ListBox が本当のイベントを dispatch して、親にバブリングする。だから、イベントを上の方で処理することも、下の方で処理することも、好きなところに置ける」- Ryan Florence [01:32:44]
+> 「div の中に画像があったら、div に `onLoad` を付けられるよね？div 自体は何もロードしないけど、load イベントはバブリングする。同じことだ。面白いパターンが生まれるはずだよ。ListBox が本当のイベントを dispatch して、親にバブリングする。だから、イベントを上の方で処理することも、下の方で処理することも、好きなところに置ける」- Ryan Florence
 
 **実用例: 複数の ListBox を1つのハンドラで処理**
 
@@ -1306,7 +1306,7 @@ function MultiSelectForm(this: Remix.Handle) {
 
 セッションのクライマックス。Ryan は、Remix コンポーネントを **Web Components** として公開できることを実演します。
 
-> 「僕らのイベントシステム全体は、ただのカスタムイベントなんだ。通常のDOMを通してバブリングする。だから、Web Componentsを含む世界の他のすべてと、すぐに互換性がある」- Ryan Florence [01:35:41]
+> 「僕らのイベントシステム全体は、ただのカスタムイベントなんだ。通常のDOMを通してバブリングする。だから、Web Componentsを含む世界の他のすべてと、すぐに互換性がある」- Ryan Florence
 
 **カスタム要素としての使用:**
 
@@ -1358,14 +1358,14 @@ function MultiSelectForm(this: Remix.Handle) {
 </html>
 ```
 
-> 「これは証明のためのコンセプトだ。ハイドレーションとかやるべきだけど、これは単なる HTML ファイル。`rmx-disclosure` と `disclosure-button` があって、これらはただの Web Components だ。`addEventListener` で `disclosure:toggle` をリッスンできる」- Ryan Florence [01:36:39]
+> 「これは証明のためのコンセプトだ。ハイドレーションとかやるべきだけど、これは単なる HTML ファイル。`rmx-disclosure` と `disclosure-button` があって、これらはただの Web Components だ。`addEventListener` で `disclosure:toggle` をリッスンできる」- Ryan Florence
 
 ![Web Components デモ](/images/remix3-introduction/demo5-web-components.png)
 *図: HTMLファイル内でカスタム要素として使用される Remix コンポーネント*
 
 **マイクロフロントエンドへの応用:**
 
-> 「Remix で完全なアプリを作れるだけじゃない。Web Components の中に隠すこともできる。そうすれば、世界の他の部分と簡単に互換性を持たせられる。レガシーシステムや、AI チャットアプリに埋め込むとか、そういう新しいユースケースにも対応できる」- Ryan Florence [01:37:34]
+> 「Remix で完全なアプリを作れるだけじゃない。Web Components の中に隠すこともできる。そうすれば、世界の他の部分と簡単に互換性を持たせられる。レガシーシステムや、AI チャットアプリに埋め込むとか、そういう新しいユースケースにも対応できる」- Ryan Florence
 
 **この設計の意義:**
 
