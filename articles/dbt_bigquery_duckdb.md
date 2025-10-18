@@ -172,7 +172,9 @@ Mart層 (DuckDB)     -- 分析用に加工
 
 ## なぜ Python モデルが必要か
 
-dbt-duckdbはBigQueryからの直接読み込みをサポートしていません（v1.9.6時点）。そこで**dbt Python モデル**を使って、BigQueryからデータを取得してpandas DataFrameとして返すと、dbtが自動的にDuckDBに保存してくれます。
+執筆当初に検証した v1.9.6 では、dbt-duckdb が BigQuery から直接読み込む手段を見つけられませんでした。そのため本稿では**dbt Python モデル**を使って、BigQueryからデータを取得し、pandas DataFrameを返してDuckDBに保存する構成を採用しています。
+
+なお、DuckDB にはコミュニティ製の BigQuery 拡張が提供されており、dbt プロファイルで拡張を読み込む手順を追加すれば直接連携できそうな気配があります。ただし、まだ手元で再現検証できていないため、後日あらためて確認してから別途まとめます。
 
 ## 設定の一元管理: lib/config.py
 
