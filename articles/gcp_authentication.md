@@ -14,7 +14,7 @@ BigQueryをPythonで使おうとしたら「403 Forbidden」エラーが出た�
 
 # 問題: 謎の 403 Forbidden エラー
 
-こんな状況でした：
+こんな状況でした。
 
 ```bash
 # bq コマンドは成功
@@ -48,7 +48,7 @@ Grant the caller the roles/serviceusage.serviceUsageConsumer role...
 
 ## 問題の本質
 
-GCPには2つの認証方式があって、それぞれ異なる権限チェックが行われます：
+GCPには2つの認証方式があって、それぞれ異なる権限チェックが行われます。
 
 | 方式 | 使用ツール | 保存場所 | 権限チェック |
 |------|-----------|---------|------------|
@@ -57,13 +57,13 @@ GCPには2つの認証方式があって、それぞれ異なる権限チェッ�
 
 ## 解決策
 
-まず ADC の quota project を指定して権限を揃えます：
+まず ADC の quota project を指定して権限を揃えます。
 
 ```bash
 gcloud auth application-default set-quota-project my-project
 ```
 
-それでも権限差異が残る場合の一時的な回避策として、Python から gcloud のトークンを借用します：
+それでも権限差異が残る場合は、一時的な回避策として Python から gcloud のトークンを借用できます。
 
 ```python
 import subprocess
@@ -176,7 +176,7 @@ ADC で利用する quota project は `gcloud auth application-default set-quota
 
 ## なぜ権限が必要なのか
 
-もし誰でも他人のプロジェクトの quota を使えてしまったら、こんなことが起きます：
+もし誰でも他人のプロジェクトの quota を使えてしまったら、こんなことが起きます。
 
 ```text
 悪意あるユーザー
@@ -190,7 +190,7 @@ Quotaを使い切る
 
 DoS攻撃が可能になってしまうわけです。
 
-だから、GCPは厳格にチェックしています：
+だから、GCPは厳格にチェックしています。
 
 ```text
 quota_project_id を指定するには
@@ -404,7 +404,7 @@ quota_project_id は課金先とは別の概念で、「誰の quota 枠を使�
 
 ## トラブルシューティングチェックリスト
 
-403 エラーが出たら、この順番で確認してみてください：
+403 エラーが出たら、この順番で確認してみてください。
 
 - [ ] `bq` コマンドは動くか？
 - [ ] `gcloud auth list` で正しいアカウントがアクティブか？
