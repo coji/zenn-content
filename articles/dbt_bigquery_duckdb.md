@@ -33,7 +33,7 @@ D SELECT * FROM marts.mart_user_activity LIMIT 10;
 
 BigQueryは便利ですが、クエリ実行ごとにスキャン量で課金されるのがネックです。開発中は試行錯誤でクエリを何度も実行するので、コストが気になります。
 
-一方、DuckDBはローカルで動くので課金ゼロ。しかも分析クエリが爆速で、SQLiteみたいに1ファイルで完結する軽量さも魅力です。
+一方、DuckDBはローカルで動くので課金ゼロ。しかも分析クエリが高速で、SQLiteみたいに1ファイルで完結する軽量さも魅力です。
 
 使い分けはこんな感じ：
 
@@ -428,16 +428,16 @@ set -e
 source .venv/bin/activate
 export DBT_PROFILES_DIR=$(pwd)
 
-echo "📊 Step 1: Running staging models (fetch from BigQuery)..."
+echo "Step 1: Running staging models (fetch from BigQuery)..."
 dbt run --select staging
 
-echo "📈 Step 2: Running mart models (materialize in DuckDB)..."
+echo "Step 2: Running mart models (materialize in DuckDB)..."
 dbt run --select marts
 
-echo "🧪 Step 3: Running tests..."
+echo "Step 3: Running tests..."
 dbt test
 
-echo "✅ Export completed successfully!"
+echo "Export completed successfully!"
 echo "DuckDB file location: data/local_analytics.duckdb"
 ```
 
@@ -480,10 +480,10 @@ FROM main_marts.mart_user_activity;
 ## 1. 設定の一元管理
 
 ```python
-# ❌ 各ファイルにハードコード
+# 悪い例: 各ファイルにハードコード
 start_date = "2025-10-10"
 
-# ✅ dbt_project.yml で一元管理
+# 良い例: dbt_project.yml で一元管理
 start_date = var('start_date')
 ```
 
@@ -498,7 +498,7 @@ Mart: ビジネスロジックで加工
 
 ## 3. テストファースト
 
-モデルを書いたら必ずテストを追加：
+モデルを書いたらテストを追加しておくと安心です：
 
 ```yaml
 tests:
@@ -519,14 +519,9 @@ description: "2025-10-10以降に入会したユーザー"
 
 # まとめ
 
-dbt + DuckDB の組み合わせで、こんな開発環境を作ることができました：
+dbt と DuckDB を組み合わせることで、BigQueryのデータをローカルにエクスポートし、課金を気にせず何度でもクエリを実行できる開発環境を作ることができました。テストでデータ品質を保証し、設定を一元管理することで保守性も向上しています。
 
-- BigQueryのデータをローカルにエクスポート
-- 課金を気にせず何度でもクエリ実行
-- テストでデータ品質を保証
-- 設定を一元管理して保守性向上
-
-BigQueryの課金を気にせず、ローカルで自由にデータ分析できる環境はかなり便利です。ダッシュボード開発やデータ探索がはかどるようになりました。
+ローカルで自由にデータ分析できる環境はかなり便利で、ダッシュボード開発やデータ探索がはかどるようになりました。
 
 ## 参考リンク
 
