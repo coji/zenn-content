@@ -211,7 +211,7 @@ roles/serviceusage.serviceUsageConsumer ロールを付与
 **データスキャン量に対する料金**
 
 ```python
-client = bigquery.Client(project='my-project')  # ← これで決まる
+client = bigquery.Client(project='my-project')  # これで決まる
 df = client.query("SELECT * FROM users").to_dataframe()
 # → my-project プロジェクトに課金
 ```
