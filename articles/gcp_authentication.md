@@ -52,12 +52,18 @@ GCPには2つの認証方式があって、それぞれ異なる権限チェッ�
 
 | 方式 | 使用ツール | 保存場所 | 権限チェック |
 |------|-----------|---------|------------|
-| **CLI認証** | `gcloud`, `bq`, `gsutil` | `~/.config/gcloud/credentials` | 緩い |
-| **ADC** | Python SDK | `application_default_credentials.json` | 厳格 |
+| **CLI認証** | `gcloud`, `bq`, `gsutil` | `~/.config/gcloud/` 配下（例: `credentials.db`） | `gcloud config set billing/quota_project` が利用される |
+| **ADC** | Python SDK | `~/.config/gcloud/application_default_credentials.json` | `quota_project_id` が必須 |
 
 ## 解決策
 
-Pythonから gcloud の認証を使うようにします：
+まず ADC の quota project を指定して権限を揃えます：
+
+```bash
+gcloud auth application-default set-quota-project my-project
+```
+
+それでも権限差異が残る場合の一時的な回避策として、Python から gcloud のトークンを借用します：
 
 ```python
 import subprocess
@@ -143,6 +149,10 @@ $ cat ~/.config/gcloud/application_default_credentials.json
   "type": "authorized_user"
 }
 ```
+
+### Quota プロジェクトの設定
+
+ADC で利用する quota project は `gcloud auth application-default set-quota-project <PROJECT_ID>` で更新できます。これを実行するには指定したプロジェクトに対する `serviceusage.services.use` 権限（例: `roles/serviceusage.serviceUsageConsumer`）が必要です。
 
 ---
 
@@ -245,7 +255,7 @@ df = client.query("SELECT * FROM users").to_dataframe()
 bq query "SELECT * FROM table"
 ```
 
-この時、内部的にはCLI認証のトークンを使って quota_project を自動で判断するか、quota_project チェックを緩くする処理が行われます。つまり、明示的な quota_project_id 指定が不要なんです。
+CLIツールは `gcloud config get-value billing/quota_project` の設定値を quota project として送信します。設定していない場合は Google 管理プロジェクト（`764086051850`）が使われるため、実務では `gcloud config set billing/quota_project my-project` で明示的に指定しておくと安心です。
 
 ## ADCの厳格なチェック
 
@@ -257,7 +267,7 @@ client = bigquery.Client(project='my-project')
 
 ## なぜ差があるのか
 
-CLI認証は開発者が直接操作しているため信頼度が高いと判断され、チェックが緩やかです。一方、ADCはアプリケーションが自動実行するため、セキュリティチェックが厳格になっています。
+CLI認証でも quota project に対する `serviceusage.services.use` 権限が必要なのは同じです。一方 ADC では `application_default_credentials.json` の `quota_project_id` がそのまま使われるため、こちらを忘れると権限エラーが発生しやすいという違いがあります。
 
 ---
 
@@ -323,6 +333,10 @@ BigQuery Client
 ```
 
 Pythonが「CLI認証を借りている」状態になるわけです。
+
+:::message alert
+このアクセストークンは数分〜1時間程度で失効します。長時間のバッチやCI/CDでは、サービスアカウントまたは ADC + `set-quota-project` を使った認証に切り替えてください。
+:::
 
 ---
 
