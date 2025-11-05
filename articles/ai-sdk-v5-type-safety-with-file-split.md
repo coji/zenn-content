@@ -188,11 +188,29 @@ export const useChatMessages = ({
 
 v4 から v5 に移行するときに、いくつか構造が変わっているので参考までにまとめておきます。
 
-メッセージパートの構造が変わりました。v4 では `part.toolInvocation.toolName`、`part.toolInvocation.state`、`part.toolInvocation.args` のようにネストしていましたが、v5 では `part.type`、`part.state`、`part.input`、`part.output` とフラットになっています。
+### メッセージパートの構造
 
-状態名も変わっていて、v4 の `'partial-call'` と `'result'` が、v5 では `'input-streaming'`、`'input-available'`、`'output-available'` になりました。
+| 項目 | v4 | v5 |
+|------|----|----|
+| ツール名 | `part.toolInvocation.toolName` | `part.type` |
+| 状態 | `part.toolInvocation.state` | `part.state` |
+| 入力 | `part.toolInvocation.args` | `part.input` |
+| 出力 | - | `part.output` |
 
-その他にも、v4 で `part.source.url` と `part.source.title` だったものが、v5 では `part.type === 'source-url'` で判定して `part.url` と `part.title` でアクセスするようになっています。推論パートも v4 の `part.reasoning` から、v5 では `part.type === 'reasoning'` で判定して `part.text` でアクセスする形に変わりました。
+### 状態名
+
+| v4 | v5 |
+|----|-----|
+| `'partial-call'` | `'input-streaming'` |
+| - | `'input-available'` |
+| `'result'` | `'output-available'` |
+
+### その他の part type
+
+| 項目 | v4 | v5 |
+|------|----|----|
+| ソースURL | `part.source.url`<br>`part.source.title` | `part.type === 'source-url'`<br>`part.url`<br>`part.title` |
+| 推論 | `part.reasoning` | `part.type === 'reasoning'`<br>`part.text` |
 
 ## まとめ
 
