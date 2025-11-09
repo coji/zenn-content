@@ -3,7 +3,7 @@ title: "Vercel AI SDK v5のuseChatでストリーミングが途中で止まる�
 emoji: "🌊"
 type: "tech"
 topics: ["vercelaisdk", "react"]
-published: false
+published: true
 ---
 
 ## これはなに？
