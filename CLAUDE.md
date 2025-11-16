@@ -1,116 +1,84 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with this Zenn content repository.
 
 ## Project Overview
 
-This is a Zenn content repository containing Japanese technical articles and books. Zenn is a developer-focused blogging platform popular in the Japanese tech community. The repository contains markdown articles, multi-chapter books, and associated images.
+Zenn向けの技術記事・書籍を管理するリポジトリです。日本語の技術記事（articles/）と複数章で構成される書籍（books/）を含みます。
+
+### Repository Structure
+
+- `articles/` - 個別の技術記事（YAML frontmatter付きmarkdown）
+- `books/` - 複数章で構成される書籍（config.yaml + 番号付き章）
+- `images/` - 記事スラッグごとに整理された画像ファイル
+
+### Content Topics
+
+React/Remix、AI/LLM（Claude, Vercel AI SDK）、FastAPI、Prisma、PostgreSQL、Supabase、shadcn/ui、Conform、XStateなど、モダンWeb開発とAI統合が中心です。
 
 ## Common Commands
 
-### Content Management
-
 ```bash
-# Preview content locally with hot reload
+# プレビュー（ホットリロード対応）
 zenn preview
 
-# Create new article
+# 新規作成
 zenn new:article
-
-# Create new book
 zenn new:book
 
-# List all articles
-zenn list:articles
-
-# List all books  
-zenn list:books
-```
-
-### Package Management
-
-```bash
-# Install dependencies (uses pnpm)
+# パッケージ管理（pnpm使用）
 pnpm install
-
-# Check for outdated packages
 pnpm outdated
-```
 
-### Content Linting
-
-```bash
-# Run textlint on content (textlint is available as dependency)
+# textlint実行
 npx textlint articles/
 npx textlint books/
 ```
 
-## Repository Structure
+## Writing Guidelines
 
-- `articles/` - Individual blog posts in markdown format with YAML frontmatter
-- `books/` - Multi-chapter books organized with config.yaml and numbered chapters
-- `images/` - Article images organized by article slug for easy association
-- `books/conform-guide/` - 35-chapter comprehensive guide on Conform form library
+### 文体と表現
 
-## Content Architecture
+**基本スタイル**: 丁寧語（です・ます調）で、誠実で親しみやすい口調。体験を共有する形式で書く。
 
-### Articles
+- ✅ 「〜してみました」「〜できます」「〜なんですが」「〜けど」
+- ❌ 「〜してみた」「〜できる」（常体は使わない）
+- ❌ 「完全理解」「爆速」「最強」「革命的」「圧倒的」（誇張表現）
+- ❌ 「必ず」「絶対」（断定的表現）→「〜しておくと安心です」
 
-- Written in Japanese for Japanese developer audience
-- Use YAML frontmatter with title, emoji, type, topics, published status
-- Focus on modern web development, AI integration, and performance optimization
-- Include practical code examples and benchmarks
+**文章の原則**:
+- 簡潔でクリアな論旨。文章は短く明快に
+- 長い前置きを避け、すぐ本題に入る
+- 能動的な表現を優先（「〜により」→「〜で」）
+- 形式的すぎる表現を避ける（「〜について解説します」→「〜を作ってみました」）
+- 文末コロンは使わない（「以下のようになります：」→「以下のようになります。」）
 
-### Books
+### 記事構成の要素
 
-- Multi-chapter comprehensive guides
-- Each book has `config.yaml` defining structure and chapters
-- Chapters are numbered markdown files (01-introduction.md, 02-setup.md, etc.)
-- `conform-guide` is the main complete book with 35 chapters
+**最小限の使用**:
+- 箇条書き: チェックリストやまとめなど本当に必要な箇所のみ。説明は文章で
+- 表組: どうしても必要な場合のみ
+- 絵文字: frontmatterのemojiフィールドのみ。本文中は使わない
+- ソースコード: ポイント理解に必要な部分のみ抜粋。完全なコードはGitHubリンクで代替
 
-### Content Topics
+### 記事構成
 
-- React/Remix ecosystem (routing, forms, SPA development)
-- AI/LLM development (Claude, Vercel AI SDK, Gemini)
-- Backend technologies (FastAPI, Prisma, PostgreSQL, Supabase)
-- UI libraries (shadcn/ui, Conform, XState)
-- Database performance optimization
+**必須要素**:
+- 冒頭に「これはなに？」セクション: 記事内容を簡潔に説明
+- デモ/GitHubリンク: ある場合は冒頭に明記
+- コードは実際のソースと一致させる（推測で書かない）
+- 実装と検証・調査を明確に区別
 
-### Writing Style Guide
+### タイトル命名
 
-- **基本の文体**: 丁寧語（です・ます調）を必ず使用する。ただし、形式的になりすぎず、誠実で親しみやすい口調を心がける
-  - ✅ 「〜してみました」「〜できます」「〜なります」
-  - ❌ 「〜してみた」「〜できる」「〜なる」（常体は使わない）
-  - ただし、文中で自然な流れを保つため、「〜なんですが」「〜けど」などの口語的な接続は可
-- **体験ベースの語り口**: 「〜を作ってみました」「〜してみた結果です」など、実際の体験を共有する形式
-- **能動的な表現**: 「〜により」→「〜で」、受動態より能動態を優先。ただし丁寧語は保つ
-- **簡潔な構成**: 長い前置きを避け、すぐ本題に入る。各セクションの導入文は最小限に
-- **自然な日本語**: 「〜について解説します」→「〜を作ってみました」、形式的すぎる表現を避ける
-- **控えめで誠実な表現**: 大げさな表現や過度な強調を避け、技術的に正確で誠実な言葉を使う
-  - ❌ 「完全理解」「爆速」「最強」「革命的」「圧倒的」などの誇張表現
-  - ✅ 「理解する」「高速」「便利」「効果的」など控えめで正確な表現
-  - 「必ず」「絶対」などの断定的表現は避け、「〜しておくと安心です」「〜がおすすめです」など柔らかい表現を使う
-- **絵文字の使用は最低限に**: 記事タイトルのemojiフィールドのみ使用し、本文中の絵文字は効果的な場所で1-2個程度に絞る
-  - コード例のコメント内の ✅ ❌ などの絵文字は使わず、「良い例」「悪い例」などテキストで表現
-- **箇条書きは本当に必要な場所のみ**: 論理的な文章で説明することを優先し、チェックリストやまとめなど本当に必要な場所でのみ箇条書きを使う
-  - 特徴や利点の説明は文章で記述する
-  - 番号付きリストも可能な限り文章に統合する
-- **文末のコロンを避ける**: 「こんな感じです：」「以下のようになります：」などの文末コロンはAIっぽく不自然
-  - ❌ 「こんな状況でした：」「確認してみてください：」
-  - ✅ 「こんな状況でした。」「確認してみてください。」「以下のようになります。」
+**基本原則**:
+- 記事本文・見出しに登場するキーワードを使う
+- サブタイトルを積極的に設ける: 「メインタイトル ── サブタイトル」
+  - メインタイトル: 記事の主題を簡潔に
+  - サブタイトル: キャッチコピーor 3つ程度の列挙で魅力を打ち出す
 
-### Article Structure Guidelines
-
-- **冒頭に「これはなに？」セクション**: 記事の内容を簡潔に説明する導入部を設ける
-- **デモやソースコードのリンク**: 動作するデモやGitHubリポジトリがある場合は冒頭に明記
-- **コード量の適正化**: ポイントを絞って必要最小限のコードのみ掲載。冗長な例は避ける
-- **実装内容の正確性**: 記事内のコードは実際のソースコードと一致させる。推測で書かない
-- **検証記事の明確化**: 実装したものと検証・調査したものを明確に区別する
-
-## Development Notes
-
-- Content is primarily in Japanese
-- Uses Zenn CLI for content management and preview
-- Package manager is pnpm (not npm)
-- No custom build process - relies on Zenn platform for publishing
-- Images should be placed in `images/` directory organized by article slug
+**避けるべき表現**:
+- ❌ 「の話」「について」「の件」（汎用的すぎる）
+- ❌ メインとサブでキーワード重複（「AのB ── AがC」）
+- ❌ メインとサブ両方で同じ品詞の用言止め（「Aで遊ぶ ── Bを構築する」）
+- ✅ 体言止めはメインとサブ両方で使用可能
