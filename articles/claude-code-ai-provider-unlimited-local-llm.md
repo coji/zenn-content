@@ -6,6 +6,20 @@ topics: ["claude", "ai", "vercel", "typescript", "provider"]
 published: true
 ---
 
+:::message alert
+**重要：AI SDK v5との互換性について**
+
+このproviderは**Language Model Specification v1**で作られているため、**AI SDK v5では動作しません**。AI SDK v5は**Specification v2**を必須としています。
+
+このproviderを使用する場合は、**AI SDK v4**（`ai@4.x`）をインストールしてください。
+
+```bash
+npm install ai@4
+```
+
+AI SDK v5対応（Specification v2）への更新は検討中です。
+:::
+
 こんにちは、cojiです。
 
 Vercel AI SDKのcommunity providerとして、Claude Code用のproviderを作ってみました。
