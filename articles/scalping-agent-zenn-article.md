@@ -8,11 +8,15 @@ published: true
 
 # はじめに
 
-React Router v7とVercel AI SDKを使って、自律的なマルチステップAIエージェント「scalpingAgent」を作ってみました。
+:::message
+**2025-11-21 更新**: この記事は当初Vercel AI SDK v4の仕様で書かれていましたが、v5の最新仕様に合わせて全面的に書き直しました。主な変更点は`maxSteps`→`stopWhen`の変更、ツール定義の`parameters`→`inputSchema`への変更、`useChat`フックの使い方の変更などです。詳細は記事末尾の比較表をご覧ください。
+:::
+
+React Router v7とVercel AI SDK v5を使って、自律的なマルチステップAIエージェント「scalpingAgent」を作ってみました。
 
 **スキャルピング**とは、株の超短期トレードのことで、数分〜30分以内に取引を完了させるデイトレードのひとつです。今回のエージェントは、**スキャルピングで利益を上げられそうな銘柄とその要因を抽出する**ものです。
 
-このシステムの最大の特徴は、**Vercel AI SDKのstreamTextとmaxSteps機能を活用して、AIがプロンプトに基づいて自分で考え、適切なツールを選択し、5段階の研究プロセスを自律的に実行する**ところにあります。
+このシステムの最大の特徴は、**Vercel AI SDK v5の`streamText`と`stopWhen`機能を活用して、AIがプロンプトに基づいて自分で考え、適切なツールを選択し、5段階の研究プロセスを自律的に実行する**ところにあります。
 
 ## デモ動画
 
@@ -20,26 +24,41 @@ React Router v7とVercel AI SDKを使って、自律的なマルチステップA
 
 https://www.youtube.com/watch?v=SBVqcY67sus
 
-## React Router v7 × Vercel AI SDK の統合
+## React Router v7 × Vercel AI SDK v5 の統合
 
-フロントエンドでは**React Router v7のResource Route（API Route）**とVercel AI SDKの**useChat**を組み合わせています：
+フロントエンドでは**React Router v7のResource Route（API Route）**とVercel AI SDK v5の**useChat**を組み合わせています：
 
 ```typescript
 // フロントエンド（React Component）
+import { useState } from 'react'
 import { useChat } from 'ai/react'
 
 export default function ScalpingResearch() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+  const [input, setInput] = useState('')
+  const { messages, sendMessage, status } = useChat({
     api: '/autonomous/api',  // Resource Route endpoint
   })
-  
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    sendMessage({ text: input })
+    setInput('')
+  }
+
   return (
     <div>
       {messages.map(message => (
         <div key={message.id}>{message.content}</div>
       ))}
       <form onSubmit={handleSubmit}>
-        <input value={input} onChange={handleInputChange} />
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          disabled={status === 'streaming'}
+        />
+        <button type="submit" disabled={status === 'streaming'}>
+          送信
+        </button>
       </form>
     </div>
   )
@@ -57,14 +76,22 @@ export const action = async ({ request }: Route.ActionArgs) => {
 }
 ```
 
+### v5での主な変更点
+
+v5では`useChat`フックの使い方が変わりました：
+
+- **入力状態の管理**：v4では`input`と`handleInputChange`が提供されていましたが、v5では`useState`で手動管理
+- **メッセージ送信**：`append()`が`sendMessage()`に変更
+- **状態管理**：`isLoading`が`status`に変更（`'ready'` | `'streaming'` | `'submitted'` | `'error'`）
+
 この構成で、useChatが自動的にストリーミングレスポンスを処理し、AIの思考過程をリアルタイムで表示できるようになりました。
 
 ## 自律的マルチステップ実行の仕組み
 
-### Vercel AI SDKのコア設定
+### Vercel AI SDK v5のコア設定
 
 ```typescript
-import { streamText } from 'ai'
+import { streamText, stepCountIs, hasToolCall } from 'ai'
 import { google } from '@ai-sdk/google'
 
 export async function runScalpingAgent(messages: Message[]) {
@@ -72,42 +99,50 @@ export async function runScalpingAgent(messages: Message[]) {
     model: google('gemini-2.5-flash'),
     tools,                    // カスタムツール群
     toolCallStreaming: true,  // ツール実行をストリーミング
-    maxSteps: 20,            // ← ここがポイント！
+    stopWhen: [              // ← v5での推奨パターン
+      stepCountIs(20),       // 最大20ステップまで実行
+      hasToolCall('final_report')  // final_reportツールが呼ばれたら終了
+    ],
     system: systemPrompt,
     messages,
   })
 }
 ```
 
-**Vercel AI SDKの`maxSteps: 20`** の設定で、AIは最大20回まで自律的にツールを実行できるようになります。これが単純な1回限りのツール実行との大きな違いですね。
+**Vercel AI SDK v5の`stopWhen`** でAIの自律的な実行を制御します。v5では`maxSteps`パラメータが削除され、代わりに`stopWhen`を使って停止条件を定義します。
+
+- `stepCountIs(20)`：最大20ステップまで実行（無限ループ防止）
+- `hasToolCall('final_report')`：`final_report`ツールが呼ばれたら研究完了と判断して終了
+
+複数の停止条件を配列で指定でき、いずれかの条件を満たすと処理が終了します。これで5段階の研究プロセスが完了したら確実に終了するようになります。
 
 ### カスタムツールの定義
 
-Vercel AI SDKの`createTool`を使ってカスタムツールを定義しました：
+Vercel AI SDK v5の`tool`関数を使ってカスタムツールを定義しました：
 
 ```typescript
-import { createTool } from 'ai'
+import { tool } from 'ai'
 import { z } from 'zod'
 
 const tools = {
-  get_market_overview: createTool({
+  get_market_overview: tool({
     description: '市場の概況を取得（日経平均、TOPIX、USD/JPY）',
-    parameters: z.object({}),
+    inputSchema: z.object({}),
     execute: async () => {
       // Yahoo Finance APIからデータ取得
     }
   }),
-  
-  get_stock_rankings: createTool({
+
+  get_stock_rankings: tool({
     description: '株式ランキングを取得（値上がり率・出来高）',
-    parameters: z.object({
+    inputSchema: z.object({
       limit: z.number().default(20)
     }),
     execute: async ({ limit }) => {
       // ランキングデータ取得
     }
   }),
-  
+
   // analyze_stocks, evaluate_strategies, final_report...
 }
 ```
@@ -252,25 +287,38 @@ AIはこんな感じで自律的に判断していきます：
 4. **戦略の選択**
    - 「高流動性・高モメンタムの銘柄 → Livermore戦略が最適」
 
-## Vercel AI SDKの`maxSteps`が実現するマルチステップ実行
+## Vercel AI SDK v5の`stopWhen`が実現するマルチステップ実行
 
 ```typescript
-maxSteps: 20  // Vercel AI SDKの強力な機能
+import { stepCountIs, hasToolCall } from 'ai'
+
+stopWhen: [
+  stepCountIs(20),              // 最大20ステップまで自律実行
+  hasToolCall('final_report')   // final_reportツールが呼ばれたら終了
+]
 ```
 
 ### 従来のAIツール実行と何が違うのか
 
-- **従来（maxSteps: 1）**：1つのツールを実行して終了
-- **Vercel AI SDK（maxSteps: 20）**：AIが判断しながら複数のツールを連続実行
+- **v4以前（maxSteps）**：ステップ数のみで制御、柔軟性に欠ける
+- **Vercel AI SDK v5（stopWhen）**：AIが判断しながら複数のツールを連続実行し、複数の停止条件を組み合わせて確実に完了
 
-### Vercel AI SDKの利点
+### v5の`stopWhen`の利点
 
-1. **ツールチェーン**：前のツールの結果を次のツールに自動的に渡す
-2. **状態管理**：複数ステップ間での状態を自動管理
-3. **エラーハンドリング**：個別ツールの失敗を適切に処理
-4. **ストリーミング**：各ステップの進捗をリアルタイム表示
+1. **柔軟な停止条件**：`stepCountIs()`や`hasToolCall()`などのヘルパーを組み合わせられる
+2. **ツールチェーン**：前のツールの結果を次のツールに自動的に渡す
+3. **状態管理**：複数ステップ間での状態を自動管理
+4. **エラーハンドリング**：個別ツールの失敗を適切に処理
+5. **ストリーミング**：各ステップの進捗をリアルタイム表示
 
-この設定で、AIは人間の介入なしに5段階すべてを完遂できるようになります。
+### stopWhenの動作
+
+`stopWhen`の条件は、最後のステップにtool resultsが含まれる場合のみ評価されます。今回のケースでは：
+
+- `stepCountIs(20)`：無限ループを防ぐための上限
+- `hasToolCall('final_report')`：研究プロセスが完了したことを示すシグナル
+
+いずれかの条件を満たすと処理が終了します。この設定で、AIは人間の介入なしに5段階すべてを完遂できるようになります。
 
 ## 実装のポイント
 
@@ -305,18 +353,32 @@ maxSteps: 20  // Vercel AI SDKの強力な機能
 
 ## まとめ
 
-scalpingAgentを作ってみて、**Vercel AI SDKの強力な機能**をフル活用できたと感じています。
+scalpingAgentを作ってみて、**Vercel AI SDK v5の強力な機能**をフル活用できたと感じています。
 
 特にこんな点が良かったです：
 
-- **`maxSteps: 20`** で自律的なマルチステップ実行ができる
-- **`createTool`** でZodスキーマベースのツール定義が簡単
+- **`stopWhen`と`stepCountIs()`/`hasToolCall()`** で柔軟な停止条件を定義できる
+- **`tool`関数と`inputSchema`** でZodスキーマベースのツール定義が簡単
 - **`toolCallStreaming`** で進捗をリアルタイム表示できる
 - **`streamText`** で高速なレスポンスが得られる
 
-AIエージェントが人間のアナリストのように、仮説を立て、データを収集し、分析し、結論を導くプロセスを自律的に実行できるようになったのが、この実装の肺です。
+### v4からv5への主な変更点
 
-Vercel AI SDKを使うと、複雑なマルチステップAIワークフローも簡単に実装できるので、この設計パターンは他の分析タスクにも応用できそうです。
+この記事で使用しているAPI機能について、v4からの主な変更点をまとめておきます：
+
+| 項目 | v4 | v5 |
+|-----|----|----|
+| マルチステップ制御 | `maxSteps: 20` | `stopWhen: [stepCountIs(20), hasToolCall('tool')]` |
+| ツール定義 | `createTool({ parameters: z.object({}) })` | `tool({ inputSchema: z.object({}) })` |
+| useChat入力管理 | `input`, `handleInputChange` (内部管理) | `useState`で手動管理 |
+| メッセージ送信 | `append()` | `sendMessage()` |
+| 状態管理 | `isLoading` | `status` (`'ready'` \| `'streaming'` など) |
+
+v5では`maxSteps`が削除され、より柔軟な`stopWhen`に置き換わったことで、「最大ステップ数」と「特定ツールの呼び出し」など、複数の停止条件を組み合わせられるようになりました。
+
+AIエージェントが人間のアナリストのように、仮説を立て、データを収集し、分析し、結論を導くプロセスを自律的に実行できるようになったのが、この実装の肝です。
+
+Vercel AI SDK v5を使うと、複雑なマルチステップAIワークフローも簡単に実装できるので、この設計パターンは他の分析タスクにも応用できそうです。
 
 ## 実際のトレード実績
 
