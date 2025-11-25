@@ -387,7 +387,7 @@ import { ProductCard, ProductForm } from "../_shared/components"
 - [React Router v7](https://reactrouter.com/) - 本記事で前提としている framework モードのドキュメント
 - [remix-flat-routes](https://github.com/kiliman/remix-flat-routes) - Nested folders with flat-files convention の詳細
 - [ts-pattern](https://github.com/gvergnaud/ts-pattern) - 型安全なパターンマッチングライブラリ
-- TSKaigi 2025 Noritaka Ikeda氏（ROUTE06）の発表「機能的凝集の概念を用いて、複数ロール・類似機能を多く含むシステムのフロントエンドのコンポーネントを適切に分割する」
+- [TSKaigi 2025 Noritaka Ikeda氏（ROUTE06）の発表「機能的凝集の概念を用いて、複数ロール・類似機能を多く含むシステムのフロントエンドのコンポーネントを適切に分割する」](https://speakerdeck.com/noritakaikeda/ji-neng-de-ning-ji-nogai-nian-woyong-ite-fu-shu-roru-lei-si-noji-neng-woduo-kuhan-musisutemuno-hurontoendonokonponentowoshi-qie-nifen-ge-suru)
 
 また、kennさんが開発している [react-router-auto-routes](https://github.com/kenn/react-router-auto-routes) も便利です。`+` プレフィックスによるコロケーションや、フォルダベースとドット区切りを混在できる柔軟なファイル構成など、React Router v7 向けにモダンな設計がされています。
 
