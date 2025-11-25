@@ -12,7 +12,7 @@ PDFスライドをアップロードして、直したいスライドだけをAI
 
 https://www.slidecraft.work
 
-https://github.com/coji/slidecraft
+https://github.com/techtalkjp/slidecraft
 
 ## 作った背景
 
@@ -171,3 +171,7 @@ export function calculateCost(slideCount: number, resolution: '2k' | '4k'): numb
 SlideCraftを開発する中で、ブラウザの進化を実感しました。OPFSによるファイルシステム抽象化、React Router v7のクライアントサイドデータフェッチ、そしてGemini APIへの直接アクセス。これらを組み合わせることで、バックエンドなしでもリッチなAIアプリケーションが作れます。
 
 ぜひ試してみてください。質問やフィードバックがあれば、GitHubのIssueでお待ちしています。
+
+https://www.slidecraft.work
+
+https://github.com/techtalkjp/slidecraft
