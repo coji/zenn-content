@@ -2,11 +2,9 @@
 title: "機能的凝集とコロケーションで保守しやすい React Router v7 コンポーネント設計"
 emoji: "🗂️"
 type: "tech"
-topics: ["react", "reactrouter", "remix", "typescript", "frontend"]
+topics: ["react", "reactrouter", "remix", "typescript"]
 published: true
 ---
-
-# 機能的凝集とコロケーションで保守しやすい React Router v7 コンポーネント設計
 
 ## これはなに？
 
@@ -396,25 +394,36 @@ import { ProductCard, ProductForm } from "../_shared/components"
 Claude Code などの AI アシスタント向けに、本記事のガイドラインを CLAUDE.md に記載する例です。
 
 ```markdown
-## React Router v7 + remix-flat-routes Guidelines
-
-### Route Structure
-- Use colocation: `route.tsx` + `components/` + `services/` in each route directory
-- Split by role: `_buyer+/`, `_seller+/`, `_admin+/` as layout routes
-- Separate create/edit: `new+/route.tsx` and `$id+/edit+/route.tsx`
-- Use `services/queries.server.ts` for loaders, `mutations.server.ts` for actions
+## React Router v7 Component Design Guidelines
 
 ### Functional Cohesion
-- Avoid logical cohesion (role-based conditionals scattered in one component)
-- Each route should contain only features needed for that specific function
-- Buyer route: no action needed. Seller route: has stock update action
+Functional cohesion: all elements in a module work together for a single purpose.
+Logical cohesion (anti-pattern): elements grouped by category, not purpose.
+
+**Signs of logical cohesion (avoid):**
+- Role-based conditionals scattered throughout: `{role === "buyer" && ...}`
+- Same component handles create/edit/view with mode flags
+- Feature flags controlling multiple unrelated behaviors
+
+**Apply functional cohesion:**
+- Split routes by role when UI differs (buyer/seller/admin as separate routes)
+- Separate create and edit routes even if they share the same form
+- Each route contains only features needed for that specific function
+- When adding features, ask: "Does this belong to THIS function's purpose?"
+
+**Benefits:**
+- Changes to buyer features don't affect seller features
+- Code location is predictable from requirements
+- Easier onboarding: directory = feature boundary
+
+### Colocation
+- Keep related files together: route file + `components/` + `services/`
+- Use `queries.server.ts` for loaders, `mutations.server.ts` for actions
+- Data flow (loader → component → action) should stay within one directory
 
 ### Shared Code Placement
 - Same route: `components/`
-- Parent-child routes: `_shared/` in parent (excluded in routes.ts)
+- Parent-child routes: `_shared/` in parent directory
 - 3+ routes: `app/features/`
-- Don't share until used by 3+ routes
-
-### routes.ts Config
-ignoredRouteFiles: ["**/_shared/**", "**/index.ts", "**/index.tsx"]
+- Don't extract shared code until used by 3+ routes (avoid premature abstraction)
 ```
