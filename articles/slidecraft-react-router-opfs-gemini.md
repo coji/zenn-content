@@ -3,7 +3,7 @@ title: "SlideCraft - AI生成スライドを部分的に直せるツールを作
 emoji: "🎨"
 type: "tech"
 topics: ["react", "reactrouter", "gemini", "typescript", "opfs"]
-published: false
+published: true
 ---
 
 ## これはなに？
