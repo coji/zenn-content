@@ -1,8 +1,8 @@
 ---
 title: "機能的凝集とコロケーションで保守しやすい React Router v7 コンポーネント設計"
-emoji: "🗂️"
+emoji: "🧩"
 type: "tech"
-topics: ["react", "reactrouter", "remix", "typescript"]
+topics: ["react", "reactrouter", "設計", "typescript"]
 published: true
 ---
 
@@ -387,7 +387,7 @@ import { ProductCard, ProductForm } from "../_shared/components"
 - [ts-pattern](https://github.com/gvergnaud/ts-pattern) - 型安全なパターンマッチングライブラリ
 - [TSKaigi 2025 Noritaka Ikeda氏（ROUTE06）の発表「機能的凝集の概念を用いて、複数ロール・類似機能を多く含むシステムのフロントエンドのコンポーネントを適切に分割する」](https://speakerdeck.com/noritakaikeda/ji-neng-de-ning-ji-nogai-nian-woyong-ite-fu-shu-roru-lei-si-noji-neng-woduo-kuhan-musisutemuno-hurontoendonokonponentowoshi-qie-nifen-ge-suru)
 
-また、kennさんが開発している [react-router-auto-routes](https://github.com/kenn/react-router-auto-routes) も便利です。`+` プレフィックスによるコロケーションや、フォルダベースとドット区切りを混在できる柔軟なファイル構成など、React Router v7 向けにモダンな設計がされています。
+また、[kennさん](https://x.com/kenn)が開発されている [react-router-auto-routes](https://github.com/kenn/react-router-auto-routes) も便利です。`+` プレフィックスによるコロケーションや、フォルダベースとドット区切りを混在できる柔軟なファイル構成など、React Router v7 向けにモダンな設計がされています。
 
 ## 付録: CLAUDE.md 記載例
 
