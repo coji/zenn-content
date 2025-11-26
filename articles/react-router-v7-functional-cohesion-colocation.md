@@ -2,7 +2,7 @@
 title: "機能的凝集とコロケーションで保守しやすい React Router v7 コンポーネント設計"
 emoji: "🧩"
 type: "tech"
-topics: ["react", "reactrouter", "設計", "typescript"]
+topics: ["react", "reactrouter", "設計", "凝集度", "typescript"]
 published: true
 ---
 
