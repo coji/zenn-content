@@ -16,6 +16,10 @@ published: true
 - remix-flat-routes（Nested folders with flat-files convention）
 - route.tsx をエントリポイントとしたコロケーション構成
 
+本記事の内容を Notebook LM でスライド化したものも公開しています。視覚的に概要を把握したい方はこちらもどうぞ。
+
+https://www.docswell.com/s/8723156/ZLVYN9-2025-11-26-202902
+
 本記事のガイドラインを Claude Code などの AI アシスタント向けに CLAUDE.md へ記載する例を付録に用意しています。
 
 ## 凝集度とは
