@@ -22,6 +22,10 @@ https://www.docswell.com/s/8723156/ZLVYN9-2025-11-26-202902
 
 本記事のガイドラインを Claude Code などの AI アシスタント向けに CLAUDE.md へ記載する例を付録に用意しています。
 
+続編として、ルートファイル内部の凝集度を上げるリファクタリング手法を解説した記事も公開しています。
+
+https://zenn.dev/coji/articles/react-router-v7-route-component-cohesion
+
 ## 凝集度とは
 
 まず「凝集度」という言葉について簡単に説明します。凝集度とは、モジュール内の要素がどれだけ密接に関連しているかを表す指標です。高い凝集度を持つモジュールは、単一の目的に集中しているため、理解しやすく変更にも強くなります。
@@ -386,6 +390,10 @@ import { ProductCard, ProductForm } from "../_shared/components"
 - オンボーディングやバグ対応が速くなる
 
 共通化できる塊は思っているより少ないです。「似ている」からといってすぐに共通化せず、機能単位でディレクトリを分けることを優先してみてください。
+
+続編として、ルートファイル内部の凝集度を上げるリファクタリング手法を解説した記事も公開しています。
+
+https://zenn.dev/coji/articles/react-router-v7-route-component-cohesion
 
 ## 参考
 
