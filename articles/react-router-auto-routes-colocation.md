@@ -52,6 +52,8 @@ npx migrate-auto-routes
 
 Git の未コミット変更がないことを確認した上で実行すると、ファイル名やフォルダ構造を自動で変換してくれます。変換前後で `npx react-router routes` の出力を比較し、差異があれば元に戻してくれるので安心です。
 
+ただし、ドット記法とフォルダの混在（`foo.bar/route.tsx` など）では差異が出ることがあります。その場合は `app/new-routes` に変換結果が残っているので、手動で調整してください。
+
 主な違いは以下のとおりです。
 
 | 項目 | remix-flat-routes | react-router-auto-routes | 違い |
