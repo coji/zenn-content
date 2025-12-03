@@ -1,5 +1,5 @@
 ---
-title: "react-router-auto-routes で機能的凝集とコロケーションを実現する"
+title: "remix-flat-routes から react-router-auto-routes へ移行する"
 emoji: "📁"
 type: "tech"
 topics: ["react", "reactrouter", "設計", "typescript"]
@@ -8,13 +8,13 @@ published: false
 
 ## これはなに？
 
-[機能的凝集とコロケーションで保守しやすい React Router v7 コンポーネント設計](https://zenn.dev/coji/articles/react-router-v7-functional-cohesion-colocation)の実践ガイドです。
+[機能的凝集とコロケーションで保守しやすい React Router v7 コンポーネント設計](https://zenn.dev/coji/articles/react-router-v7-functional-cohesion-colocation)の続きです。
 
-元記事では remix-flat-routes を前提としていましたが、本記事では [react-router-auto-routes](https://github.com/kenn/react-router-auto-routes) を使う場合の具体的な構成を解説します。
+これまで remix-flat-routes を使っていたのですが、[react-router-auto-routes](https://github.com/kenn/react-router-auto-routes) のほうがスッキリしていて良さそうなので、乗り換えにあたって構成をまとめました。
 
 ## remix-flat-routes との違い
 
-元記事で使用していた remix-flat-routes との主な違いを表にまとめます。
+主な違いは以下のとおりです。
 
 | 項目 | remix-flat-routes | react-router-auto-routes |
 |------|-------------------|-------------------------|
@@ -24,6 +24,14 @@ published: false
 | コロケーション | `$id+/` (サフィックス) | `+/`, `+components/` (プレフィックス) |
 | 除外設定 | `routes.ts` で `ignoredRouteFiles` 指定 | 不要（`+` プレフィックスで自動除外） |
 | 共有フォルダ | `_shared/` + 除外設定 | `+_shared/`（自動除外） |
+
+移行は CLI ツールでできます。
+
+```bash
+npx migrate-auto-routes
+```
+
+Git の未コミット変更がないことを確認した上で実行すると、ファイル名やフォルダ構造を自動で変換してくれます。変換前後で `npx react-router routes` の出力を比較し、差異があれば元に戻してくれるので安心です。
 
 ## react-router-auto-routes の特徴
 
@@ -180,3 +188,5 @@ react-router-auto-routes を使うと、以下のパターンで機能的凝集�
 
 - [react-router-auto-routes](https://github.com/kenn/react-router-auto-routes)
 - [機能的凝集とコロケーションで保守しやすい React Router v7 コンポーネント設計](https://zenn.dev/coji/articles/react-router-v7-functional-cohesion-colocation)
+
+本記事では基本的な構成パターンに絞りました。オプショナルセグメント `(segment)`、スプラットルート `$.tsx`、リテラルドットのエスケープ `[.]`、モノレポ対応など、詳細な命名規則は README を参照してください。
