@@ -19,7 +19,7 @@ published: false
 | 項目 | remix-flat-routes | react-router-auto-routes |
 |------|-------------------|-------------------------|
 | ルートエントリ | `route.tsx` | `index.tsx` |
-| レイアウト | 親フォルダの `route.tsx` | `_layout.tsx` |
+| レイアウト | 親フォルダの `route.tsx` または同フォルダの `_layout.tsx` | `_layout.tsx` |
 | pathless layout | `_auth+/` (サフィックス) | `_auth/` (プレフィックスのみ) |
 | コロケーション | `$id+/` (サフィックス) | `+/`, `+components/` (プレフィックス) |
 | 除外設定 | `routes.ts` で `ignoredRouteFiles` 指定 | 不要（`+` プレフィックスで自動除外） |
