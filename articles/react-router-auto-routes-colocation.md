@@ -199,7 +199,9 @@ react-router-auto-routes を使うと、以下のパターンで機能的凝集�
 - **pathless layout**: `_` プレフィックスのフォルダ
 - **親子共有**: `+_shared/` フォルダ
 
-詳細な設計思想については[元記事](https://zenn.dev/coji/articles/react-router-v7-functional-cohesion-colocation)を参照してください。
+詳細な設計思想については元記事を参照してください。
+
+https://zenn.dev/coji/articles/react-router-v7-functional-cohesion-colocation
 
 ## 参考
 
