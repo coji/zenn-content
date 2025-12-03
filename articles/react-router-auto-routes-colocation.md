@@ -43,6 +43,14 @@ app/routes/
 │               └── product-info.tsx
 ```
 
+移行は CLI ツールでできます。
+
+```bash
+npx migrate-auto-routes
+```
+
+Git の未コミット変更がないことを確認した上で実行すると、ファイル名やフォルダ構造を自動で変換してくれます。変換前後で `npx react-router routes` の出力を比較し、差異があれば元に戻してくれるので安心です。
+
 主な違いは以下のとおりです。
 
 | 項目 | remix-flat-routes | react-router-auto-routes | 違い |
@@ -57,14 +65,6 @@ app/routes/
 | コロケーション | `$id+/`（サフィックス） | `+/`（プレフィックス） | 位置が逆 |
 | 除外設定 | `routes.ts` で `ignoredRouteFiles` 指定 | 不要（`+` プレフィックスで自動除外） | 設定不要に |
 | 共有フォルダ | `_shared/` + 除外設定 | `+_shared/`（自動除外） | 設定不要に |
-
-移行は CLI ツールでできます。
-
-```bash
-npx migrate-auto-routes
-```
-
-Git の未コミット変更がないことを確認した上で実行すると、ファイル名やフォルダ構造を自動で変換してくれます。変換前後で `npx react-router routes` の出力を比較し、差異があれば元に戻してくれるので安心です。
 
 ## ディレクトリ構成
 
