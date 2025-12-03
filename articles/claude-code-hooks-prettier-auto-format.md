@@ -17,8 +17,8 @@ Claude Code がファイルを編集するたびに prettier を自動実行す�
 ````text
 Claude Code の Hooks でファイル編集後に prettier を自動実行する設定をして。
 
-1. cc-hooks-ts をインストール
-pnpm add -D cc-hooks-ts
+1. cc-hooks-ts と ts-pattern をインストール（ts-pattern が既にあればスキップ）
+pnpm add -D cc-hooks-ts ts-pattern
 
 2. .claude/hooks/format-on-edit.ts を作成
 ```typescript
