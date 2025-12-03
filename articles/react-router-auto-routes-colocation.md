@@ -10,7 +10,9 @@ published: false
 
 [機能的凝集とコロケーションで保守しやすい React Router v7 コンポーネント設計](https://zenn.dev/coji/articles/react-router-v7-functional-cohesion-colocation)の続きです。
 
-これまで remix-flat-routes を使っていたのですが、[react-router-auto-routes](https://github.com/kenn/react-router-auto-routes) のほうがスッキリしていて良さそうなので、乗り換えにあたって構成をまとめました。
+これまで remix-flat-routes を使っていたのですが、のほうがスッキリしていて良さそうなので、乗り換えにあたって構成をまとめました。
+
+https://github.com/kenn/react-router-auto-routes
 
 スッキリしている理由は、コロケーション用の `+` がサフィックスではなくプレフィックスになっていること、そして除外設定が不要なことです。`routes.ts` も `autoRoutes()` を呼ぶだけで済みます。
 
