@@ -46,6 +46,7 @@ app/routes/
 移行は CLI ツールでできます。
 
 ```bash
+npm install -D react-router-auto-routes
 npx migrate-auto-routes
 ```
 
