@@ -3,7 +3,7 @@ title: "Serena MCP でブラウザが勝手に開くのを止める - 設定フ�
 emoji: "🛠"
 type: "tech"
 topics: ["mcp", "serena", "claudecode"]
-published: false
+published: true
 ---
 
 ## これはなに？
