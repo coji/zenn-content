@@ -46,6 +46,12 @@ web_dashboard_open_on_launch: false
 
 設定ファイルに1行追加するだけで、タブが増え続ける問題は解消されました。
 
+## 別の方法
+
+この記事を公開したあと、起動オプションで `--enable-web-dashboard` を `false` にする方法を教えていただきました。MCP サーバーの設定で起動引数を指定できる場合は、こちらの方法でも解決できます。
+
+https://x.com/ushiro_noko/status/1996537621238128716
+
 ## 参考
 
 - [The Dashboard and GUI Tool — Serena Documentation](https://oraios.github.io/serena/02-usage/060_dashboard.html)
