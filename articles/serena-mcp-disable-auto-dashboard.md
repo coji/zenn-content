@@ -15,7 +15,9 @@ Claude Code で Serena MCP を使っていると、起動するたびにブラ�
 以下のプロンプトを Claude Code に貼り付ければ、設定を自動で行ってくれます。
 
 ```text
-~/.serena/serena_config.yml を開いて、web_dashboard_open_on_launch: false を追加して。ファイルがなければ作成して。
+~/.serena/serena_config.yml を開いて、
+web_dashboard_open_on_launch: false を追加して。
+ファイルがなければ作成して。
 ```
 
 これだけで完了です。以下は手動で設定したい場合や、何が起きているか知りたい場合の説明です。
