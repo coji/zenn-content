@@ -3,12 +3,12 @@ title: 'Cloudflare Workers + Turso で動画広告配信システムを作って
 emoji: '📺'
 type: 'tech'
 topics: ['cloudflare', 'turso', 'hono', 'betterauth', 'typescript']
-published: false
+published: true
 ---
 
 ## これはなに？
 
-動画・音声広告を配信するアドネットワークを OSS としてフルスクラッチで構築してみました。技術スタックの選定理由と実装のポイントを共有します。
+趣味で動画・音声広告を配信するアドネットワークを OSS としてフルスクラッチで構築してみました。技術スタックの選定理由と実装のポイントを共有します。
 
 https://github.com/coji/video-ad-network
 
