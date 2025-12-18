@@ -2,7 +2,7 @@
 title: 'Cloudflare Workers + Turso で動画広告配信システムを作ってみた - VAST準拠、エッジで動くOSS'
 emoji: '📺'
 type: 'tech'
-topics: ['cloudflare', 'turso', 'hono', 'betterauth', 'typescript']
+topics: ['cloudflare', 'turso', 'hono', 'betterauth', 'reactrouter']
 published: true
 ---
 
