@@ -59,13 +59,9 @@ Prisma の libsql アダプターは `url` と `authToken` を別引数で受け
 
 Prisma Client は型安全で便利なのですが、生成されるコードが巨大です。今回のプロジェクトでは約 11,000 行のコードが生成されていました。これがビルド時間に影響しますし、エディタの補完も重くなります。
 
-### better-auth との相性問題
+### 設定の複雑さ
 
-better-auth が snake_case（`email_verified`）で SQL を発行するのに、Prisma Client は camelCase（`emailVerified`）を使います。`@map` でカラム名を変換しているのですが、better-auth はそれを知りません。`fields` マッピングの方向を間違えて何度もエラーを見ました。
-
-```text
-table user has no column named emailVerified
-```
+Prisma 7 では設定ファイルの構成が大きく変わり、`prisma.config.ts` の書き方やアダプターの使い分けなど、把握すべきことが増えました。ドキュメントを何度も行き来しながら設定を調整する必要があり、正直なところ疲弊しました。
 
 ### パフォーマンス問題
 
