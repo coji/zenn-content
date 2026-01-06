@@ -382,9 +382,7 @@ function Header(this: Handle) {
 }
 ```
 
-値の変更を購読したい場合は、`EventTarget` を継承したクラスを Context に設定します。
-
-ここで使っている `this.on(target, { eventName: handler })` は `target.addEventListener(eventName, handler)` のラッパーで、コンポーネント削除時に自動でリスナーを解除してくれます。`EventTarget` を継承したクラスは `addEventListener` を持つため、`this.on()` の第1引数として渡せます。つまり `document` や `window` だけでなく、`EventTarget` を継承した任意のオブジェクトに対してイベント購読ができる汎用的な仕組みです。
+値の変更を購読したい場合は、`EventTarget` を継承したクラスを Context に設定します。以下はダークモードを実装する例です。
 
 ```tsx
 class Theme extends EventTarget {
@@ -415,15 +413,17 @@ function ThemedContent(this: Handle) {
 }
 ```
 
+`this.on(target, { eventName: handler })` は `target.addEventListener(eventName, handler)` のラッパーで、コンポーネント削除時に自動でリスナーを解除してくれます。`EventTarget` を継承したクラスは `addEventListener` を持つため、`this.on()` の第1引数として渡せます。つまり `document` や `window` だけでなく、`EventTarget` を継承した任意のオブジェクトに対してイベント購読ができる汎用的な仕組みです。
+
 ## Web 標準 API の活用
 
 @remix-run/component の特徴として、Web 標準 API を積極的に活用している点が挙げられます。React が独自の抽象化（合成イベント、Hooks など）を作ったのに対し、こちらは「すでにブラウザにある機能をそのまま使う」というアプローチです。
 
 | 機能 | Web 標準 API | 用途 |
 | --- | --- | --- |
-| イベント購読 | `EventTarget` | Context の変更通知、カスタムイベント |
-| ライフサイクル管理 | `AbortSignal` / `AbortController` | コンポーネント削除時のクリーンアップ |
-| イベント発火 | `Event` | `dispatchEvent(new Event('change'))` |
+| イベント購読 | [`EventTarget`](https://developer.mozilla.org/ja/docs/Web/API/EventTarget) | Context の変更通知、カスタムイベント |
+| ライフサイクル管理 | [`AbortSignal`](https://developer.mozilla.org/ja/docs/Web/API/AbortSignal) / [`AbortController`](https://developer.mozilla.org/ja/docs/Web/API/AbortController) | コンポーネント削除時のクリーンアップ |
+| イベント発火 | [`Event`](https://developer.mozilla.org/ja/docs/Web/API/Event) | `dispatchEvent(new Event('change'))` |
 
 この設計思想は Remix 本体とも一貫しています。Remix は Web Fetch API、FormData、Request/Response など Web 標準を重視しており、@remix-run/component もその延長線上にあります。
 
