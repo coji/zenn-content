@@ -12,10 +12,6 @@ published: true
 この記事で紹介する `@remix-run/component` は開発中のライブラリです。仕様は今後変更される可能性が高いです。
 :::
 
-2025年1月14日(水) 19:00 から「Offers フロントエンドカンファレンス」で、この記事の内容について LT とディスカッションをします。興味がある方はぜひご覧ください。
-
-https://offers-jp.connpass.com/event/378636/
-
 Remix チームが開発中の `@remix-run/component` を試してみました。React とは異なるコンポーネントモデルで、タスク管理アプリを作りながら違いを理解したのでまとめます。
 
 https://github.com/coji/remix-task-manager
@@ -416,3 +412,9 @@ function Header(this: Handle) {
 @remix-run/component を試してみました。React とは異なるアプローチで、クロージャベースの状態管理と Web 標準 API（`AbortSignal`、`EventTarget`）を中心としたクリーンアップ・イベント機構が特徴です。Hooks のルールを覚える必要がない一方で、props の受け取り方など独自の注意点があります。
 
 現時点での制限として、SSR 未対応、async コンポーネント未対応、エコシステムが未成熟という点があります。React からの移行を考えるというより、Remix チームが提案する新しいコンポーネントモデルとして今後の発展を見守る段階です。
+
+## 告知
+
+2025年1月14日(水) 19:00 から「Offers フロントエンドカンファレンス」で、この記事の内容について LT とディスカッションをします。興味がある方はぜひご覧ください。
+
+https://offers-jp.connpass.com/event/378636/
