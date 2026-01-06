@@ -12,6 +12,10 @@ published: true
 この記事で紹介する `@remix-run/component` は開発中のライブラリです。仕様は今後変更される可能性が高いです。
 :::
 
+2025年1月14日(水) 19:00 から「Offers フロントエンドカンファレンス」で、この記事の内容について LT とディスカッションをします。興味がある方はぜひご覧ください。
+
+https://offers-jp.connpass.com/event/378636/
+
 Remix チームが開発中の `@remix-run/component` を試してみました。React とは異なるコンポーネントモデルで、タスク管理アプリを作りながら違いを理解したのでまとめます。
 
 https://github.com/coji/remix-task-manager
@@ -254,7 +258,7 @@ createRoot(document.getElementById('root')!).render(<App />)
 
 ### TaskInput コンポーネント
 
-ローカル状態を持つコンポーネントです。`onAdd` はコールバック関数なので初期化時に受け取っています。
+`connect` prop で DOM 要素への参照を取得し、直接値を操作しています。`onAdd` はコールバック関数なので初期化時に受け取っています。
 
 ```tsx
 import type { Handle } from '@remix-run/component'
@@ -264,27 +268,25 @@ interface Props {
 }
 
 export default function TaskInput(this: Handle, { onAdd }: Props) {
-  let value = ''
+  let inputEl: HTMLInputElement | null = null
 
   const handleSubmit = () => {
-    if (value.trim()) {
-      onAdd(value.trim())
-      value = ''
-      this.update()
+    if (inputEl?.value.trim()) {
+      onAdd(inputEl.value.trim())
+      inputEl.value = ''
     }
   }
 
   return () => (
     <div class="flex gap-2">
       <input
+        connect={(el: HTMLInputElement) => {
+          inputEl = el
+        }}
         type="text"
-        value={value}
         on={{
-          input: (e: Event) => {
-            value = (e.target as HTMLInputElement).value
-          },
           keydown: (e: KeyboardEvent) => {
-            if (e.key === 'Enter') handleSubmit()
+            if (e.key === 'Enter' && !e.isComposing) handleSubmit()
           },
         }}
       />
