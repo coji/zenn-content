@@ -382,6 +382,39 @@ function Header(this: Handle) {
 }
 ```
 
+値の変更を購読したい場合は、`EventTarget` を継承したクラスを Context に設定します。
+
+ここで使っている `this.on(target, { eventName: handler })` は `target.addEventListener(eventName, handler)` のラッパーで、コンポーネント削除時に自動でリスナーを解除してくれます。`EventTarget` を継承したクラスは `addEventListener` を持つため、`this.on()` の第1引数として渡せます。つまり `document` や `window` だけでなく、`EventTarget` を継承した任意のオブジェクトに対してイベント購読ができる汎用的な仕組みです。
+
+```tsx
+class Theme extends EventTarget {
+  value = 'light'
+  toggle() {
+    this.value = this.value === 'light' ? 'dark' : 'light'
+    this.dispatchEvent(new Event('change'))
+  }
+}
+
+function App(this: Handle<Theme>) {
+  const theme = new Theme()
+  this.context.set(theme)
+  return () => <ThemedContent />
+}
+
+function ThemedContent(this: Handle) {
+  const theme = this.context.get(App)
+
+  // 変更を購読
+  this.on(theme, { change: () => this.update() })
+
+  return () => (
+    <div css={{ backgroundColor: theme.value === 'dark' ? '#000' : '#fff' }}>
+      Current theme: {theme.value}
+    </div>
+  )
+}
+```
+
 ## Web 標準 API の活用
 
 @remix-run/component の特徴として、Web 標準 API を積極的に活用している点が挙げられます。React が独自の抽象化（合成イベント、Hooks など）を作ったのに対し、こちらは「すでにブラウザにある機能をそのまま使う」というアプローチです。
