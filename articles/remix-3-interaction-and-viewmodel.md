@@ -518,9 +518,19 @@ EventTarget ベースの ViewModel は React でもそのまま使えます。`u
 
 今回の TaskViewModel では単純な `change` イベントだけを使いましたが、より複雑なドメインモデルでは、セマンティックなイベントを定義することもできます。
 
+`@remix-run/interaction` には `TypedEventTarget` というヘルパーがあり、型安全なイベント定義ができます。
+
 ```tsx
+import { TypedEventTarget } from '@remix-run/interaction'
+
+// イベントの型を定義
+type ReservationEvents = {
+  'reservation:confirmed': CustomEvent<{ id: string; confirmedAt: Date }>
+  'reservation:cancelled': CustomEvent<{ id: string; reason: string }>
+}
+
 // 予約システムの例
-class ReservationViewModel extends EventTarget {
+class ReservationViewModel extends TypedEventTarget<ReservationEvents> {
   confirm(id: string) {
     // 確定処理
     this.dispatchEvent(new CustomEvent('reservation:confirmed', {
@@ -536,13 +546,13 @@ class ReservationViewModel extends EventTarget {
   }
 }
 
-// 購読側
+// 購読側 - addEventListener の型が効く
 vm.addEventListener('reservation:confirmed', (e) => {
-  // 確定時の処理（通知、ログ、分析など）
+  console.log(e.detail.id, e.detail.confirmedAt)  // 型補完が効く
 })
 ```
 
-EventTarget と CustomEvent は Web 標準 API なので、React でも Remix でも、あるいは将来別のフレームワークが出てきても同じように使えます。ドメインロジックがフレームワークに依存しないというのは、こういうことです。
+`TypedEventTarget` も `EventTarget` も Web 標準 API（またはそれを拡張したもの）なので、React でも Remix でも、あるいは将来別のフレームワークが出てきても同じように使えます。ドメインロジックがフレームワークに依存しないというのは、こういうことです。
 
 タスク管理アプリでここまでやるのはオーバーテクノロジーですが、予約システムや決済フローのような複雑なドメインでは、こうしたセマンティックなイベント設計が活きてきます。
 
