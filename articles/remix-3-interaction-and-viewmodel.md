@@ -514,6 +514,8 @@ EventTarget ベースの ViewModel は React でもそのまま使えます。`u
 
 ## 将来の展望
 
+ここでは、ドメインイベントの拡張、API バックエンドとの結合、モバイルへの可能性について考えてみます。
+
 ### ドメインイベントの拡張
 
 今回の TaskViewModel では単純な `change` イベントだけを使いましたが、より複雑なドメインモデルでは、セマンティックなイベントを定義することもできます。
@@ -597,6 +599,8 @@ export class TaskViewModel extends EventTarget {
 ビジネスロジックを純粋な TypeScript（EventTarget 継承の ViewModel）で実装しておけば、将来「Remix Native」のようなモバイル向けフレームワークを作ることもできるのでは？そうなれば同一のロジックを Web とモバイルで共有できたりするのでは？と妄想しています。
 
 ## React と比べて
+
+ここでは class への抵抗感、AI によるコード生成、そしてフレームワーク依存について考えます。
 
 正直なところ、自分も当面は `@remix-run/component` を仕事で使う予定はありません。React Router v7 を使うつもりです。
 
