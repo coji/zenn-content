@@ -12,6 +12,10 @@ published: true
 この記事で紹介する `@remix-run/component` は開発中のライブラリです。仕様は今後変更される可能性が高いです。
 :::
 
+:::message
+続編を書きました。[Remix 3 続編 - セマンティックイベントと ViewModel でフレームワーク依存を減らす](https://zenn.dev/coji/articles/remix-3-interaction-and-viewmodel)
+:::
+
 Remix チームが開発中の `@remix-run/component` を試してみました。React とは異なるコンポーネントモデルで、タスク管理アプリを作りながら違いを理解したのでまとめます。
 
 https://github.com/coji/remix-task-manager
