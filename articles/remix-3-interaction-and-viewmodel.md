@@ -484,6 +484,34 @@ ViewModel は純粋な TypeScript なので vitest でテストできます。�
 
 一休の記事が目指している「フレームワーク依存の最小化」は、`@remix-run/component` + ViewModel パターンで自然に実現できます。
 
+### React で同じ ViewModel を使うなら
+
+ちなみに、今回作った `TaskViewModel` を React で使うとしたらこうなります。
+
+```tsx
+import { useSyncExternalStore } from 'react'
+import { TaskViewModel } from './stores/TaskViewModel'
+
+const vm = new TaskViewModel()
+
+function useTaskViewModel() {
+  return useSyncExternalStore(
+    (callback) => {
+      vm.addEventListener('change', callback)
+      return () => vm.removeEventListener('change', callback)
+    },
+    () => vm
+  )
+}
+
+function App() {
+  const vm = useTaskViewModel()
+  return <TaskList tasks={vm.filteredTasks} />
+}
+```
+
+EventTarget ベースの ViewModel は React でもそのまま使えます。`useSyncExternalStore` がアダプター役になるだけで、ロジック自体は共通です。まさに一休方式ですね。
+
 ## 将来の展望
 
 ### カスタムインタラクション
