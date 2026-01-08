@@ -514,17 +514,37 @@ EventTarget ベースの ViewModel は React でもそのまま使えます。`u
 
 ## 将来の展望
 
-### カスタムインタラクション
+### ドメインイベントの拡張
 
-`defineInteraction` で独自のインタラクションを定義できます。
+今回の TaskViewModel では単純な `change` イベントだけを使いましたが、より複雑なドメインモデルでは、セマンティックなイベントを定義することもできます。
 
 ```tsx
-import { defineInteraction, type Interaction } from '@remix-run/interaction'
+// 予約システムの例
+class ReservationViewModel extends EventTarget {
+  confirm(id: string) {
+    // 確定処理
+    this.dispatchEvent(new CustomEvent('reservation:confirmed', {
+      detail: { id, confirmedAt: new Date() }
+    }))
+  }
 
-const doubleClick = defineInteraction('rmx:double-click', function(this: Interaction) {
-  // 実装
+  cancel(id: string, reason: string) {
+    // キャンセル処理
+    this.dispatchEvent(new CustomEvent('reservation:cancelled', {
+      detail: { id, reason }
+    }))
+  }
+}
+
+// 購読側
+vm.addEventListener('reservation:confirmed', (e) => {
+  // 確定時の処理（通知、ログ、分析など）
 })
 ```
+
+EventTarget と CustomEvent は Web 標準 API なので、React でも Remix でも、あるいは将来別のフレームワークが出てきても同じように使えます。ドメインロジックがフレームワークに依存しないというのは、こういうことです。
+
+タスク管理アプリでここまでやるのはオーバーテクノロジーですが、予約システムや決済フローのような複雑なドメインでは、こうしたセマンティックなイベント設計が活きてきます。
 
 ### API バックエンドとの結合
 
