@@ -368,6 +368,46 @@ Generatorを使うことで、状態を内包しつつ外部から `next(timesta
 
 これを `requestAnimationFrame` と組み合わせることで、フレームごとに正確なタイミングでアニメーション値を取得できます。
 
+### key属性とアニメーションの深い関係
+
+ソースコードを読んでいて面白い実装を見つけたので紹介します。
+
+`key` 属性は単なる差分検出の最適化ではなく、**enter/exitアニメーションの発火条件**に直結しています。
+
+```tsx
+// keyなし: 同じ位置の要素は「更新」扱い
+{cond ? <span>🌙</span> : <span>☀️</span>}
+// → DOMが書き換わるだけ、アニメーションなし
+
+// keyあり: 別の要素として認識
+{cond ? <span key="moon">🌙</span> : <span key="sun">☀️</span>}
+// → moon が exit、sun が enter アニメーション発火
+```
+
+内部では、keyed diffアルゴリズムが以下の流れで動作します。
+
+1. **新旧の子要素を比較** - `Map<key, index>` で O(1) マッチング
+2. **マッチしない要素を検出** - 削除対象は `exitingNodes` に追加
+3. **exitアニメーション開始** - Web Animations API で実行
+4. **アニメーション完了後にDOM削除** - `animation.finished` で待機
+
+さらに賢いのは、**exit中に同じkeyの要素が戻ってきた場合の処理**です。
+
+```typescript
+// ライブラリ内部の実装（vdom.ts より）
+function reclaimExitingNode(exitingNode, newNode, ...) {
+  let animation = exitingNode._animation
+  if (animation && animation.playState === 'running') {
+    animation.reverse()  // アニメーションを逆再生！
+  }
+  // ...DOMを再利用
+}
+```
+
+例えば、テーマ切り替えボタンを連打した場合を考えてみます。🌙 が exit 開始してフェードアウト中（opacity: 1 → 0）に、すぐにテーマを戻すと 🌙 が再度必要になります。このとき `findMatchingExitingNode()` で exit中の 🌙 を発見し、`animation.reverse()` で逆再生（フェードイン）してDOMを再利用します。
+
+これも [Web Animations API の `reverse()`](https://developer.mozilla.org/ja/docs/Web/API/Animation/reverse) をそのまま活用しています。新しいDOMを作り直すのではなく、進行中のアニメーションを巻き戻すことで、より自然な遷移を実現しているのが面白いですね。
+
 ---
 
 ## まとめ
