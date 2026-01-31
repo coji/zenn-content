@@ -16,7 +16,9 @@ published: true
 
 公式ドキュメントは [@remix-run/component の README](https://github.com/remix-run/remix/tree/main/packages/component) を参照してください。
 
-https://github.com/coji/remix-task-manager
+今回のデモはこちらで触れます。
+
+https://remix-task-manager-eight.vercel.app/
 
 ![タスク追加のデモ](/images/remix-3-component-animation-api/01-task-add.gif)
 
@@ -417,3 +419,5 @@ Remix v3.0.0-alpha.2 のアニメーションAPIは、宣言的な `animate`、�
 すべてのAPIがWeb標準（Web Animations API、CSS Transitions、requestAnimationFrame）の上に構築されているため、軽量で高速に動作し、既存のWeb知識がそのまま活かせます。ブラウザのDevToolsでそのまま確認できるのも開発体験として優れています。
 
 特に `animate` の `layout` オプションと `spring` の組み合わせは、少ないコードでリッチなUIを実現できるので試してみてください。
+
+https://github.com/coji/remix-task-manager
