@@ -18,6 +18,39 @@ https://coji.github.io/durably/
 
 https://github.com/coji/durably
 
+# Durably のジョブはこう書く
+
+内部構造の話に入る前に、Durably のジョブがどんなものか見ておきます。
+
+```typescript
+const translateArticlesJob = defineJob({
+  name: 'translate-articles',
+  input: z.object({ articleIds: z.array(z.string()) }),
+  run: async (step, input) => {
+    // ステップ1: 記事一覧を取得
+    const articles = await step.run('fetch-articles', async (signal) => {
+      return await db.getArticles(input.articleIds)
+    })
+
+    // ステップ2〜N: 各記事をLLMで翻訳
+    for (const article of articles) {
+      await step.run(`translate-${article.id}`, async (signal) => {
+        const translated = await llm.translate(article.body, { signal })
+        await db.saveTranslation(article.id, translated)
+      })
+    }
+
+    return { translatedCount: articles.length }
+  },
+})
+```
+
+`step.run()` で囲んだ処理がステップです。各ステップの戻り値はデータベースに永続化されます。コールバックには `AbortSignal` が渡されるので、`durably.cancel()` でジョブをキャンセルしたときに長時間の LLM 呼び出しを中断できます。
+
+たとえば200件の記事を翻訳していて150件目でプロセスが落ちても、再起動後にジョブが再実行されたとき、完了済みの149件はキャッシュから即座にスキップし、150件目から再開します。LLM API への二重リクエストは発生しません。
+
+この「ステップ単位の再開」を実現するために、内部でどんな仕組みが動いているのか。そこがこの記事の本題です。
+
 # 全体像
 
 Durably のコアは約10ファイル、2000行程度のTypeScriptで構成されています。
