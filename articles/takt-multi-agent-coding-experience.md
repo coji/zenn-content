@@ -17,7 +17,7 @@ https://github.com/coji/durably/pull/151
 
 takt は複数の AI コーディングエージェントを順番に動かすためのツールです。「仕様レビュー → 実装 → テスト確認」のような一連の流れを YAML で定義しておくと、各工程を異なる AI エージェントに自動で割り振って実行してくれます。
 
-https://github.com/dai-shi/takt
+https://github.com/nrslib/takt
 
 takt ではこの一連の流れを「ピース」、各工程を「ムーブメント」と呼びます。工程ごとに Cursor、Codex CLI、Claude Code など好きなエージェントを指定できるのが特徴です。
 
