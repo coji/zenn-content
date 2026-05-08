@@ -3,7 +3,7 @@ title: "Lightdash の BI データを Claude Code から触りたい ― エー�
 emoji: "📊"
 type: "tech"
 topics: ["lightdash", "claudecode", "cli", "ai", "typescript"]
-published: false
+published: true
 ---
 
 ## これはなに？
