@@ -332,7 +332,7 @@ spring.transition = (properties, preset) => {
 }
 ```
 
-真のスプリング物理シミュレーションではなくベジェ曲線近似ですが、CSSネイティブで動作するため非常に軽量です。
+厳密には物理シミュレーションではなく、あくまでベジェ曲線による近似です。CSSネイティブで動作する分、動作は非常に軽量です。
 
 ### tween の仕組み
 
@@ -374,7 +374,7 @@ Generatorを使うことで、状態を内包しつつ外部から `next(timesta
 
 ソースコードを読んでいて面白い実装を見つけたので紹介します。
 
-`key` 属性は単なる差分検出の最適化ではなく、**enter/exitアニメーションの発火条件**に直結しています。
+`key` 属性は差分検出の最適化にとどまらず、**enter/exitアニメーションの発火条件**そのものを左右します。
 
 ```tsx
 // keyなし: 同じ位置の要素は「更新」扱い
@@ -408,7 +408,7 @@ function reclaimExitingNode(exitingNode, newNode, ...) {
 
 例えば、テーマ切り替えボタンを連打した場合を考えてみます。🌙 が exit 開始してフェードアウト中（opacity: 1 → 0）に、すぐにテーマを戻すと 🌙 が再度必要になります。このとき `findMatchingExitingNode()` で exit中の 🌙 を発見し、`animation.reverse()` で逆再生（フェードイン）してDOMを再利用します。
 
-これも [Web Animations API の `reverse()`](https://developer.mozilla.org/ja/docs/Web/API/Animation/reverse) をそのまま活用しています。新しいDOMを作り直すのではなく、進行中のアニメーションを巻き戻すことで、より自然な遷移を実現しているのが面白いですね。
+これも [Web Animations API の `reverse()`](https://developer.mozilla.org/ja/docs/Web/API/Animation/reverse) をそのまま活用しています。新しいDOMを作り直す代わりに進行中のアニメーションを巻き戻すことで、より自然な遷移を実現しているのが面白いですね。
 
 ---
 
