@@ -10,9 +10,7 @@ published: false
 
 AIエージェントを使って架空の音楽レーベル「TECHTALK RECORDS」を運営し、約5ヶ月で18曲の1stアルバム『Claude Code vs. Codex』を作ってリリースしました。リリースといっても公式サイトと YouTube での公開のことで、Spotify などのストア配信は執筆時点では配信業者の審査待ちです。Claude Code と Codex という2人の架空の日本語ラッパーが、dissの応酬から始まってコラボで終わる、というコンセプトアルバムです。
 
-- 公式サイト: https://records.techtalk.jp （アルバムページで全曲再生できます）
-- YouTube プレイリスト: https://www.youtube.com/playlist?list=PLUCAAD9Tr1zwA_6KE3UNTKZu8XheeW6IG
-- リポジトリ（公開）: https://github.com/techtalkjp/records
+https://records.techtalk.jp/albums/claude-code-vs-codex/
 
 制作範囲は、歌詞・音源・カバーアート・PV・リリックビデオ・公式サイト・配信手配までです。分担としては、企画の方向づけ・採否の判断・フィードバック・Suno の操作が人間（私）で、調査・歌詞・画像や動画の生成・サイト実装・各種変換作業がエージェント側でした。この記事では、Claude Code を軸に Suno・Gemini・Veo・Grok・Whisper・Cloudflare を繋いだ制作フローと、5ヶ月分の失敗と学びを書きます。
 
