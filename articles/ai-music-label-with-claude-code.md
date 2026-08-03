@@ -1,8 +1,8 @@
 ---
 title: "AIエージェントで音楽レーベルを運営する - Claude CodeとSuno・Gemini・Veoで18曲のアルバムを作った5ヶ月の記録"
 emoji: "🎤"
-type: "idea"
-topics: ["claudecode", "suno", "gemini", "生成ai", "ai"]
+type: "tech"
+topics: ["claudecode", "codex", "suno", "gemini"]
 published: false
 ---
 
@@ -67,6 +67,21 @@ https://records.techtalk.jp/albums/claude-code-vs-codex
 | 字幕のタイミング | Whisper（mlx-whisper） |
 | サイト | React Router v7 + Cloudflare Workers |
 | 音声配信 | Cloudflare R2 |
+
+スキルから呼ぶ補助スクリプトも10本あります。どれも「今回ここが大変だった」と伝えた流れでエージェントが書いたもので、スキルと同じくらい制作を支えました。
+
+| スクリプト | 役割 |
+|---|---|
+| [`search-x.ts`](https://github.com/techtalkjp/records/blob/main/scripts/search-x.ts) | Grok API の x_search で X を検索 |
+| [`generate-image.ts`](https://github.com/techtalkjp/records/blob/main/scripts/generate-image.ts) | 汎用の画像生成（参照画像を渡せる） |
+| [`generate-cover.ts`](https://github.com/techtalkjp/records/blob/main/scripts/generate-cover.ts) | カバーアート生成（マルチターン会話） |
+| [`crop-square.py`](https://github.com/techtalkjp/records/blob/main/scripts/crop-square.py) | 16:9 から 1:1 を切り出す |
+| [`build-lyrics-timing.py`](https://github.com/techtalkjp/records/blob/main/scripts/build-lyrics-timing.py) | SRT からプレイヤー用の歌詞同期 JSON を生成 |
+| [`convert-audio.sh`](https://github.com/techtalkjp/records/blob/main/scripts/convert-audio.sh) | WAV → M4A 変換 |
+| [`upload-audio.sh`](https://github.com/techtalkjp/records/blob/main/scripts/upload-audio.sh) | 音源を Cloudflare R2 へアップロード |
+| [`collect-album-flac.sh`](https://github.com/techtalkjp/records/blob/main/scripts/collect-album-flac.sh) | 配信入稿用に全曲を FLAC で1フォルダに集める |
+| [`collect-album-lyrics.py`](https://github.com/techtalkjp/records/blob/main/scripts/collect-album-lyrics.py) | 配信入稿用に歌詞を整形して集める |
+| [`build-archive-skills.py`](https://github.com/techtalkjp/records/blob/main/scripts/build-archive-skills.py) | 制作の記録ページに SKILL.md を埋め込む |
 
 このほかにサイト更新と配信手配がありますが、これは曲ごとの工程というより、リリース時の運用として別枠です。
 
