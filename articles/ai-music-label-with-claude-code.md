@@ -68,7 +68,7 @@ https://records.techtalk.jp/albums/claude-code-vs-codex
 | サイト | React Router v7 + Cloudflare Workers |
 | 音声配信 | Cloudflare R2 |
 
-スキルから呼ぶ補助スクリプトも10本あります。どれも「今回ここが大変だった」と伝えた流れでエージェントが書いたもので、スキルと同じくらい制作を支えました。
+スキルから呼ぶ補助スクリプトもあります。どれも「今回ここが大変だった」と伝えた流れでエージェントが書いたもので、スキルと同じくらい制作を支えました。
 
 | スクリプト | 役割 |
 |---|---|
@@ -81,7 +81,6 @@ https://records.techtalk.jp/albums/claude-code-vs-codex
 | [`upload-audio.sh`](https://github.com/techtalkjp/records/blob/main/scripts/upload-audio.sh) | 音源を Cloudflare R2 へアップロード |
 | [`collect-album-flac.sh`](https://github.com/techtalkjp/records/blob/main/scripts/collect-album-flac.sh) | 配信入稿用に全曲を FLAC で1フォルダに集める |
 | [`collect-album-lyrics.py`](https://github.com/techtalkjp/records/blob/main/scripts/collect-album-lyrics.py) | 配信入稿用に歌詞を整形して集める |
-| [`build-archive-skills.py`](https://github.com/techtalkjp/records/blob/main/scripts/build-archive-skills.py) | 制作の記録ページに SKILL.md を埋め込む |
 
 このほかにサイト更新と配信手配がありますが、これは曲ごとの工程というより、リリース時の運用として別枠です。
 
