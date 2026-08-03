@@ -12,7 +12,7 @@ AIエージェントを使って架空の音楽レーベル「TECHTALK RECORDS�
 
 Claude Code と Codex という2人の架空の日本語ラッパーが、dissの応酬から始まってコラボで終わるコンセプトアルバムです。公開先は公式サイトと YouTube、サブスク配信は審査待ちです。
 
-https://records.techtalk.jp/albums/claude-code-vs-codex/
+https://records.techtalk.jp/albums/claude-code-vs-codex
 
 :::details 初期の4曲は Apple Music / Spotify でも配信中
 - Complexes on the Codex — [Apple Music](https://music.apple.com/jp/album/1883681529) / [Spotify](https://open.spotify.com/intl-ja/album/5SVwxbdpVCFNWS3sJ760Mn)
