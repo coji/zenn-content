@@ -45,13 +45,13 @@ https://records.techtalk.jp/albums/claude-code-vs-codex/
 
 1曲は次の工程で作ります。それぞれが Claude Code の Agent Skill になっていて、リポジトリの [`.claude/skills/`](https://github.com/techtalkjp/records/tree/main/.claude/skills) に入っています。
 
-1. `/search-x-voices` — Grok API の x_search で X からネタを収集
-2. `/make-lyrics` — 韻ペアと構成を対話で磨き、歌詞を完成させる
-3. `/make-suno-prompt` — 歌詞を Suno 用の入力セットに変換
+1. [`/search-x-voices`](https://github.com/techtalkjp/records/blob/main/.claude/skills/search-x-voices/SKILL.md) — Grok API の x_search で X からネタを収集
+2. [`/make-lyrics`](https://github.com/techtalkjp/records/blob/main/.claude/skills/make-lyrics/SKILL.md) — 韻ペアと構成を対話で磨き、歌詞を完成させる
+3. [`/make-suno-prompt`](https://github.com/techtalkjp/records/blob/main/.claude/skills/make-suno-prompt/SKILL.md) — 歌詞を Suno 用の入力セットに変換
 4. （Suno で音源生成 — ここだけ手動）
-5. `/make-cover-art` — Gemini でカバーアートを生成
-6. `/make-lyric-video` — Whisper でタイミングを取り、ffmpeg で字幕付き動画を生成
-7. `/make-release-post` — X 投稿と YouTube 概要欄の告知文を作成
+5. [`/make-cover-art`](https://github.com/techtalkjp/records/blob/main/.claude/skills/make-cover-art/SKILL.md) — Gemini でカバーアートを生成
+6. [`/make-lyric-video`](https://github.com/techtalkjp/records/blob/main/.claude/skills/make-lyric-video/SKILL.md) — Whisper でタイミングを取り、ffmpeg で字幕付き動画を生成
+7. [`/make-release-post`](https://github.com/techtalkjp/records/blob/main/.claude/skills/make-release-post/SKILL.md) — X 投稿と YouTube 概要欄の告知文を作成
 
 ツールの役割分担はこうです。歌詞と全体の指揮が Claude Code、音源が Suno V5.5、静止画が Gemini（gemini-3.1-flash-image）、動画が Veo 3.1、ネタ収集が Grok API。
 
@@ -79,7 +79,7 @@ Codex の7曲目「またかよ」は、2026年7月14日（火）の朝9時47分
 
 > codex のネタ集めしよう。先週新モデルでてかなりうごいてる。fable がサブスクから消えるのも再延長された。この辺を材料にするといろいろ考えられそう
 
-エージェントが `/search-x-voices` を起動し、Grok の x_search に投げるクエリを6本書きます。
+エージェントが [`/search-x-voices`](https://github.com/techtalkjp/records/blob/main/.claude/skills/search-x-voices/SKILL.md) を起動し、Grok の x_search に投げるクエリを6本書きます。
 
 クエリはキーワードの羅列より、探している投稿の「温度感」まで文章で指定したほうが欲しい声が返ってきます。実際のクエリの一部がこれです。
 
@@ -141,7 +141,7 @@ Codex の7曲目「またかよ」は、2026年7月14日（火）の朝9時47分
 
 ### 10:32 Suno入力への変換
 
-最後は `/make-suno-prompt` で表記変換です。内容は変えず、「明けて当日 告知は『延長』」→「あけてとうじつ こくちわ『えんちょう』」のように漢字をひらがなへ、助詞の「は」を「わ」へ。
+最後は [`/make-suno-prompt`](https://github.com/techtalkjp/records/blob/main/.claude/skills/make-suno-prompt/SKILL.md) で表記変換です。内容は変えず、「明けて当日 告知は『延長』」→「あけてとうじつ こくちわ『えんちょう』」のように漢字をひらがなへ、助詞の「は」を「わ」へ。
 
 セクションタグには、歌われない英語アノテーションを付けます。
 
