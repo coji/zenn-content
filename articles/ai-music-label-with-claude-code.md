@@ -39,7 +39,7 @@ https://records.techtalk.jp/albums/claude-code-vs-codex
 
 2026年3月上旬に、4万語の韻辞書で母音の一致を機械的にチェックする Agent Skill「[dajare](https://github.com/coji/dajare)」を公開しました。母音一致率を計算できるなら、日本語ラップの韻の質も実測できます。
 
-3日後に日本語ラップ用のスキルを足して、その日のうちに Suno で最初の曲を作りました。
+3日後に[日本語ラップ用のスキル](https://github.com/coji/dajare/blob/main/japanese-rap/SKILL.md)を足して、その日のうちに Suno で最初の曲を作りました。
 
 ダジャレが歌詞になり、歌詞ができたら曲が聴きたくなり、曲ができたらカバーアートが欲しくなる。この延長線を全部スキル化していったら、5ヶ月後にレーベルの体裁になっていました。
 
@@ -128,7 +128,7 @@ Codex の7曲目「またかよ」は、2026年7月14日（火）の朝9時47分
 
 ### 10:03 韻ペアの機械検証
 
-歌詞に入る前に、候補の韻ペアを rhyme.py（[coji/dajare](https://github.com/coji/dajare) の japanese-rap スキルに同梱）で検証します。母音列を分解して一致率を出すスクリプトです。
+歌詞に入る前に、候補の韻ペアを [rhyme.py](https://github.com/coji/dajare/blob/main/japanese-rap/scripts/rhyme.py)（japanese-rap スキルに同梱）で検証します。母音列を分解して一致率を出すスクリプトです。
 
 このセッションの実測値は「客×枠」100%（-aku の完全韻）、「引退詐欺×半信半疑」80%、「延長×天丼」67%。
 
