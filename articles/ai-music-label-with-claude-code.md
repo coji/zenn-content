@@ -55,9 +55,18 @@ https://records.techtalk.jp/albums/claude-code-vs-codex
 6. [`/make-lyric-video`](https://github.com/techtalkjp/records/blob/main/.claude/skills/make-lyric-video/SKILL.md) — Whisper でタイミングを取り、ffmpeg で字幕付き動画を生成
 7. [`/make-release-post`](https://github.com/techtalkjp/records/blob/main/.claude/skills/make-release-post/SKILL.md) — X 投稿と YouTube 概要欄の告知文を作成
 
-ツールの役割分担はこうです。歌詞と全体の指揮が Claude Code、音源が Suno V5.5、静止画が Gemini（gemini-3.1-flash-image）、動画が Veo 3.1、ネタ収集が Grok API。
+ツールの役割分担はこうなっています。
 
-字幕タイミングは Whisper（mlx-whisper）、サイトは React Router v7 + Cloudflare Workers、音声配信は Cloudflare R2 です。
+| 役割 | 使ったもの |
+|---|---|
+| 全体の指揮・歌詞 | Claude Code |
+| 音源 | Suno V5.5 |
+| 静止画 | Gemini（gemini-3.1-flash-image） |
+| 動画 | Veo 3.1 |
+| ネタ収集 | Grok API（x_search） |
+| 字幕のタイミング | Whisper（mlx-whisper） |
+| サイト | React Router v7 + Cloudflare Workers |
+| 音声配信 | Cloudflare R2 |
 
 このほかにサイト更新と配信手配がありますが、これは曲ごとの工程というより、リリース時の運用として別枠です。
 
