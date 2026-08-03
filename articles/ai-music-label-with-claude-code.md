@@ -8,9 +8,18 @@ published: false
 
 ## これはなに？
 
-AIエージェントを使って架空の音楽レーベル「TECHTALK RECORDS」を運営し、約5ヶ月で18曲の1stアルバム『Claude Code vs. Codex』を作ってリリースしました。リリースといっても公式サイトと YouTube での公開のことで、Spotify などのストア配信は執筆時点では配信業者の審査待ちです。Claude Code と Codex という2人の架空の日本語ラッパーが、dissの応酬から始まってコラボで終わる、というコンセプトアルバムです。
+AIエージェントを使って架空の音楽レーベル「TECHTALK RECORDS」を運営し、約5ヶ月で18曲の1stアルバム『Claude Code vs. Codex』を作ってリリースしました。リリースといっても公式サイトと YouTube での公開のことで、アルバム全曲のストア配信は執筆時点では審査待ちです（初期に出した4曲だけは Apple Music や Spotify でも聴けます）。Claude Code と Codex という2人の架空の日本語ラッパーが、dissの応酬から始まってコラボで終わる、というコンセプトアルバムです。
 
 https://records.techtalk.jp/albums/claude-code-vs-codex/
+
+:::details 初期の4曲は Apple Music / Spotify でも配信中
+- Complexes on the Codex — [Apple Music](https://music.apple.com/jp/album/complexes-on-the-codex-single/1883681529) / [Spotify](https://open.spotify.com/intl-ja/album/5SVwxbdpVCFNWS3sJ760Mn)
+- Hourglass on the Claude — [Apple Music](https://music.apple.com/jp/album/hourglass-on-the-claude-single/1886201261) / [Spotify](https://open.spotify.com/intl-ja/album/5J4biJb2sUYQqUFpAMTxcM)
+- ターミナルの誇り — [Apple Music](https://music.apple.com/jp/album/1887627926) / [Spotify](https://open.spotify.com/intl-ja/track/32Y3lkYItRnwbGSLA5zQH0)
+- なんでだよ — [Apple Music](https://music.apple.com/jp/album/1889005629) / [Spotify](https://open.spotify.com/intl-ja/album/2vFVqKn8DhulYKmpueiRrU)
+
+アルバム全曲の配信は審査中です。
+:::
 
 制作範囲は、歌詞・音源・カバーアート・PV・リリックビデオ・公式サイト・配信手配までです。分担としては、企画の方向づけ・採否の判断・フィードバック・Suno の操作が人間（私）で、調査・歌詞・画像や動画の生成・サイト実装・各種変換作業がエージェント側でした。この記事では、Claude Code を軸に Suno・Gemini・Veo・Grok・Whisper・Cloudflare を繋いだ制作フローと、5ヶ月分の失敗と学びを書きます。
 
