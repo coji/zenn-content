@@ -2,8 +2,8 @@
 title: "AIエージェントで音楽レーベルを運営する - Claude CodeとSuno・Gemini・Veoで18曲のアルバムを作った5ヶ月の記録"
 emoji: "🎤"
 type: "tech"
-topics: ["claudecode", "codex", "suno", "gemini"]
-published: false
+topics: ["claudecode", "codex", "suno", "gemini", "cloudflare"]
+published: true
 ---
 
 ## これはなに？
