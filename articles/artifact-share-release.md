@@ -32,7 +32,7 @@ https://artifactshare.com/ja
 
 ## ほぼ無料で回すための Cloudflare Workers / D1 / R2
 
-設計方針は最初から決まっていました。価値のほとんどは AI 側にあって、共有サービス自体に大きな価値はない。だからタダ同然で回せる構成にする。そこで選んだのが Cloudflare Workers + D1 + R2 です。Workers はリクエスト課金で待機コストがほぼゼロ、D1 の無料枠はメタデータには十分広く、R2 は egress 無料なので共有 URL がどれだけ踏まれても転送料の心配がありません。
+設計方針は最初から決まっていました。価値のほとんどは AI 側にあって、共有サービス自体に大きな価値はない。だからタダ同然で回せる構成にする。そこで選んだのが Cloudflare スタックです。軸は Workers + D1 + R2 で、Workers はリクエスト課金で待機コストがほぼゼロ、D1 の無料枠はメタデータには十分広く、R2 は egress 無料なので共有 URL がどれだけ踏まれても転送料の心配がありません。ほかに、プレゼンスと版更新のリアルタイム通知に Durable Objects、閲覧の重複排除に KV、D1 の定期バックアップに Workflows も使っています。
 
 アプリ側は React Router v8 (framework mode) と Better Auth、DB アクセスは kysely + kysely-d1 です。
 
