@@ -3,7 +3,7 @@ title: "AIが作ったHTMLの社内共有、みんな一回自作するやつを
 emoji: "📤"
 type: "tech"
 topics: ["claudecode", "cloudflare", "d1", "個人開発", "ai"]
-published: false
+published: true
 ---
 
 ## 「最新版どれですか」が戻ってきた
