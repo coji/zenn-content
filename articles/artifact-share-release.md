@@ -46,7 +46,9 @@ AI が作ったものを、人間が手で運んでいる。
 Claude の Team プランには成果物の共有機能がありますが、業務委託のぼくはどの会社の Team にも属していないし、一社でだけ使えても困ります。
 必要だったのは、どの会社の契約にもぶら下がらない、会社横断で使える置き場所でした。
 ないので、作りました。
-それが [Artifact Share](https://artifactshare.com/ja) です。
+それが Artifact Share です。
+
+https://artifactshare.com/ja
 
 ## ほぼ無料で回すための Cloudflare Workers / D1 / R2
 
@@ -153,7 +155,9 @@ URL は永続なので、この記事の公開後に直しても、このリン�
 冒頭に書いた「クライアント向け文書」の働き方が、そのまま数字に出ています。
 
 個人的に一番気に入っている使い方も紹介させてください。
-kenn さんの Mac アプリ [Kanary](https://kanary.download/voice) で、クライアントとのオンライン MTG を録音しておきます。
+kenn さんの Mac アプリ Kanary で、クライアントとのオンライン MTG を録音しておきます。
+
+https://kanary.download/voice
 MTG が終わったら、Claude Code に「Kanary で文字起こしして、議事録にして、as でクライアントにシェアして」と言う。
 これだけで議事録が相手に届きます。
 しかも過去の議事録も as にあるので、Claude Code が出席者の名前や前回までの文脈をそこから拾えます。
