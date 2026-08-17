@@ -40,7 +40,7 @@ https://artifactshare.com/ja
 
 https://zenn.dev/coji/articles/cloudflare-workers-better-auth-hanging-promise
 
-実測はこうです。直近 24 時間で Worker リクエスト約 11 万、D1 クエリ約 47 万、R2 のストレージは 518MB。これで請求は Workers Paid の $5/月に、従量課金が今月ここまでで 1 セント (R2 のストレージ分) です。
+直近 24 時間の実測で、Worker リクエストは約 11 万、D1 クエリは約 47 万、R2 のストレージは 518MB。これで請求は Workers Paid の $5/月に、従量課金が今月ここまでで 1 セント (R2 のストレージ分) です。
 
 ## D1 で本当に大丈夫なのか
 
