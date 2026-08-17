@@ -131,7 +131,9 @@ https://github.com/artifactshare/artifactshare
 
 一つだけ約束できることがあります。ぼく自身の業務とクライアントのために必要なので、Artifact Share はこれからもずっとメンテナンスと機能強化を続けます。間に合わせの自作と一番違うのは、たぶんここです。自分が便利なので、トークンは燃やし続けます。
 
-Claude Code で HTML を量産している方は、[Artifact Share](https://artifactshare.com/ja) を試してみてください。
+Claude Code で HTML を量産している方は、Artifact Share を試してみてください。
+
+https://artifactshare.com/ja
 
 漫画も描きました (これも AI 製です)。
 
