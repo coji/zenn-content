@@ -36,6 +36,10 @@ https://artifactshare.com/ja
 
 アプリ側は React Router v8 (framework mode) と Better Auth、DB アクセスは kysely + kysely-d1 です。
 
+ちなみに開発で一番しんどかったのは、Workers + Better Auth の hanging promise で特定のユーザーだけサイト全体が無応答になる問題でした。原因究明の顛末は別記事に書いています。
+
+https://zenn.dev/coji/articles/cloudflare-workers-better-auth-hanging-promise
+
 実測はこうです。直近 24 時間で Worker リクエスト約 11 万、D1 クエリ約 47 万、R2 のストレージは 518MB。これで請求は Workers Paid の $5/月に、従量課金が今月ここまでで 1 セント (R2 のストレージ分) です。
 
 ## D1 で本当に大丈夫なのか
@@ -57,11 +61,7 @@ DAU 10 万なら月 $20 前後、100 万でも月 $300 くらい。ユーザー�
 
 もちろん無傷だったわけではなく、ほぼ AI 任せで作っているので、最初期にはマイグレーションの事故で DB を 2 回ふっとばしています。ただ、この手の事故は起きるたびに検証のハーネスを作ることで簡単に潰せて、以後は起きていません。
 
-一番しんどかったのはこれです。Workers + Better Auth の hanging promise で、特定のユーザーだけサイト全体が無応答になる。原因究明の顛末は別記事に書きました。
-
-https://zenn.dev/coji/articles/cloudflare-workers-better-auth-hanging-promise
-
-DB と ORM の選定やこのあたりの失敗談は、9/9 (水) の[イベント](https://offers-jp.connpass.com/event/402907/)でも詳しく話す予定です。
+DB と ORM の選定やこのあたりの失敗談は、9/9 (水) の[イベント](https://offers-jp.connpass.com/event/402907/)で詳しく話す予定です。
 
 ## 自作で足りなかった 3 つ
 
