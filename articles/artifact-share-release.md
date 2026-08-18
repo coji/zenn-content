@@ -139,6 +139,12 @@ https://github.com/artifactshare/artifactshare
 
 一つだけ約束できることがあります。ぼく自身の業務とクライアントのために必要なので、Artifact Share はこれからもずっとメンテナンスと機能強化を続けます。間に合わせの自作と一番違うのは、たぶんここです。自分が便利なので、トークンは燃やし続けます。
 
+実際、直近 2 ヶ月の[更新情報](https://artifactshare.com/ja/updates)から拾うとこんな調子です。
+
+- AI エージェントの CLI 権限をプロジェクト単位に制限できるようにしました (エージェントに全部見せない)
+- 共有ページで更新と過去の版を確認できるようにしました
+- プロジェクトへの投稿を Slack に通知できるようにしました (Slack と喧嘩する気はないんです)
+
 Claude Code で HTML を量産している方は、Artifact Share を試してみてください。
 
 https://artifactshare.com/ja
