@@ -141,9 +141,9 @@ https://github.com/artifactshare/artifactshare
 
 実際、直近 2 ヶ月の[更新情報](https://artifactshare.com/ja/updates)から拾うとこんな調子です。
 
-- AI エージェントの CLI 権限をプロジェクト単位に制限できるようにしました (エージェントに全部見せない)
+- AI エージェントの CLI 権限をプロジェクト単位に制限できるようにしました
 - 共有ページで更新と過去の版を確認できるようにしました
-- プロジェクトへの投稿を Slack に通知できるようにしました (Slack と喧嘩する気はないんです)
+- プロジェクトへの投稿を Slack に通知できるようにしました
 
 Claude Code で HTML を量産している方は、Artifact Share を試してみてください。
 
