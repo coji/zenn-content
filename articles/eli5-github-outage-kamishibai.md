@@ -28,6 +28,16 @@ Xで話題のAnthropic社内スキル **ELI5** で、[GitHubが約8時間止ま�
 
 おしまい。
 
+## ELI5 スキルのプロンプト
+
+[anthropics/claude-plugins-community](https://github.com/anthropics/claude-plugins-community/blob/main/eli5/skills/eli5/SKILL.md) の原文です。ChatGPTやCursorに貼っても動きます。
+
+```text
+Explain like I'm someone who knows nothing about this topic, using a HTML artifact with big pictures and few words.
+
+Topic: <説明してほしいトピック>
+```
+
 ## Claude Code で作った HTML 実例はこちら
 
 スクロールで紙芝居が進みます。末尾にELI5プロンプト原文のコピーボタンがあります。ChatGPTやCursorに貼っても動きます。
