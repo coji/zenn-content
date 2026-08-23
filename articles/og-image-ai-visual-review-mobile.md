@@ -47,7 +47,7 @@ https://artifactshare.com/a/il2g11rc2e
 5. 各行を `white-space: nowrap` の明示的なblockとしてTakumiに渡す
 6. 文字量に応じて76 / 68 / 58 / 48pxの4段階で文字サイズを落とす
 
-改行位置は特定のコピーへハードコードせず、英語や日英混在を含む任意のタイトルで効く仕組みにしています。OG画像は幅が固定なので、ブラウザの汎用レイアウトに寄せるより、行を決めてから描画するほうが再現性を持たせやすいです。
+OG画像は幅が固定なので、ブラウザの汎用レイアウトに寄せるより、行を決めてから描画するほうが再現性を持たせやすいです。
 
 コードは公開しています（[改行ロジック](https://github.com/artifactshare/artifactshare/blob/main/apps/web/app/services/og-title-layout.ts) / [OG Worker](https://github.com/artifactshare/artifactshare/blob/main/apps/web/workers/og-image.ts)）。
 
