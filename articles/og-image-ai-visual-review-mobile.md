@@ -3,7 +3,7 @@ title: "AIに作らせて、目で選ぶだけ。スマホでCloudflare Workers�
 emoji: "🖼️"
 type: "tech"
 topics: ["cloudflareworkers", "codex", "ai", "ひとり開発", "budoux"]
-published: false
+published: true
 ---
 
 ## これはなに？
