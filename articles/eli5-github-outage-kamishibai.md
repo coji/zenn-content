@@ -1,5 +1,5 @@
 ---
-title: "GitHubが8時間止まった日を、5歳でもわかる紙芝居にした"
+title: "Anthropicではやってる ELI5 スキルで、GitHub障害を説明してもらってみた"
 emoji: "🚪"
 type: "idea"
 topics: ["claudecode", "claude", "github", "sre", "ai"]
