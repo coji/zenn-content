@@ -6,6 +6,8 @@ topics: ["cloudflareworkers", "codex", "ai", "ひとり開発", "budoux"]
 published: false
 ---
 
+## これはなに？
+
 ひとりで開発している [Artifact Share](https://artifactshare.com) のOG画像生成を、SatoriからTakumiへ移行して作り直しました。調査、仕様づくり、実装、視覚検証、レビュー、PRのマージまで、すべてスマートフォンのCodexからリモートで進めています。PCは一度も開いていません。
 
 結果はこうなりました。
