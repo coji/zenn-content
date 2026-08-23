@@ -47,7 +47,7 @@ https://artifactshare.com/a/il2g11rc2e
 5. 各行を `white-space: nowrap` の明示的なblockとしてTakumiに渡す
 6. 文字量に応じて76 / 68 / 58 / 48pxの4段階で文字サイズを落とす
 
-OG画像は幅が固定なので、ブラウザの汎用レイアウトに寄せるより、行を決めてから描画するほうが再現性を持たせやすいです。
+OG画像は幅が固定なので、ブラウザの汎用レイアウトに寄せるより、行を決めてから描画するほうが崩れにくいです。
 
 コードは公開しています（[改行ロジック](https://github.com/artifactshare/artifactshare/blob/main/apps/web/app/services/og-title-layout.ts) / [OG Worker](https://github.com/artifactshare/artifactshare/blob/main/apps/web/workers/og-image.ts)）。
 
@@ -78,7 +78,7 @@ PRはマージ済みで、検証結果は次のとおりです。
 - 英語、日本語、混在、fallbackアバター、Googleアバターの各カードを1200×630のPNGで検証
 - CodexとClaudeの最終レビューで未解決のblockerなし
 
-正直に書くと、bundleは軽くなっていません。production bundleは約6.87MiB（gzip約4.43MiB）で、日本語サブセットのフォント2ウェイトを同梱した分が大きいです。ただ、OG生成は専用Workerに分けてあるので、アプリ本体の起動やデプロイには響きません。
+正直に書くと、bundleは軽くなっていません。production bundleは約6.87MiB（gzip約4.43MiB）で、日本語サブセットのフォント2ウェイトを同梱した分が大きいです。ただ、OG生成は専用Workerに分けてあるので、アプリ本体の起動やデプロイには影響しません。
 
 ## スマホだけで回った理由
 
