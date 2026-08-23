@@ -9,6 +9,7 @@ published: false
 ひとりで開発している [Artifact Share](https://artifactshare.com) のOG画像生成を、SatoriからTakumiへ移行して作り直しました。
 調査、仕様づくり、実装、視覚検証、レビュー、PRのマージまで、すべてスマートフォンのCodexからリモートで進めています。
 PCは一度も開いていません。
+結果はこうなりました。
 
 ![OGカードのBefore/After。Beforeは文節を無視した折り返しで書体もばらつく。AfterはBudouXの均等改行と統一書体、著者アバター付き](/images/og-before-after.png)
 
