@@ -73,8 +73,7 @@ Explain like I'm someone who knows nothing about this topic, using a HTML artifa
 Topic: <説明してほしいトピック>
 ```
 
-一度目の出力は文字だらけの「解説記事」になりました。
-big pictures and few wordsの精神に立ち返って「1画面1枚の絵と一言だけ」に作り直させたのが上の紙芝居です。
+コツは、big pictures and few wordsの精神どおり「1画面1枚の絵と一言だけ」に寄せることです。
 
 次に、できたHTMLをそのままURLにして共有しました。
 私がひとりで開発しているArtifact Shareを使うと、コマンド1発で済みます。
