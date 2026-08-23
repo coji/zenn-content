@@ -3,7 +3,7 @@ title: "Anthropicではやってる ELI5 スキルで、GitHub障害を説明し
 emoji: "🚪"
 type: "idea"
 topics: ["claudecode", "claude", "github", "sre", "ai"]
-published: false
+published: true
 ---
 
 ## これはなに？
@@ -28,7 +28,7 @@ Xで話題のAnthropic社内スキル **ELI5** で、[GitHubが約8時間止ま�
 
 おしまい。
 
-## HTML実例はこちら
+## Claude Code で作った HTML 実例はこちら
 
 スクロールで紙芝居が進みます。末尾にELI5プロンプト原文のコピーボタンがあります。ChatGPTやCursorに貼っても動きます。
 
