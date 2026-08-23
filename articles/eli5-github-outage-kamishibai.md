@@ -8,7 +8,7 @@ published: false
 
 ## これはなに？
 
-Xで話題のAnthropic社内スキル **ELI5**（本文たった1行、「大きい絵と少ない言葉のHTMLで説明して」）で、[GitHubが約8時間止まった8/17障害](https://github.blog/news-insights/company-news/the-august-17-outage-and-the-work-ahead/)のポストモーテムを紙芝居にしてみました。
+Xで話題のAnthropic社内スキル **ELI5** で、[GitHubが約8時間止まった8/17障害](https://github.blog/news-insights/company-news/the-august-17-outage-and-the-work-ahead/)のポストモーテムを紙芝居にしてみました。
 
 ## やってみた
 
@@ -30,6 +30,6 @@ Xで話題のAnthropic社内スキル **ELI5**（本文たった1行、「大き
 
 ## HTML実例はこちら
 
-スクロールで紙芝居が進みます。末尾にELI5プロンプト原文（コピーボタン付き。ChatGPTやCursorに貼っても動きます）。
+スクロールで紙芝居が進みます。末尾にELI5プロンプト原文のコピーボタンがあります。ChatGPTやCursorに貼っても動きます。
 
 https://artifactshare.com/a/l2z2809bsp
