@@ -15,7 +15,7 @@ Anthropicの社内で使われているという **ELI5 Skill**（Explain Like I
 
 「大きい絵と少ない言葉のHTMLで説明して」。それだけ。
 
-ちょうど1週間前の2026年8月17日、GitHubが約8時間止まる大規模障害がありました。
+ちょうど1週間前の2026年8月17日、GitHubは約8時間止まる大規模障害を起こしました。
 公式ポストモーテムも出ていますが、autoscaling、sidecar、リトライストームと、正直ひと目では頭に入ってきません。
 そこでこの1行スキルで、障害の顛末を紙芝居にしてみました。
 この記事はそのスクショを並べただけです。スクロールするだけで、あの日なにが起きたかわかります。
@@ -64,7 +64,8 @@ https://github.blog/news-insights/company-news/the-august-17-outage-and-the-work
 
 まず、ELI5 Skillの1行プロンプトに、ポストモーテムの内容を渡して図解HTMLを作らせました。
 スキルの原文は[anthropics/claude-plugins-community](https://github.com/anthropics/claude-plugins-community/blob/main/eli5/skills/eli5/SKILL.md)にあります。
-Claude Codeなら `claude plugin install eli5@claude-community` で入りますが、本文が1行のプロンプトなので、ChatGPTやCursorに貼ってもそのまま動きます。
+Claude Codeなら `claude plugin install eli5@claude-community` で入ります。
+本文が1行のプロンプトなので、ChatGPTやCursorに貼ってもそのまま動きます。
 
 ```text
 Explain like I'm someone who knows nothing about this topic, using a HTML artifact with big pictures and few words.
