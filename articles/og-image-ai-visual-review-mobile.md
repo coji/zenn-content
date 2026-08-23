@@ -38,7 +38,7 @@ https://artifactshare.com/a/il2g11rc2e
 
 ## 日本語タイトルの組版
 
-日本語は空白で単語が区切られないため、レンダラー任せの折り返しでは文節の途中で行が変わります。不可視文字（U+200B）を挿入する方法もありますが、レンダラーやフォントによっては豆腐になります。そこで、行の決定をレンダリングの前に済ませる構成としました。
+日本語は空白で単語が区切られないため、レンダラー任せの折り返しでは文節の途中で行が変わります。そこで、行の決定をレンダリングの前に済ませる構成としました。
 
 1. BudouXで日本語の文節候補を得る
 2. 行頭の閉じ括弧類と行末の開き括弧類を補正する
@@ -47,7 +47,7 @@ https://artifactshare.com/a/il2g11rc2e
 5. 各行を `white-space: nowrap` の明示的なblockとしてTakumiに渡す
 6. 文字量に応じて76 / 68 / 58 / 48pxの4段階で文字サイズを落とす
 
-OG画像は幅が固定なので、ブラウザの汎用レイアウトに寄せるより、行を決めてから描画するほうが崩れにくいです。
+OG画像は幅が固定なので、行を先に決めてから描画するほうが崩れにくいです。
 
 コードは公開しています（[改行ロジック](https://github.com/artifactshare/artifactshare/blob/main/apps/web/app/services/og-title-layout.ts) / [OG Worker](https://github.com/artifactshare/artifactshare/blob/main/apps/web/workers/og-image.ts)）。
 
