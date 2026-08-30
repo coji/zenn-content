@@ -12,7 +12,7 @@ published: false
 
 @[youtube](ooC8CCVog9A)
 
-ここから先は仕組みの話です。サインイン・アップロード不要のローカル機能で、実装は公開されています。
+ここから先は仕組みの話です。サインイン・アップロード不要のローカル機能で、実装は公開しています。
 
 https://github.com/artifactshare/artifactshare/pull/198
 
