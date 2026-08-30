@@ -80,7 +80,7 @@ type PreviewAnchor =
 
 https://github.com/artifactshare/artifactshare/blob/main/packages/cli/src/preview/contract.ts
 
-`artifact` はファイル全体への指摘、`text` はMarkdown向けのテキスト選択、`element` はHTML向けの要素クリックに対応します。`element` はCSSセレクタだけでなく、`button "送信"` のような人間可読ラベルと、クリック時点の周辺テキストも一緒に持ちます。エージェントがファイルを編集してセレクタの指す先がずれても、ラベルと周辺文脈を突き合わせて指摘位置を再解決できます。再解決できなければ `orphaned` として扱い、誤った場所に紐付けません。
+`artifact` はファイル全体への指摘、`text` はMarkdown向けのテキスト選択、`element` はHTML向けの要素クリックに対応します。`element` はCSSセレクタだけでなく、`button "送信"` のような人間可読ラベルと、クリック時点の周辺テキストも一緒に持ちます。エージェントがファイルを編集してセレクタの指す先がずれても、ラベルと周辺文脈を突き合わせて指摘位置を再解決できます。再解決できなければ `orphaned` として扱い、誤った場所に紐づけません。
 
 要素の座標(boundingBox)は保存しません。表示のたびに計算し直す値であり、永続化すると編集後にずれて誤情報になるからです。
 
@@ -110,7 +110,7 @@ https://github.com/artifactshare/artifactshare/blob/main/packages/cli/README.md
 
 ### Claude Code: バックグラウンドタスクの完了を使う
 
-Claude Codeは、コマンドをターンの外で実行し続けられる「バックグラウンドタスク」という仕組みを持ちます。ここへ `preview next --wait 3600` を仕込んでおくと、人間が指摘を送った瞬間にバッチが届いて `next` が終了します。Claude Codeはバックグラウンドタスクの完了を検知すると新しいターンを自動的に開くので、そのままファイルを直しにいきます。修正後は同じ手順で次の `next --wait` を再度仕込み、ループが続きます。タイムアウトで終わった `next` は再武装しません。
+Claude Codeは、コマンドをターンの外で実行し続けられる「バックグラウンドタスク」という仕組みを持ちます。ここへ `preview next --wait 3600` を仕込んでおくと、人間が指摘を送った瞬間にバッチが届いて `next` が終了します。Claude Codeはバックグラウンドタスクの完了を検知すると新しいターンを自動的に開くので、そのままファイルを直しにいきます。修正後は同じ手順で次の `next --wait` を再度仕込み、ループが続きます。タイムアウトで終わった `next` は仕込み直しません。
 
 ```mermaid
 sequenceDiagram
@@ -124,12 +124,12 @@ sequenceDiagram
     S-->>C: バッチを返す(nextが終了)
     Note over C: バックグラウンドタスク完了で新ターンが自動的に開く
     C->>S: preview done --stdin
-    C->>S: preview next --wait 3600(再武装)
+    C->>S: preview next --wait 3600(仕込み直し)
 ```
 
 ### Codex: 実行中セッションのキューに直接差し込む
 
-Codexには、バックグラウンドタスクの完了で自動的にターンを再開する仕組みがありません([openai/codex#32188](https://github.com/openai/codex/issues/32188) として要望が上がっています)。そのため、Claude Codeとは違う方式が要ります。Codexでは、trusted thread（実行中のセッション）を検出できた場合、指摘バッチをそのセッションのキューへ直接積みます。人間がバッチを送った時点で投入は完了しますが、状態は "queued" のままで、エージェントが実際に `preview next` を呼ぶまで消費されません。セッションが終了していても、`codex resume` で再開すれば同じバッチを受け取れます。
+Codexには、バックグラウンドタスクの完了で自動的にターンを再開する仕組みがありません([openai/codex#32188](https://github.com/openai/codex/issues/32188) として要望が上がっています)。そのため、Claude Codeとは別の方式が必要です。Codexでは、trusted thread（実行中のセッション）を検出できた場合、指摘バッチをそのセッションのキューへ直接積みます。人間がバッチを送った時点で投入は完了しますが、状態は "queued" のままで、エージェントが実際に `preview next` を呼ぶまで消費されません。セッションが終了していても、`codex resume` で再開すれば同じバッチを受け取れます。
 
 ```mermaid
 sequenceDiagram
