@@ -1,5 +1,5 @@
 ---
-title: "ターミナルに戻らずにAIの成果物を修正依頼する — Claude Code/Codex/Cursor対応プレビューの設計"
+title: "会話セッションを邪魔せずに Claude Code / Codex / Cursor を外部イベントで動かす方法まとめ"
 emoji: "🖱️"
 type: "tech"
 topics: ["claudecode", "codex", "cursor", "cli", "ai"]
