@@ -10,6 +10,8 @@ published: false
 
 Artifact Share は、AIエージェントが作ったHTMLやMarkdownをURLで共有するサービスです。そのCLIに `preview` というローカルコマンドを追加しました。ブラウザで開いたファイルの要素をクリックして指摘を書くと、その指摘が Claude Code・Codex・Cursor のいずれかのエージェントに届きます。エージェントがファイルを直接修正し、保存を検知するとブラウザは自動でリロードして、直った箇所がその場でわかります。指摘をターミナルの言葉に翻訳し直す手間がありません。
 
+@[youtube](ooC8CCVog9A)
+
 サインイン・アップロードなしで動くローカル機能で、実装は公開リポジトリにあります。
 
 https://github.com/artifactshare/artifactshare/pull/198
