@@ -54,7 +54,7 @@ flowchart LR
 
 ## 指摘の場所を覚えておく: anchorの3種類
 
-指摘の位置は3種類のanchorで保存します。型定義は実物のままです。
+指摘の位置は3種類のanchorで保存します。
 
 ```ts
 type PreviewAnchor =
@@ -75,8 +75,6 @@ type PreviewAnchor =
       contextText: string // クリック時点の周辺テキスト
     }
 ```
-
-https://github.com/artifactshare/artifactshare/blob/main/packages/cli/src/preview/contract.ts
 
 ポイントは `element` をCSSセレクタ単独にしないことです。エージェントの編集でセレクタの指す先がずれても、ラベルと周辺テキストを突き合わせて位置を再解決できます。再解決に失敗したら `orphaned` に落とし、誤った場所に紐づけません。座標(boundingBox)は編集でずれる値なので保存せず、表示のたびに計算します。
 
