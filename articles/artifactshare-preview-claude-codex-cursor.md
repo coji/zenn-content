@@ -1,6 +1,6 @@
 ---
 title: "会話セッションを邪魔せずに Claude Code / Codex / Cursor を外部イベントで動かす方法まとめ"
-emoji: "🖱️"
+emoji: "🔔"
 type: "tech"
 topics: ["claudecode", "codex", "cursor", "cli", "ai"]
 published: false
