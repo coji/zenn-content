@@ -27,11 +27,11 @@ https://github.com/artifactshare/artifactshare/pull/198
 
 ```sh
 # 人間側: プレビューを開く(ブラウザが開き、以後は画面上で指摘する)
-artifactshare preview ./report.html
+npx @artifactshare/cli preview ./report.html
 
 # エージェント側: 1周はこの2コマンド
-artifactshare preview next --wait 90   # 指摘が届くまで待って受け取る
-artifactshare preview done --stdin     # 直した結果を報告する
+npx @artifactshare/cli preview next --wait 90   # 指摘が届くまで待って受け取る
+npx @artifactshare/cli preview done --stdin     # 直した結果を報告する
 ```
 
 指摘はまとめて1バッチで送信します。エージェントの1周は「指摘を取りに行く(`next`) → 編集・保存 → 結果を報告する(`done`)」です。
