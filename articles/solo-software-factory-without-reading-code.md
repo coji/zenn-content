@@ -198,8 +198,6 @@ pnpm pr:ready --deferred "型定義の共通化は別PRへ切り出し"
 
 ---
 
-スライドとスピーチ原稿の実物は、以下で公開しています。
+スライドの実物は、以下で公開しています。
 
 https://artifactshare.com/a/8op3kvcy3x
-
-https://artifactshare.com/a/y8qz9imoms
