@@ -30,11 +30,14 @@ HTMLを社内だけで安全に共有するWebサービス「Artifact Share」�
 
 AI主体の開発体制、いわゆる「ソフトウェアファクトリー」をどうやって現実のものにしていくのか。ぼくが1人で走らせてみた工場の記録を共有します。
 
-サービスの実物とリポジトリ、登壇スライドはこちらです。
+先週9月3日の勉強会「ToKyoto.js #03」で登壇した際のスライドはこちらです。
+
+https://artifactshare.com/a/8op3kvcy3x
+
+サービスの実物と公開リポジトリも置いておきます。
 
 - サービス: https://artifactshare.com/ja
 - リポジトリ: https://github.com/artifactshare/artifactshare
-- 登壇スライド: https://artifactshare.com/a/8op3kvcy3x
 
 ## ノーガードの自動運転：事故が起きてからガードレールを作る
 
