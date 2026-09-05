@@ -1,5 +1,5 @@
 ---
-title: "コードを読まずにWebサービスを作る - 1人で25万行を回すAI工場の試行錯誤"
+title: "HTMLを社内共有するサービスを、コードを読まずに作る - 1人で25万行を回す自動運用の記録"
 emoji: "🏭"
 type: "tech"
 topics: ["claudecode", "codex", "githubactions", "個人開発", "ai"]
