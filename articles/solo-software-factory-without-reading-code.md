@@ -208,7 +208,7 @@ pnpm pr:ready --deferred "型定義の共通化は別PRへ切り出し"
 
 現在運用している開発ワークフローの規則全文は、GitHubで公開しています。
 
-https://github.com/artifactshare/artifactshare/blob/main/docs/development-workflow.md
+https://github.com/artifactshare/artifactshare/blob/d50596d7d61ec4d54056f413a8e161af04618b3c/docs/development-workflow.md
 
 ## ソフトウェアファクトリーは、ここから始められる
 
