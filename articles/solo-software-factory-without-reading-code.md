@@ -195,6 +195,8 @@ https://artifactshare.com/a/3zbbta71gr
 
 ## おわりに：実践者同士で話す小さなミートアップをやります
 
+![Software Factory Meetup Tokyo #0 — 実践者同士で話す小さなミートアップ。10月30日（金）19:00-21:00、東京・麹町、10名程度のクローズド開催。参加希望・お問い合わせは X @techtalkjp](/images/solo-software-factory-without-reading-code/software-factory-meetup-tokyo-0.jpg)
+
 10月30日（金）の夜に、東京・麹町で「Software Factory Meetup Tokyo #0」という10人前後のクローズドな会を開催します。
 
 すでに現場でソフトウェアファクトリーやAI主体の開発に取り組んでいる方々が、ぼくを含めて5名ほど集まる予定です。かしこまった登壇発表というよりは、会議室に集まって簡単なLTを交えつつ、ディスカッション中心で生々しい知見を交換したいと考えています。
