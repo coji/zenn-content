@@ -3,7 +3,7 @@ title: "HTMLを社内共有するサービスを、コードを読まずに作�
 emoji: "🏭"
 type: "tech"
 topics: ["claudecode", "codex", "githubactions", "個人開発", "ai"]
-published: false
+published: true
 ---
 
 ## これはなに？
