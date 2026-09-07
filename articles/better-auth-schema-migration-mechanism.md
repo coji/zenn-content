@@ -1,119 +1,63 @@
 ---
-title: "Better Authのスキーママイグレーション管理の仕組み"
+title: "Better Authのスキーマ管理はどう動いているのか - Kysely・Prisma・Drizzleへのコード生成の仕組み"
 emoji: "🔐"
 type: "tech"
 topics: ["betterauth", "typescript", "prisma", "drizzle", "kysely"]
 published: true
 ---
 
-# Better Auth はどうやってDBアダプタごとのスキーママイグレーションを扱っているのか？
+## これはなに？
 
-この記事では、[Better Auth](https://better-auth.com/)というTypeScript向け認証・認可ライブラリのスキーママイグレーション管理について解説します。開発者[Beka Cru](https://x.com/imbereket)さんが実装した仕組みを見ていきましょう。
+TypeScript向けの認証ライブラリ [Better Auth](https://better-auth.com/) は、Kysely、Prisma、Drizzle など複数のDBアダプタに対応しています。さらにプラグインを追加すると、二要素認証や組織管理に必要なテーブルが動的に増える設計になっています。
 
-Better Authは、TypeScript向けの包括的な認証・認可ライブラリで、様々なデータベースやフレームワークに対応しています。今回は、Better Authがどのようにして多様なDBアダプタ（Kysely、Prisma、Drizzleなど）に対応し、スキーママイグレーションを管理しているのかを解説します。
+アダプタごとにスキーマの書き方もマイグレーションの仕組みも異なる中で、CLIがどうやって各ツールの定義ファイルへ反映しているのか、ソースコードを追って調べてみました。
 
-## なぜスキーマ管理が重要なのか
+## スキーマ定義が合成される流れ
 
-認証ライブラリにとって、ユーザー情報やセッションデータなどを格納するデータベーススキーマの管理は非常に重要です。特にBetter Authのように**プラグイン**によって必要なスキーマが動的に変わる場合、その管理はさらに複雑になります。
+Better Auth のスキーマ情報は、単一の静的ファイルではなく3系統の定義をメモリ上で合成して組み立てられます。
 
-## Better Authのスキーマ管理の基本構造
+1. **コアテーブル**: `user`、`session`、`account`、`verification` といった認証の基本スキーマ
+2. **プラグイン**: `twoFactor` や `organization` などのプラグインがそれぞれ要求する拡張スキーマ
+3. **ユーザー設定**: `auth.ts` でユーザーが指定したテーブル名・フィールド名の変更やカスタムフィールド
 
-Better Authのスキーマ管理は、以下の要素を組み合わせて実現しています：
+CLI（`@better-auth/cli`）を実行すると、まずユーザーのプロジェクト内にある `auth.ts` を評価し、有効なプラグインとDB設定を読み出します。そのうえで内部スキーマを1つに統合し、選択されたアダプタ向けの生成処理へ渡す仕組みです。
 
-### 1. スキーマ定義の集約
+ここから先のアプローチが、アダプタの性質ごとに大きく分かれています。
 
-Better Authでは、様々な場所からスキーマ定義を集約しています：
+## アダプタごとに異なるアプローチ
 
-- **コア機能**: `user`、`session`、`account`、`verification`といった基本テーブルのスキーマ定義
-- **プラグイン**: 有効化されたプラグイン（`twoFactor`、`organization`、`passkey`、`apiKey`など）が追加するスキーマ定義
-- **ユーザー設定**: デフォルトのテーブル名やフィールド名のカスタマイズ、独自フィールドの追加
+### 1. Kysely: 自前でSQLを出力して適用まで行う
 
-これらすべてのスキーマ情報はBetter Auth内部で**マージ**され、最終的に必要となる完全なスキーマを構築します。
+Better Auth の標準（ビルトイン）構成では内部で Kysely を使っています。
 
-### 2. CLIによる処理 (`@better-auth/cli`)
+Kysely 向けの場合、CLI の `generate` コマンドは統合済みスキーマから直接 `.sql` ファイル（`CREATE TABLE` や `ALTER TABLE`）を組み立てます。処理の本体は [`packages/better-auth/src/db/get-migration.ts`](https://github.com/better-auth/better-auth/blob/main/packages/better-auth/src/db/get-migration.ts) と [`packages/cli/src/generators/kysely.ts`](https://github.com/better-auth/better-auth/blob/main/packages/cli/src/generators/kysely.ts) です。
 
-`@better-auth/cli`は次のような流れで動作します：
+さらに Kysely 向けに限り、`@better-auth/cli migrate` コマンドで生成した SQL をそのままデータベースへ直接流し込めます。別途マイグレーションツールを用意せずに完結できる手軽さがある一方、ORM 固有のリレーション定義などは扱えません。
 
-1. ユーザーのプロジェクトからBetter Authの設定ファイル（`auth.ts`など）を読み込み
-2. 使用中のDBアダプタとプラグイン、カスタマイズ情報を解析
-3. 解析結果と内部スキーマ定義を元に、選択されたアダプタに応じた処理を実行
+### 2. Prisma: schema.prisma を AST で解析して追記する
 
-## アダプタ別のアプローチ
+Prisma を使っているプロジェクトでは、Better Auth が勝手にマイグレーションを実行することはありません。代わりに既存の `schema.prisma` を書き換えるアプローチをとっています。
 
-主要なアダプタごとに、具体的にどのようにスキーマ管理を行っているのかを見ていきましょう。
+CLI は [`packages/cli/src/generators/prisma.ts`](https://github.com/better-auth/better-auth/blob/main/packages/cli/src/generators/prisma.ts) 内で `@mrleebo/prisma-ast` を使い、既存の `schema.prisma` を構文木として読み込みます。必要なモデルやフィールドが存在しなければ差分を追加し、テーブル名のカスタマイズがあれば `@map` 属性を挿入してファイルを上書きします。
 
-### 1. Kysely（ビルトインアダプタ）
+スキーマファイルを更新した後のマイグレーション（`prisma migrate dev` や `prisma db push`）は、開発者が普段のワークフローどおりに実行します。Better Auth 側が無理にマイグレーションへ介入せず、Prisma のライフサイクルに委ねる設計です。
 
-Better Authは内部的に[Kysely](https://kysely.dev/)を使用して、SQLite、PostgreSQL、MySQL、MSSQLなどのRDBMSに対応しています。
+### 3. Drizzle: TypeScript のテーブル定義コードを生成する
 
-#### `generate`コマンドの動作
+Drizzle を使う場合は、TypeScript のスキーマファイル（`auth-schema.ts` など）をコード生成で出力します。
 
-- 集約されたスキーマ情報を元に、**SQLマイグレーションファイル（`.sql`）**を生成
-- `CREATE TABLE`文や`ALTER TABLE`文を含む適切なSQLを出力
-- 主に[`packages/better-auth/src/db/get-migration.ts`](https://github.com/better-auth/better-auth/blob/main/packages/better-auth/src/db/get-migration.ts)と[`packages/cli/src/generators/kysely.ts`](https://github.com/better-auth/better-auth/blob/main/packages/cli/src/generators/kysely.ts)で実装
+実装は [`packages/cli/src/generators/drizzle.ts`](https://github.com/better-auth/better-auth/blob/main/packages/cli/src/generators/drizzle.ts) にあり、対象データベースが PostgreSQL か MySQL か SQLite かに応じて `pgTable`、`mysqlTable`、`sqliteTable` の定義コードを書き分けます。型注釈や制約、外部キー設定も TypeScript のコードとして組み立てられます。
 
-#### `migrate`コマンドの動作
+Prisma と同様に、DBへの反映は `drizzle-kit generate` や `drizzle-kit migrate` に任せる形です。
 
-- 生成されたSQLを**データベースに直接適用**
-- ユーザーは追加ツールなしでスキーマを最新状態に保てる
+## 各アダプタの対応方針の整理
 
-#### メリット・デメリット
+各アダプタの違いを整理すると次の表のようになります。
 
-- **メリット**: CLIだけでスキーマ生成から適用まで完結して手軽
-- **デメリット**: ORM固有の機能（Prismaのリレーション構文など）は利用できない
+| アダプタ | `generate` コマンドの出力 | `migrate` コマンドの対応 | 実際の反映手順 |
+| :--- | :--- | :--- | :--- |
+| **Kysely** | SQLファイル (`.sql`) | 対応（直接実行） | `npx @better-auth/cli migrate` |
+| **Prisma** | `schema.prisma` のAST更新 | 非対応 | `npx prisma migrate dev` |
+| **Drizzle** | TypeScript定義コード | 非対応 | `npx drizzle-kit generate` など |
 
-### 2. Prisma
-
-[Prisma](https://www.prisma.io/)は型安全なデータベースアクセスを提供する人気のORMです。
-
-#### `generate`コマンドの動作
-
-- 既存の`schema.prisma`ファイルを解析し、必要なモデルやフィールドを追記・更新
-- `@mrleebo/prisma-ast`などを使用してPrismaスキーマをASTとして安全に編集
-- ユーザー設定は`@map`属性を使って反映
-- 主に[`packages/cli/src/generators/prisma.ts`](https://github.com/better-auth/better-auth/blob/main/packages/cli/src/generators/prisma.ts)で実装
-
-#### `migrate`コマンドの動作
-
-- **サポートされていません**
-- ユーザー自身がPrisma CLI（`prisma migrate dev`や`prisma db push`）を実行する必要あり
-
-#### メリット・デメリット
-
-- **メリット**: Prismaの型安全性やマイグレーション機能を最大限活用可能
-- **デメリット**: スキーマ適用はPrisma CLIに依存するため、Better Auth CLIだけでは完結しない
-
-### 3. Drizzle
-
-[Drizzle ORM](https://orm.drizzle.team/)は軽量で高速、型安全なTypeScript ORMです。
-
-#### `generate`コマンドの動作
-
-- **Drizzle ORMのスキーマ定義ファイル（`.ts`）を生成・更新**
-- データベース種類に応じて`pgTable`、`mysqlTable`、`sqliteTable`などを使い分け
-- フィールドの型、NULL許容、ユニーク制約なども適切に出力
-- 主に[`packages/cli/src/generators/drizzle.ts`](https://github.com/better-auth/better-auth/blob/main/packages/cli/src/generators/drizzle.ts)で実装
-
-#### `migrate`コマンドの動作
-
-- **サポートされていません**
-- ユーザー自身がDrizzle Kit（`drizzle-kit generate`など）を実行する必要あり
-
-#### メリット・デメリット
-
-- **メリット**: Drizzleの型安全性やDrizzle Kitによるマイグレーション管理を活用可能
-- **デメリット**: スキーマ適用はDrizzle Kitに依存するため、Better Auth CLIだけでは完結しない
-
-## まとめ：アダプタ別のスキーマ管理方法
-
-Better Authのスキーママイグレーション生成は、使用するDBアダプタに応じて最適なアプローチを提供します。
-
-| アダプタ | `generate`コマンドの出力 | `migrate`コマンドの機能 | 適用方法 |
-|:---------|:------------------------|:----------------------|:---------|
-| **Kysely (ビルトイン)** | SQLマイグレーションファイル (`.sql`) | SQLをDBに**直接適用** | `npx @better-auth/cli migrate` |
-| **Prisma** | Prismaスキーマ (`schema.prisma`) の更新 | **なし** | `prisma migrate dev`または`prisma db push` |
-| **Drizzle** | Drizzleスキーマ (`.ts`) の更新 | **なし** | `drizzle-kit generate`と`drizzle-kit migrate` |
-
-このように、Better Authは各データベース/ORMのエコシステムを尊重しつつ、プラグインによるスキーマ拡張にも対応できる柔軟な仕組みを提供しています。これにより、私たち開発者は自身が選択した技術スタックでスムーズにBetter Authを導入・運用できます。
-
-より詳しい情報は[Better Authの公式ドキュメント](https://better-auth.com/docs)をご覧ください。この記事が皆さんのお役に立てば幸いです！
+外部ORMを使うときはスキーマファイルの更新やコード生成にとどめ、実際のマイグレーション実行は各エコシステムの公式CLIに委ねる、という役割分担が徹底されています。ライブラリ側でDBの接続管理やロールバックを無理に抱え込まない、現実的で扱いやすい設計だと感じました。
