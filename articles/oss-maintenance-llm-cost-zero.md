@@ -12,6 +12,8 @@ published: true
 
 依存関係の更新、更新で踏んでしまったバグの修正、その後の機能追加までを実際に回しました。作業にはオープンソースのコーディングエージェントOpenCodeを使っています。OpenCodeには最初から無料モデルが用意されており、今回はその中からMetaの推論モデル`muse-spark-1.3-contributor-free`を選びました。追加のAPIキーや利用料の支払いは不要です。この記事の初稿も同じ組み合わせで書きました。
 
+@[tweet](https://x.com/opencode/status/2095332254855647493)
+
 画面のスクリーンショットや詳細な図解は、Artifact Shareの記録ページにまとめています。
 
 https://bt9furluuc.artifactshare.link
