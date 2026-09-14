@@ -8,11 +8,11 @@ published: false
 
 ## これはなに？
 
-ひとりで開発しているOSSの保守3件を、追加のLLM費用なしで回した記録です。対象はGitHubのPR滞留時間を測る開発生産性ダッシュボード（[coji/upflow](https://github.com/coji/upflow)）で、依存更新、Draft表示の機能追加、ログイン不能の修正まで含みます。図と写真入りの記録ページも作っています。別タブで開いて眺められるものです。
+ひとりで開発しているOSSの保守3件を、追加のLLM費用なしで回した記録です。対象はGitHubのPR滞留時間を測る開発生産性ダッシュボード[coji/upflow](https://github.com/coji/upflow)で、依存更新、Draft表示の機能追加、ログイン不能の修正まで含みます。図と写真入りの記録ページも作っています。別タブで開いて眺められるものです。
 
 https://bt9furluuc.artifactshare.link
 
-作業はターミナルで動くコーディングエージェント（OpenCode）に任せ、モデルはMetaが提供する推論モデル（muse-spark-1.3-contributor-free）の無料枠を使いました。無料枠は入力と出力を学習に提供する代わりに割引になる料金体系（contributor tier）で、回数制限と地域限定があります。contributor tierは毎分60リクエストなどの上限があります。条件は公式の料金表で確認しています。今回の分量では制限に当たらず、請求は追加なしでした。
+作業はターミナルで動くコーディングエージェントOpenCodeに任せ、モデルはMetaが提供する推論モデル`muse-spark-1.3-contributor-free`の無料枠を使いました。無料枠は入力と出力を学習に提供する代わりに割引になるcontributor tierという料金体系で、回数制限と地域限定があります。contributor tierは毎分60リクエストなどの上限があります。条件は公式の料金表で確認しています。今回の分量では制限に当たらず、請求は追加なしでした。
 
 https://developer.meta.com/ai/models/muse-spark
 
@@ -22,9 +22,9 @@ https://developer.meta.com/ai/models/muse-spark
 
 | 区分 | 内容 | 規模 |
 | --- | --- | --- |
-| 保守 | Node 24.20.0、pnpm 12.3.4への更新とCI移行（[coji/upflow #445](https://github.com/coji/upflow/pull/445)） | 68ファイル、9コミット |
-| 機能追加 | Review StacksでDraftを識別・除外する（[coji/upflow #450](https://github.com/coji/upflow/pull/450)） | 追加561行、削除9行 |
-| 不具合修正 | 本番ログイン400を1行修正で復旧する（[coji/upflow #451](https://github.com/coji/upflow/pull/451)） | 追加26行、2ファイル |
+| 保守 | Node 24.20.0、pnpm 12.3.4への更新とCI移行[coji/upflow #445](https://github.com/coji/upflow/pull/445) | 68ファイル、9コミット |
+| 機能追加 | Review StacksでDraftを識別・除外する[coji/upflow #450](https://github.com/coji/upflow/pull/450) | 追加561行、削除9行 |
+| 不具合修正 | 本番ログイン400を1行修正で復旧する[coji/upflow #451](https://github.com/coji/upflow/pull/451) | 追加26行、2ファイル |
 
 3件ともCIが緑の状態でマージしています。
 
@@ -46,7 +46,7 @@ pnpm / nodejs を最新にしたい。あわせて pnpm v12 の github actions �
 
 #450は朝会で使う画面の要望が起点です。人間の指示は「review stacks の画面で draft 状態を見分けられるようにしたい」の一文でした。Review Stacksに混ざるDraftを除外と識別で見分けられるようにしました。取得側では`isDraft`が取れているのに保存していませんでした。そこで`is_draft`列を追加して永続化し、既存分はbackfillからrecalculateで補っています。表示は3案からDドットを選び、`?hideDrafts=1`で除外できるようにしました。テストは634件が通っています。
 
-#451は本番のログイン不能の修正です。人間の報告は「シークレットウィンドウでログインボタンを押したら Bad Request になる」の一文でした。ブラウザからのform POSTが素のBad Requestになり、curlでは再現しませんでした。headless Chromeで再現し、`Origin`の有無で切り分けました。React Router v8の同一オリジン判定が原因でした。FlyのTLS終端の裏でサーバー側がhttp組み立てになっていたためです。修正は1行だけです。`server.mjs`に`app.set('trust proxy', 1)`を足し、構造テスト（`tests/structural/express-trust-proxy.test.ts`）で固定しています。evil originは400のままにして防御を維持し、デプロイ後に本番で`POST /login 302`を確認しました。
+#451は本番のログイン不能の修正です。人間の報告は「シークレットウィンドウでログインボタンを押したら Bad Request になる」の一文でした。ブラウザからのform POSTが素のBad Requestになり、curlでは再現しませんでした。headless Chromeで再現し、`Origin`の有無で切り分けました。React Router v8の同一オリジン判定が原因でした。FlyのTLS終端の裏でサーバー側がhttp組み立てになっていたためです。修正は1行だけです。`server.mjs`に`app.set('trust proxy', 1)`を足し、構造テストは`tests/structural/express-trust-proxy.test.ts`で固定しています。evil originは400のままにして防御を維持し、デプロイ後に本番で`POST /login 302`を確認しました。
 
 ## 無料枠を使うときの線引きは学習利用です
 
