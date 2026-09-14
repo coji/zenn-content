@@ -3,7 +3,7 @@ title: "LLM費用¥0で公開リポジトリの保守を回してみた"
 emoji: "🛠️"
 type: "tech"
 topics: ["opencode", "reactrouter", "githubactions", "llm"]
-published: false
+published: true
 ---
 
 ## これはなに？
