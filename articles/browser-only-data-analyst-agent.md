@@ -3,7 +3,7 @@ title: 'ブラウザだけで動くデータ分析AIエージェントを作っ�
 emoji: '🦆'
 type: 'tech'
 topics: ['gemini', 'duckdb', 'aiagent', 'webassembly', 'chrome']
-published: false
+published: true
 ---
 
 ## これはなに？
