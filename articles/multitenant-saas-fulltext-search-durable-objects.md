@@ -100,6 +100,204 @@ const recent = await inventory(db, workspace)
 
 また、読み込みを始めるタイミングで、それまでに溜まっていた通知回数を0にリセットします。読み込み中に新しい通知が届いていた場合は、処理を終えたあとにもう一度差分を読み込みます。
 
+```html-embed
+<div class="sync-diagram">
+  <div class="sync-title">差分同期の流れ（1時間あたり 7,800万行 → 50万〜200万行）</div>
+  <div class="sync-flow">
+    <div class="node app">
+      <div class="node-label">1. ファイル更新</div>
+      <div class="node-sub">アプリが <code>sync()</code> を呼ぶ</div>
+    </div>
+    <div class="arrow">
+      <span class="pulse-dot"></span>
+      <span class="arrow-text">通知回数 +1</span>
+    </div>
+    <div class="node do">
+      <div class="node-label">2. Durable Object</div>
+      <div class="node-sub">alarm をセットして即返却</div>
+    </div>
+    <div class="arrow">
+      <span class="pulse-dot delay"></span>
+      <span class="arrow-text">alarm 発火</span>
+    </div>
+    <div class="node d1">
+      <div class="node-label">3. D1 から差分取得</div>
+      <div class="node-sub"><code>updated_at</code> 以降を 50件ずつ</div>
+    </div>
+  </div>
+  <div class="sync-notes">
+    <div class="note-item">
+      <span class="badge">取りこぼし防止</span>
+      次回は「読み始め時刻の <strong>5分前</strong>」から読む
+    </div>
+    <div class="note-item">
+      <span class="badge">保険</span>
+      <strong>12時間ごと</strong>に Cron 経由で全件照合（50件ずつ）
+    </div>
+  </div>
+</div>
+<style>
+  .sync-diagram {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #cbd5e1;
+    --text: #0f172a;
+    --muted: #475569;
+    --accent: #0284c7;
+    --accent-bg: #e0f2fe;
+    --badge-bg: #fef3c7;
+    --badge-text: #92400e;
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  [data-theme="dark"] .sync-diagram {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-bg: #0c4a6e;
+    --badge-bg: #451a03;
+    --badge-text: #fcd34d;
+  }
+  .sync-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .sync-flow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .node {
+    flex: 1;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .node.do {
+    border-color: var(--accent);
+    background: var(--accent-bg);
+  }
+  .node-label {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .node-sub {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .node-sub code {
+    font-size: 11px;
+    padding: 1px 4px;
+    border-radius: 4px;
+    background: rgba(128, 128, 128, 0.15);
+  }
+  .arrow {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 72px;
+  }
+  .arrow::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--border);
+    margin-bottom: 4px;
+  }
+  .pulse-dot {
+    position: absolute;
+    top: -3px;
+    left: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: move-right 2s linear infinite;
+  }
+  .pulse-dot.delay {
+    animation-delay: 1s;
+  }
+  @keyframes move-right {
+    0% { left: 0; opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { left: calc(100% - 8px); opacity: 0; }
+  }
+  .arrow-text {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .sync-notes {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .note-item {
+    flex: 1;
+    min-width: 220px;
+    font-size: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--badge-bg);
+    color: var(--badge-text);
+    white-space: nowrap;
+  }
+  @media (max-width: 640px) {
+    .sync-flow {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .arrow {
+      min-width: auto;
+      padding: 6px 0;
+    }
+    .arrow::before {
+      width: 2px;
+      height: 18px;
+      margin-bottom: 2px;
+    }
+    .pulse-dot {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pulse-dot {
+      animation: none;
+      display: none;
+    }
+  }
+</style>
+```
+
 通知を取りこぼした変更については、12時間に1回の全件照合で拾い上げます。この全件照合も50件ずつ alarm で進める仕組みです。5分ごとの Cron は、前回の送信から時間が経過したテナントから順に50件へ `sync()` を送るだけにしています。
 
 ## 5. 権限情報はインデックスに入れず、候補を D1 で判定する
@@ -115,6 +313,178 @@ PoC で10万件のテナントを使い、3つの方式を比較した結果が�
 | D1 が所有者・共有・参加プロジェクトから ID を取得してインデックスに渡す | 117ms | 1,228行 |
 
 実際の運用では、テナントのメンバーには2つ目の方式、他社から共有を受けた外部ユーザーには3つ目の方式を使っています。メンバーは社内全体に公開されたファイルも閲覧できるため、2つ目の方式なら候補がほぼ1回で埋まります。一方、外部ユーザーは閲覧できる範囲が狭いため、先に D1 で ID を絞り込んでから渡したほうが高速です。
+
+```html-embed
+<div class="auth-tabs">
+  <input type="radio" name="auth-mode" id="tab-member" checked>
+  <input type="radio" name="auth-mode" id="tab-guest">
+  <div class="tab-bar">
+    <label for="tab-member" class="tab-btn">テナントメンバー向け（171ms）</label>
+    <label for="tab-guest" class="tab-btn">外部共有ユーザー向け（117ms）</label>
+  </div>
+
+  <div class="panel panel-member">
+    <div class="panel-desc">社内公開ファイルが多く対象が広いため、先に DO で候補を絞ってから D1 で権限判定します。</div>
+    <div class="steps">
+      <div class="step do">
+        <div class="step-num">Step 1</div>
+        <div class="step-title">Durable Object（FTS5）</div>
+        <div class="step-body">関連性の高い順に候補 <strong>2,000件</strong> の ID を取得</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step d1">
+        <div class="step-num">Step 2</div>
+        <div class="step-title">D1（権限の正本）</div>
+        <div class="step-body"><code>json_each(?1)</code> と <code>+workspace_id</code> で閲覧可否を判定（約1.2万行読込）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-guest">
+    <div class="panel-desc">閲覧できるファイルが限られているため、先に D1 で許可 ID を引いてから DO で検索します。</div>
+    <div class="steps">
+      <div class="step d1">
+        <div class="step-num">Step 1</div>
+        <div class="step-title">D1（権限の正本）</div>
+        <div class="step-body">所有者・個別共有・参加プロジェクトから許可 ID を取得（1,228行読込）</div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step do">
+        <div class="step-num">Step 2</div>
+        <div class="step-title">Durable Object（FTS5）</div>
+        <div class="step-body">受け取った ID の範囲内だけで全文検索を実行</div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .auth-tabs {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #cbd5e1;
+    --text: #0f172a;
+    --muted: #475569;
+    --do-border: #0284c7;
+    --do-bg: #e0f2fe;
+    --d1-border: #f59e0b;
+    --d1-bg: #fef3c7;
+    font-family: system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 16px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  [data-theme="dark"] .auth-tabs {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --border: #334155;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --do-border: #38bdf8;
+    --do-bg: #0c4a6e;
+    --d1-border: #fbbf24;
+    --d1-bg: #451a03;
+  }
+  .auth-tabs input[type="radio"] {
+    display: none;
+  }
+  .tab-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .tab-btn {
+    flex: 1;
+    text-align: center;
+    padding: 8px 10px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  #tab-member:checked ~ .tab-bar label[for="tab-member"],
+  #tab-guest:checked ~ .tab-bar label[for="tab-guest"] {
+    border-color: var(--do-border);
+    background: var(--do-bg);
+    color: var(--text);
+  }
+  .panel {
+    display: none;
+  }
+  #tab-member:checked ~ .panel-member,
+  #tab-guest:checked ~ .panel-guest {
+    display: block;
+  }
+  .panel-desc {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  .steps {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .step {
+    flex: 1;
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+  }
+  .step.do {
+    border-color: var(--do-border);
+  }
+  .step.d1 {
+    border-color: var(--d1-border);
+  }
+  .step-num {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .step-title {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .step-body {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .step-body code {
+    font-size: 11px;
+    padding: 1px 4px;
+    border-radius: 4px;
+    background: rgba(128, 128, 128, 0.15);
+  }
+  .step-arrow {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  @media (max-width: 640px) {
+    .tab-bar {
+      flex-direction: column;
+    }
+    .steps {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .step-arrow {
+      text-align: center;
+      transform: rotate(90deg);
+    }
+  }
+</style>
+```
 
 候補の判定では、ID の配列を1つの JSON 文字列にまとめて D1 に渡します。D1 は1クエリあたりのバインド引数が100個までに制限されているため、ID をそのまま引数に並べる方法は使えません。
 
