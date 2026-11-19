@@ -25,6 +25,112 @@ published: false
 
 検索インデックスは、ワークスペース（テナント）ごとに1つの Durable Object に配置します。こうすることで、検索クエリにテナントで絞り込む条件を書く必要がなくなり、他社の文書が検索結果に混ざる心配もなくなります。
 
+```html-embed
+<div class="zd-wrap">
+  <div class="zd-head">
+    <span class="zd-tag">アーキテクチャ</span>
+    <span class="zd-title">テナントごとに独立した Durable Object（SQLite FTS5）</span>
+  </div>
+  <div class="zd-grid-3">
+    <div class="zd-card zd-do">
+      <div class="zd-card-h">Tenant A 用 DO</div>
+      <div class="zd-card-b">
+        <div class="zd-pill">SQLite FTS5</div>
+        <ul class="zd-list">
+          <li>A社の文書のみ格納</li>
+          <li>A社専用の BM25 統計</li>
+        </ul>
+      </div>
+    </div>
+    <div class="zd-card zd-do">
+      <div class="zd-card-h">Tenant B 用 DO</div>
+      <div class="zd-card-b">
+        <div class="zd-pill">SQLite FTS5</div>
+        <ul class="zd-list">
+          <li>B社の文書のみ格納</li>
+          <li>B社専用の BM25 統計</li>
+        </ul>
+      </div>
+    </div>
+    <div class="zd-card zd-warn">
+      <div class="zd-card-h">D1（正本・バックアップ対象）</div>
+      <div class="zd-card-b">
+        <div class="zd-pill zd-pill-warn">FTS5 は置かない</div>
+        <ul class="zd-list">
+          <li>FTS5 仮想テーブルがあると <code>wrangler d1 export</code> 不可</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="zd-foot">
+    1つの Durable Object 上限は <strong>10GB</strong>（PoC 10万件で約 <strong>5GB</strong>）
+  </div>
+</div>
+<style>
+  .zd-wrap {
+    --zd-bg: #f8fafc;
+    --zd-surface: #ffffff;
+    --zd-border: #cbd5e1;
+    --zd-text: #0f172a;
+    --zd-muted: #475569;
+    --zd-accent: #0284c7;
+    --zd-accent-soft: #e0f2fe;
+    --zd-warn: #d97706;
+    --zd-warn-soft: #fef3c7;
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+    font-feature-settings: "palt";
+    font-variant-numeric: tabular-nums;
+    line-height: 1.65;
+    letter-spacing: 0.02em;
+    word-break: normal;
+    overflow-wrap: anywhere;
+    background: var(--zd-bg);
+    color: var(--zd-text);
+    border: 1px solid var(--zd-border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+  [data-theme="dark"] .zd-wrap {
+    --zd-bg: #0f172a;
+    --zd-surface: #1e293b;
+    --zd-border: #334155;
+    --zd-text: #f1f5f9;
+    --zd-muted: #94a3b8;
+    --zd-accent: #38bdf8;
+    --zd-accent-soft: #0c4a6e;
+    --zd-warn: #fbbf24;
+    --zd-warn-soft: #451a03;
+  }
+  .zd-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .zd-tag {
+    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+    background: var(--zd-accent-soft); color: var(--zd-accent);
+  }
+  .zd-title { font-size: 14px; font-weight: 700; }
+  .zd-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .zd-card {
+    background: var(--zd-surface); border: 1.5px solid var(--zd-border);
+    border-radius: 8px; padding: 12px;
+  }
+  .zd-do { border-color: var(--zd-accent); }
+  .zd-warn { border-color: var(--zd-warn); }
+  .zd-card-h { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .zd-pill {
+    display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 7px;
+    border-radius: 4px; background: var(--zd-accent-soft); color: var(--zd-accent); margin-bottom: 8px;
+  }
+  .zd-pill-warn { background: var(--zd-warn-soft); color: var(--zd-warn); }
+  .zd-list { margin: 0; padding-left: 16px; font-size: 12px; color: var(--zd-muted); }
+  .zd-list li + li { margin-top: 4px; }
+  .zd-list code { font-size: 11px; padding: 1px 4px; border-radius: 4px; background: rgba(128,128,128,0.15); }
+  .zd-foot { margin-top: 12px; font-size: 12px; color: var(--zd-muted); text-align: right; }
+  @media (max-width: 640px) {
+    .zd-grid-3 { grid-template-columns: 1fr; }
+    .zd-foot { text-align: left; }
+  }
+</style>
+```
+
 BM25 のスコア計算に使う単語の統計情報も、そのテナントの文書だけで計算されます。1つの Durable Object は 10GB まで利用でき、PoC で10万件のデータを登録した際は約 5GB でした。
 
 なお、D1 も SQLite ベースなので FTS5 は使えますが、FTS5 の仮想テーブルがあると `wrangler d1 export` が使えなくなります。バックアップを export で取得している場合は、D1 に FTS5 テーブルを置かないほうが安全です。
@@ -32,6 +138,68 @@ BM25 のスコア計算に使う単語の統計情報も、そのテナントの
 ## 2. 配置リージョンを固定し、オブジェクト名に含める
 
 Durable Object は最初に作成された場所で配置リージョンが決まり、あとから変更できません。利用者の多いリージョンに固定し、そのリージョン名をオブジェクト名に含めておけば、どこに配置したかを D1 に記録して毎回参照する処理が不要になります。
+
+```html-embed
+<div class="zd-wrap">
+  <div class="zd-head">
+    <span class="zd-tag">命名規則</span>
+    <span class="zd-title">オブジェクト名に配置リージョンを埋め込む</span>
+  </div>
+  <div class="zd-anatomy">
+    <div class="zd-seg zd-seg-a">
+      <div class="zd-seg-code">${workspaceId}</div>
+      <div class="zd-seg-desc">テナント識別子</div>
+    </div>
+    <div class="zd-sep">:</div>
+    <div class="zd-seg zd-seg-b">
+      <div class="zd-seg-code">0</div>
+      <div class="zd-seg-desc">将来の分割番号</div>
+    </div>
+    <div class="zd-sep">@</div>
+    <div class="zd-seg zd-seg-c">
+      <div class="zd-seg-code">apac-ne</div>
+      <div class="zd-seg-desc"><code>locationHint</code> と一致</div>
+    </div>
+  </div>
+  <div class="zd-foot">D1 への場所記録・毎回参照が不要になり、リージョン変更時は名前を変えて作り直す</div>
+</div>
+<style>
+  .zd-wrap {
+    --zd-bg: #f8fafc; --zd-surface: #ffffff; --zd-border: #cbd5e1;
+    --zd-text: #0f172a; --zd-muted: #475569; --zd-accent: #0284c7; --zd-accent-soft: #e0f2fe;
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+    font-feature-settings: "palt"; line-height: 1.65; letter-spacing: 0.02em;
+    word-break: normal; overflow-wrap: anywhere;
+    background: var(--zd-bg); color: var(--zd-text);
+    border: 1px solid var(--zd-border); border-radius: 10px; padding: 16px;
+  }
+  [data-theme="dark"] .zd-wrap {
+    --zd-bg: #0f172a; --zd-surface: #1e293b; --zd-border: #334155;
+    --zd-text: #f1f5f9; --zd-muted: #94a3b8; --zd-accent: #38bdf8; --zd-accent-soft: #0c4a6e;
+  }
+  .zd-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .zd-tag {
+    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+    background: var(--zd-accent-soft); color: var(--zd-accent);
+  }
+  .zd-title { font-size: 14px; font-weight: 700; }
+  .zd-anatomy { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; }
+  .zd-seg {
+    background: var(--zd-surface); border: 1.5px solid var(--zd-border);
+    border-radius: 8px; padding: 10px 14px; text-align: center; min-width: 120px;
+  }
+  .zd-seg-c { border-color: var(--zd-accent); background: var(--zd-accent-soft); }
+  .zd-seg-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 14px; font-weight: 700; }
+  .zd-seg-desc { font-size: 12px; color: var(--zd-muted); margin-top: 4px; }
+  .zd-seg-desc code { font-size: 11px; padding: 1px 4px; border-radius: 4px; background: rgba(128,128,128,0.15); }
+  .zd-sep { font-family: ui-monospace, monospace; font-size: 18px; font-weight: 700; color: var(--zd-muted); }
+  .zd-foot { margin-top: 12px; font-size: 12px; color: var(--zd-muted); text-align: center; }
+  @media (max-width: 640px) {
+    .zd-anatomy { flex-direction: column; align-items: stretch; }
+    .zd-sep { text-align: center; }
+  }
+</style>
+```
 
 ```ts
 export const SEARCH_INDEX_LOCATION = 'apac-ne'
@@ -52,6 +220,60 @@ export function workspaceSearchIndex(namespace, workspaceId) {
 ## 3. テーブルは初回の同期時に作成する
 
 検索リクエストは、まだ一度もデータを同期していないテナントの Durable Object にも届きます。そのタイミングでテーブルを作成してしまうと、検索されただけのテナントにもストレージ費用がかかります。そのため、コンストラクタではテーブルの有無だけを確認し、実際の作成は同期処理のときに行うようにしました。
+
+```html-embed
+<div class="zd-wrap">
+  <div class="zd-head">
+    <span class="zd-tag">遅延初期化</span>
+    <span class="zd-title">未同期テナントにストレージ費用を発生させない</span>
+  </div>
+  <div class="zd-grid-3">
+    <div class="zd-card">
+      <div class="zd-card-h">検索のみ（未同期）</div>
+      <div class="zd-card-b">テーブルを作らず空配列を返す。<strong>ストレージ費用 0</strong>。</div>
+    </div>
+    <div class="zd-card zd-do">
+      <div class="zd-card-h">初回 <code>sync()</code> 実行</div>
+      <div class="zd-card-b">ここで初めて SQLite テーブルを作成して索引を構築。</div>
+    </div>
+    <div class="zd-card zd-warn">
+      <div class="zd-card-h">名前とテナント不一致</div>
+      <div class="zd-card-b"><code>deleteAll()</code> で中身を削除し、古いオブジェクトを自動掃除。</div>
+    </div>
+  </div>
+</div>
+<style>
+  .zd-wrap {
+    --zd-bg: #f8fafc; --zd-surface: #ffffff; --zd-border: #cbd5e1;
+    --zd-text: #0f172a; --zd-muted: #475569; --zd-accent: #0284c7; --zd-accent-soft: #e0f2fe;
+    --zd-warn: #d97706;
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+    font-feature-settings: "palt"; line-height: 1.65; letter-spacing: 0.02em;
+    word-break: normal; overflow-wrap: anywhere;
+    background: var(--zd-bg); color: var(--zd-text);
+    border: 1px solid var(--zd-border); border-radius: 10px; padding: 16px;
+  }
+  [data-theme="dark"] .zd-wrap {
+    --zd-bg: #0f172a; --zd-surface: #1e293b; --zd-border: #334155;
+    --zd-text: #f1f5f9; --zd-muted: #94a3b8; --zd-accent: #38bdf8; --zd-accent-soft: #0c4a6e;
+    --zd-warn: #fbbf24;
+  }
+  .zd-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .zd-tag {
+    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+    background: var(--zd-accent-soft); color: var(--zd-accent);
+  }
+  .zd-title { font-size: 14px; font-weight: 700; }
+  .zd-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .zd-card { background: var(--zd-surface); border: 1.5px solid var(--zd-border); border-radius: 8px; padding: 12px; }
+  .zd-do { border-color: var(--zd-accent); }
+  .zd-warn { border-color: var(--zd-warn); }
+  .zd-card-h { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+  .zd-card-b { font-size: 12px; color: var(--zd-muted); }
+  .zd-card-h code, .zd-card-b code { font-size: 11px; padding: 1px 4px; border-radius: 4px; background: rgba(128,128,128,0.15); }
+  @media (max-width: 640px) { .zd-grid-3 { grid-template-columns: 1fr; } }
+</style>
+```
 
 ```ts
 constructor(ctx, env) {
@@ -500,6 +722,69 @@ WHERE s.id IN (SELECT value FROM json_each(?1))
 ## 6. 日本語は Intl.Segmenter で分割し、カタカナは1語にまとめる
 
 インデックスに登録するテキストと検索クエリの両方に、同じ前処理をかけます。NFKC で正規化して小文字に変換したあと、`Intl.Segmenter` で単語に分割してスペースでつなぎます。また、3文字以上のカタカナについては末尾の長音記号を削り、「サーバー」と「サーバ」を同じ語として扱います。
+
+```html-embed
+<div class="zd-wrap">
+  <div class="zd-head">
+    <span class="zd-tag">日本語前処理</span>
+    <span class="zd-title">検索クエリとインデックスの両方に同じ正規化を適用</span>
+  </div>
+  <div class="zd-pipe">
+    <div class="zd-pbox">
+      <div class="zd-pstep">入力</div>
+      <div class="zd-pval">「サーバーのレビュー」</div>
+    </div>
+    <div class="zd-parr">→</div>
+    <div class="zd-pbox">
+      <div class="zd-pstep">NFKC・小文字化・長音除去</div>
+      <div class="zd-pval">「サーバのレビュー」</div>
+    </div>
+    <div class="zd-parr">→</div>
+    <div class="zd-pbox zd-pbox-accent">
+      <div class="zd-pstep">2つの索引へ</div>
+      <div class="zd-pval">
+        <div>通常：<code>サーバ / の / レ / ビュ</code></div>
+        <div>カタカナ1語：<code>サーバー</code> <code>レビュー</code>（前方一致）</div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .zd-wrap {
+    --zd-bg: #f8fafc; --zd-surface: #ffffff; --zd-border: #cbd5e1;
+    --zd-text: #0f172a; --zd-muted: #475569; --zd-accent: #0284c7; --zd-accent-soft: #e0f2fe;
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic UI", "Meiryo", system-ui, sans-serif;
+    font-feature-settings: "palt"; line-height: 1.65; letter-spacing: 0.02em;
+    word-break: normal; overflow-wrap: anywhere;
+    background: var(--zd-bg); color: var(--zd-text);
+    border: 1px solid var(--zd-border); border-radius: 10px; padding: 16px;
+  }
+  [data-theme="dark"] .zd-wrap {
+    --zd-bg: #0f172a; --zd-surface: #1e293b; --zd-border: #334155;
+    --zd-text: #f1f5f9; --zd-muted: #94a3b8; --zd-accent: #38bdf8; --zd-accent-soft: #0c4a6e;
+  }
+  .zd-head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+  .zd-tag {
+    font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px;
+    background: var(--zd-accent-soft); color: var(--zd-accent);
+  }
+  .zd-title { font-size: 14px; font-weight: 700; }
+  .zd-pipe { display: flex; align-items: center; gap: 8px; }
+  .zd-pbox {
+    flex: 1; background: var(--zd-surface); border: 1.5px solid var(--zd-border);
+    border-radius: 8px; padding: 10px 12px;
+  }
+  .zd-pbox-accent { border-color: var(--zd-accent); background: var(--zd-accent-soft); }
+  .zd-pstep { font-size: 11px; font-weight: 700; color: var(--zd-muted); margin-bottom: 4px; }
+  .zd-pval { font-size: 12px; }
+  .zd-pval code { font-size: 11px; padding: 1px 4px; border-radius: 4px; background: rgba(128,128,128,0.18); }
+  .zd-parr { font-size: 16px; font-weight: 700; color: var(--zd-muted); }
+  @media (max-width: 640px) {
+    .zd-pipe { flex-direction: column; align-items: stretch; }
+    .zd-parr { text-align: center; transform: rotate(90deg); }
+  }
+</style>
+```
 
 なお、`Intl.Segmenter` で日本語を分かち書きし、Cloudflare D1 の SQLite FTS5 で検索する基本的な実装については、以前の記事でコード付きで紹介しています。[個人開発に無料の日本語全文検索を - Cloudflare D1 と Web Component でつくる検索 API](https://zenn.dev/coji/articles/cloudflare-d1-fts5-japanese-search-api)
 
