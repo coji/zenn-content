@@ -3,7 +3,7 @@ title: 'Cloudflareで追加料金をかけずに動かすマルチテナントSa
 emoji: '🔎'
 type: 'tech'
 topics: ['cloudflare', 'durableobjects', 'sqlite', 'fts5', 'workers']
-published: false
+published: true
 ---
 
 ## これはなに？
